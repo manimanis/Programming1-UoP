@@ -59,7 +59,7 @@ public class BookCopies extends Book {
 
     @Override
     public String toString() {
-        return super.toString() + "\n" + "Copies: " + booksAvailable + "/" + booksCount;
+        return super.toString() + " " + booksAvailable + "/" + booksCount;
     }  
 
     @Override

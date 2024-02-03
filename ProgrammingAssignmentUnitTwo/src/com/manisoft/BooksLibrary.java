@@ -1,15 +1,6 @@
 package com.manisoft;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,62 +22,8 @@ public class BooksLibrary {
         }
         return sb.toString();
     }
-
-    public void loadBooks(String filePath) {
-        ObjectInputStream ois = null;
-        FileInputStream fis = null;
-        BookCopies bc = null;
-        books.clear();
-        try {
-            File fichier = new File(filePath);
-            fis = new FileInputStream(fichier);
-            ois = new ObjectInputStream(fis);
-            int count = ois.readInt();
-            for (int i = 0; i < count; i++) {
-                Object obj = ois.readObject();
-                if (obj != null) {
-                    bc = (BookCopies) obj;
-                    books.add(bc);
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                ois.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void saveBooks(String filePath) {
-        ObjectOutputStream oos = null;
-        try {
-            File fichier = new File(filePath);
-            oos = new ObjectOutputStream(new FileOutputStream(fichier));
-            oos.writeInt(books.size());
-            for (BookCopies bc : books) {
-                oos.writeObject(bc);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
     
-    public int count() {
+    public int bookCount() {
         return books.size();
     }
     
@@ -94,6 +31,14 @@ public class BooksLibrary {
         return books.get(idx);
     }
     
+    public Iterable<BookCopies> getBooks() {
+        return books;
+    }
+    
+    public void clear() {
+        books.clear();
+    }
+        
     public int findBookByTitle(String title) {
         for (int i = 0; i < books.size(); i++) {
             BookCopies bc = books.get(i);
@@ -102,6 +47,10 @@ public class BooksLibrary {
             }
         }
         return -1;
+    }
+    
+    public void addBook(BookCopies bc) {
+        addBook(bc.getTitle(), bc.getAuthor(), bc.getBooksCount());
     }
 
     public void addBook(String title, String author, int numCopies) {
@@ -133,10 +82,11 @@ public class BooksLibrary {
         return true;
     }
     
-    public void displayBooks() {
-        for (int i = 0; i < books.size(); i++) {
-            BookCopies bk = books.get(i);
-            System.out.println(bk);
-        }
-    }
+    
+
+    
+
+    
+
+    
 }

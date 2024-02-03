@@ -18,8 +18,11 @@ public class ProgrammingAssignmentUnitTwo {
 //        booksLibrary.addBook("Book 4", "Author 2", 13);
 //        booksLibrary.addBook("Book 2", "Author 2", 10);
 //        booksLibrary.saveBooks("books.bk");
-        booksLibrary.loadBooks("books.bk");
-        booksLibrary.displayBooks();
+        
+        
+        LibraryInterface library = new LibraryInterface();
+        library.loadBooks("books.bk");
+        library.displayBooks();
     }
     
 }
