@@ -11,18 +11,15 @@ public class ProgrammingAssignmentUnitTwo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BooksLibrary booksLibrary = new BooksLibrary();
-//        booksLibrary.addBook("Book 1", "Author 1", 5);
-//        booksLibrary.addBook("Book 2", "Author 2", 10);
-//        booksLibrary.addBook("Book 3", "Author 2", 10);
-//        booksLibrary.addBook("Book 4", "Author 2", 13);
-//        booksLibrary.addBook("Book 2", "Author 2", 10);
-//        booksLibrary.saveBooks("books.bk");
-        
-        
-        LibraryInterface library = new LibraryInterface();
-        library.loadBooks("books.bk");
-        library.displayBooks();
+        LibraryInterface libInterface = new LibraryInterface();
+        libInterface.getLibrary().addBook("Head First Java", "Kathy Sierra & Bert Bates", 5);
+        libInterface.getLibrary().addBook("Java: A Beginner's Guide", "Herbert Schildt", 3);
+        libInterface.getLibrary().addBook("Java for Dummies", "Barry A. Burd", 4);
+        libInterface.getLibrary().addBook("Effective Java", "Joshua Bloch", 2);
+        libInterface.getLibrary().addBook("Java: A Beginner's Guide", "Herbert Schildt", 2);
+        libInterface.saveBooks("books.bk");
+        libInterface.loadBooks("books.bk");
+        libInterface.displayMenu();
     }
     
 }

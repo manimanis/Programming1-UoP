@@ -23,6 +23,31 @@ public class BooksLibrary {
         return sb.toString();
     }
     
+    public static String removeSpaces(String s) {
+        s = s.trim();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char car = s.charAt(i);
+            if (car != ' ' || (i > 0 && sb.charAt(sb.length() - 1) != ' ')) {
+                sb.append(car);
+            }
+        }
+        return sb.toString();
+    }
+    
+    public static boolean isAlphanumeric(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char car = s.charAt(i);
+            boolean valid = (Character.isAlphabetic(car) 
+                    || Character.isDigit(car) 
+                    || Character.isSpaceChar(car));
+            if (!valid) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public int bookCount() {
         return books.size();
     }
@@ -49,44 +74,43 @@ public class BooksLibrary {
         return -1;
     }
     
-    public void addBook(BookCopies bc) {
-        addBook(bc.getTitle(), bc.getAuthor(), bc.getBooksCount());
+    public int addBook(BookCopies bc) {
+        return addBook(bc.getTitle(), bc.getAuthor(), bc.getBooksCount());
     }
 
-    public void addBook(String title, String author, int numCopies) {
+    public int addBook(String title, String author, int numCopies) {
         int pos = findBookByTitle(toTitleCase(title));
         if (pos == -1) {
+            pos = books.size();
             books.add(new BookCopies(numCopies, title, author));
         } else {
             books.get(pos).addCopies(numCopies);
         }
+        return pos;
     }
 
-    public boolean borrowBook(String title, int numCopies) {
-        int pos = findBookByTitle(toTitleCase(title));
-        BookCopies book = books.get(pos);
-        if (pos == -1 || !book.canBorrow(numCopies)) {
+    public boolean borrowBook(BookCopies book, int numCopies) {
+        if (!book.canBorrow(numCopies)) {
             return false;
         }
         book.borrowCopies(numCopies);
         return true;
     }
+    
+    public boolean borrowBook(int index, int numCopies) {
+        return borrowBook(books.get(index), numCopies);
+    }
 
-    public boolean returnBook(String title, int numCopies) {
-        int pos = findBookByTitle(toTitleCase(title));
-        BookCopies book = books.get(pos);
-        if (pos == -1 || !book.canReturn(numCopies)) {
+    public boolean returnBook(BookCopies book, int numCopies) {
+        if (!book.canReturn(numCopies)) {
             return false;
         }
         book.returnCopies(numCopies);
         return true;
     }
     
-    
-
-    
-
-    
-
+    public boolean returnBook(int index, int numCopies) {
+        return returnBook(books.get(index), numCopies);
+    }
     
 }

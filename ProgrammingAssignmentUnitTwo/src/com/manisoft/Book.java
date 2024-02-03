@@ -53,7 +53,9 @@ public class Book implements Comparable<Book>, Serializable {
 
     @Override
     public String toString() {
-        return String.format("%-60s %-20s", title, author);
+        return String.format("%-60s %-20s", 
+                title.length() > 60 ? (title.substring(0, 57) + "...") : title, 
+                author.length() > 20 ? (author.substring(0, 17) + "..."): author);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class BookCopies extends Book {
     }
 
     public boolean canBorrow(int numCopies) {
-        return booksAvailable > numCopies;
+        return booksAvailable >= numCopies;
     }
 
     public void borrowCopies(int numCopies) {
@@ -45,9 +45,13 @@ public class BookCopies extends Book {
         }
         booksAvailable -= numCopies;
     }
+    
+    public int getBorrowedCopies() {
+        return booksCount - booksAvailable;
+    }
 
     public boolean canReturn(int numCopies) {
-        return booksAvailable + numCopies > booksCount;
+        return booksAvailable + numCopies <= booksCount;
     }
 
     public void returnCopies(int numCopies) {
