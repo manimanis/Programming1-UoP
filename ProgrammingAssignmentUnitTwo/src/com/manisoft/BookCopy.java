@@ -120,7 +120,9 @@ public class BookCopy implements Comparable<BookCopy>, Serializable {
      */
     public void returnCopies(int numCopies) {
         if (!canReturn(numCopies)) {
-            throw new IllegalArgumentException(String.format("Cannot return more than %d missing books.", booksCount - booksAvailable));
+            throw new IllegalArgumentException(
+                    String.format("Cannot return more than %d missing books.", 
+                            booksCount - booksAvailable));
         }
         booksAvailable += numCopies;
     }
@@ -132,9 +134,9 @@ public class BookCopy implements Comparable<BookCopy>, Serializable {
      */
     @Override
     public String toString() {
-        return String.format("%-60s %-20s %d/%d",
-                title.length() > 60 ? (title.substring(0, 57) + "...") : title,
-                author.length() > 20 ? (author.substring(0, 17) + "...") : author,
+        return String.format("%-40s %-20s %d/%d",
+                UtilityFunc.formatStr(title, 40),
+                UtilityFunc.formatStr(author, 20),
                 booksAvailable, booksCount);
     }
 

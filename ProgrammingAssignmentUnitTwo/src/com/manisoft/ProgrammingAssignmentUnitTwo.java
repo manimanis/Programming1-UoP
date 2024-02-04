@@ -6,7 +6,6 @@ package com.manisoft;
  * @author Cyberbox
  */
 public class ProgrammingAssignmentUnitTwo {
-
     /**
      * @param args the command line arguments
      */
@@ -26,6 +25,5 @@ public class ProgrammingAssignmentUnitTwo {
         }
         // Start application main menu.
         libInterface.displayMenu();
-    }
-    
+    } 
 }

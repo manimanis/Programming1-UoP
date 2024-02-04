@@ -35,7 +35,7 @@ public class LibraryInterface {
      * @param end End index exclusive.
      */
     public void displayBooks(int start, int end) {
-        System.out.println(String.format("%-4s %-60s %-20s %s",
+        System.out.println(String.format("%-4s %-40s %-20s %s",
                 "Ref", "Book Title", "Author", "Avail/Count"));
         for (int i = start; i < end; i++) {
             BookCopy bk = library.get(i);

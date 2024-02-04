@@ -82,4 +82,11 @@ public class UtilityFunc {
         } while (!valid);
         return v;
     }
+    
+    public static String formatStr(String s, int length) {
+        if (s.length() <= length) {
+            return s;
+        }
+        return s.substring(0, length-3) + "...";
+    }
 }
