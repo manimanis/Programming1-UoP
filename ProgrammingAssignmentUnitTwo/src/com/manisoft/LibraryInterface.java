@@ -1,46 +1,53 @@
 package com.manisoft;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Cyberbox
  */
 public class LibraryInterface {
 
-    private BooksLibrary library = new BooksLibrary();
-    private final Scanner scan = new Scanner(System.in);
+    private final BooksLibrary library;
 
-    public LibraryInterface() {
+    public LibraryInterface(String filePath) {
+        library = new BooksLibrary(filePath);
     }
 
+    /**
+     * Returns BooksLibrary object.
+     *
+     * @return BooksLibrary object.
+     */
     public BooksLibrary getLibrary() {
         return library;
     }
 
+    /**
+     * Display all books in the library.
+     */
     public void displayBooks() {
-        displayBooks(0, library.bookCount());
+        displayBooks(0, library.getBooksCount());
     }
 
+    /**
+     * Display the books ranging between start index and end index exclusive.
+     *
+     * @param start Start index inclusive.
+     * @param end End index exclusive.
+     */
     public void displayBooks(int start, int end) {
-        System.out.println(String.format("%-60s %-20s %s", 
-                "Book Title", "Author", "Avail/Count"));
+        System.out.println(String.format("%-4s %-60s %-20s %s",
+                "Ref", "Book Title", "Author", "Avail/Count"));
         for (int i = start; i < end; i++) {
-            BookCopies bk = library.get(i);
-            System.out.println(bk);
+            BookCopy bk = library.get(i);
+            System.out.println(
+                    String.format("%-4d ", i) + bk);
         }
         System.out.println();
     }
 
+    /**
+     * Displays application main menu.
+     */
     public void displayMenu() {
         int choice;
         do {
@@ -48,12 +55,13 @@ public class LibraryInterface {
             System.out.println("1. Add new book");
             System.out.println("2. Borrow books");
             System.out.println("3. Return books");
+            System.out.println("------------------");
             System.out.println("4. List of books");
+            System.out.println("------------------");
             System.out.println("9. Exit");
 
-            System.out.print("Your choice, please? ");
-            choice = scan.nextInt();
-            scan.nextLine();
+            choice = UtilityFunc.getInteger("Your choice, please? ", 1, 9);
+            System.out.println();
 
             switch (choice) {
                 case 1 ->
@@ -74,164 +82,110 @@ public class LibraryInterface {
         } while (choice != 9);
     }
 
-    public String getString(String msg, int minLen, int maxLen) {
-        String s;
-        boolean valid;
-        do {
-            System.out.print(msg);
-            s = BooksLibrary.removeSpaces(scan.nextLine().trim());
-            valid = s.length() >= minLen
-                    && s.length() <= maxLen;
-            if (!valid) {
-                System.out.println(String.format(
-                        "Input should contain between %d and %d characters!",
-                        minLen, maxLen));
-            }
-        } while (!valid);
-        return s;
-    }
-
-    public int getInteger(String msg, int minVal, int maxVal) {
-        int v;
-        boolean valid;
-        do {
-            System.out.print(msg);
-            v = scan.nextInt();
-            valid = v >= minVal && v <= maxVal;
-            if (!valid) {
-                System.out.println(String.format(
-                        "Input should range between %d and %d!",
-                        minVal, maxVal));
-            }
-        } while (!valid);
-        return v;
-    }
-
+    /**
+     * Prompts the user for information about a new book.
+     */
     public void addNewBook() {
-        System.out.println(" -- Add new book -- \n");
-        String title = getString("Book title? ", 10, 60);
-        String author = getString("Book author? ", 10, 60);
-        int numCopies = getInteger("Book copies? ", 1, 100);
+        String title;
+        String author = "";
+        int numCopies;
+        BookCopy book;
 
+        System.out.println(" -- Add new book -- \n");
+
+        title = UtilityFunc.toTitleCase(
+                UtilityFunc.getString("Book title? ", 10, 60));
         int pos = library.findBookByTitle(title);
         if (pos == -1) {
-            System.out.println("New book!");
+            author = UtilityFunc.toTitleCase(
+                    UtilityFunc.getString("Book author? ", 3, 40));
         } else {
+            book = library.get(pos);
             System.out.println("We already have this title!");
+            System.out.println("It is authored by: " + book.getAuthor());
+            System.out.println("We own " + book.getBooksCount() + " copies.");
         }
-        pos = library.addBook(title, author, numCopies);
-        System.out.println("Book Successfully Added!\n");
-        
-        displayBooks(pos, pos+1);
+        numCopies = UtilityFunc.getInteger("Book copies? ", 1, 100);
+
+        if (pos == -1) {
+            pos = library.addBook(title, author, numCopies);
+            System.out.println("Book Successfully Added!\n");
+        } else {
+            library.addBookCopies(pos, numCopies);
+            System.out.println("Books count Successfully Updated!\n");
+        }
+        library.saveBooks();
+        displayBooks(pos, pos + 1);
     }
 
+    /**
+     * Prompts the user for book they wish to borrow.
+     */
     public void borrowBooks() {
         System.out.println("\n -- Borrow books -- \n");
-        String title = getString("Book title? ", 10, 60);
+
+        String title = UtilityFunc.toTitleCase(
+                UtilityFunc.getString("Book title? ", 10, 60));
 
         int pos = library.findBookByTitle(title);
         if (pos == -1) {
             System.out.println("This book is not found!");
             return;
         }
-        BookCopies bc = library.get(pos);
+
+        BookCopy bc = library.get(pos);
         if (bc.getBooksAvailable() == 0) {
             System.out.println("No copies of the book are available!");
             return;
         }
+
         System.out.println(String.format(
                 "There are %d copies available of this book.",
                 bc.getBooksAvailable()));
-        int numCopies = getInteger("How many copies, 0 to cancel? ",
+        int numCopies = UtilityFunc.getInteger("How many copies, 0 to cancel? ",
                 0, bc.getBooksAvailable());
         if (numCopies != 0) {
             library.borrowBook(bc, numCopies);
             System.out.println(
-                    String.format("You just borrowed %d copies "
-                            + "of '%s' book.\n",
+                    String.format("You just borrowed %d copies of '%s' book.\n",
                             numCopies, title));
-            displayBooks(pos, pos+1);
+            library.saveBooks();
+            displayBooks(pos, pos + 1);
         }
     }
 
+    /**
+     * Prompts the user for book they want to return.
+     */
     public void returnBooks() {
         System.out.println("\n -- Return books -- \n");
-        String title = getString("Book title? ", 10, 60);
+        String title = UtilityFunc.toTitleCase(
+                UtilityFunc.getString("Book title? ", 10, 60));
 
         int pos = library.findBookByTitle(title);
         if (pos == -1) {
             System.out.println("This book is not ours!");
             return;
         }
-        BookCopies bc = library.get(pos);
-        int numCopies = getInteger("How many copies, 0 to cancel? ",
-                0, 100);
+
+        BookCopy bc = library.get(pos);
+        if (bc.getBorrowedCopies() == 0) {
+            System.out.println("No copies of this book were borrowed!");
+            return;
+        }
+
+        System.out.println(bc.getBorrowedCopies() + " copies were borrowed!");
+        int numCopies = UtilityFunc.getInteger(
+                "How many copies to return, 0 to cancel? ",
+                0, bc.getBorrowedCopies());
         if (numCopies != 0) {
-            if (numCopies > bc.getBorrowedCopies()) {
-                System.out.println(
-                        String.format("%d of these books are not ours!",
-                                numCopies - bc.getBorrowedCopies()));
-                return;
-            }
             library.returnBook(bc, numCopies);
             System.out.println(
-                    String.format("You just returned %d copies "
-                            + "of '%s' book.\n"
-                            + "%d books available.",
-                            numCopies, title,
-                            bc.getBooksAvailable()));
-        }
-    }
-
-    public void loadBooks(String filePath) {
-        ObjectInputStream ois = null;
-        BookCopies bc;
-        library.clear();
-        try {
-            File fichier = new File(filePath);
-            ois = new ObjectInputStream(new FileInputStream(fichier));
-            int count = ois.readInt();
-            for (int i = 0; i < count; i++) {
-                Object obj = ois.readObject();
-                if (obj != null) {
-                    bc = (BookCopies) obj;
-                    library.addBook(bc);
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                ois.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void saveBooks(String filePath) {
-        ObjectOutputStream oos = null;
-        try {
-            File fichier = new File(filePath);
-            oos = new ObjectOutputStream(new FileOutputStream(fichier));
-            oos.writeInt(library.bookCount());
-            for (BookCopies bc : library.getBooks()) {
-                oos.writeObject(bc);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BooksLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                    String.format("You just returned %d copies of '%s' book.\n"
+                            + "Now, %d books are available.",
+                            numCopies, title, bc.getBooksAvailable()));
+            library.saveBooks();
+            displayBooks(pos, pos + 1);
         }
     }
 }
