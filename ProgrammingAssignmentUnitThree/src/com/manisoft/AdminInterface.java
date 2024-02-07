@@ -6,6 +6,9 @@ package com.manisoft;
  */
 public class AdminInterface {
 
+    /**
+     * The Application Main Menu
+     */
     public static void displayMainMenu() {
         int choice;
         do {

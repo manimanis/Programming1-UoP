@@ -1,4 +1,3 @@
-
 package com.manisoft;
 
 import java.io.File;
@@ -22,6 +21,11 @@ public class StudentList {
     private final ArrayList<Student> students = new ArrayList<>();
     private final String filePath;
 
+    /**
+     * Constructs a StudentList object.
+     *
+     * @param filePath
+     */
     public StudentList(String filePath) {
         this.filePath = filePath;
         File file = new File(filePath);
@@ -30,26 +34,59 @@ public class StudentList {
         }
     }
 
+    /**
+     * Returns last student's ID.
+     *
+     * @return
+     */
     public static String getNewStudentId() {
         return String.format("%s%04d", "BCS", numStudents + 1);
     }
 
+    /**
+     * Return student's list array.
+     *
+     * @return Student Array.
+     */
     public ArrayList<Student> getStudents() {
         return students;
     }
 
+    /**
+     * Get a student by its index in the user.
+     *
+     * @param idx Student's index.
+     * @return Student object.
+     */
     public Student getStudent(int idx) {
         return students.get(idx);
     }
 
+    /**
+     * Modify student at the specified index in the array.
+     *
+     * @param idx The index.
+     * @param student The new object to store at idx position.
+     */
     public void setStudent(int idx, Student student) {
         students.set(idx, student);
     }
 
+    /**
+     * Returns students count.
+     *
+     * @return students count.
+     */
     public int getStudentsCount() {
         return students.size();
     }
 
+    /**
+     * Add a new student.
+     *
+     * @param student The Student object to be inserted.
+     * @return true if the object is inserted, false otherwise.
+     */
     public boolean addStudent(Student student) {
         int pos = findStudent(student);
         if (pos != -1) {
@@ -59,6 +96,12 @@ public class StudentList {
         return students.add(student);
     }
 
+    /**
+     * Update an student's information.
+     *
+     * @param student The Student object to be updated.
+     * @return true if the object is updated, false otherwise.
+     */
     public boolean updateStudent(Student student) {
         int posId = findStudentByID(student.getId());
         if (posId == -1) {
@@ -71,7 +114,13 @@ public class StudentList {
         students.set(posId, student);
         return true;
     }
-    
+
+    /**
+     * Delete a student from the record.
+     *
+     * @param student The student object to be deleted.
+     * @return true if the student is deleted, false otherwise.
+     */
     public boolean deleteStudent(Student student) {
         int posId = findStudentByID(student.getId());
         if (posId == -1) {
@@ -81,6 +130,12 @@ public class StudentList {
         return true;
     }
 
+    /**
+     * Find a student by its ID, or by its name.
+     *
+     * @param student A Student's object to serach for.
+     * @return The first object position in the students' array or -1 otherwise.
+     */
     public int findStudent(Student student) {
         int pos = findStudentByID(student.getId());
         if (pos != -1) {
@@ -93,6 +148,12 @@ public class StudentList {
         return -1;
     }
 
+    /**
+     * Find a student by or by its name.
+     *
+     * @param name A Student's name to serach for.
+     * @return The first position of the name, or -1 otherwise.
+     */
     public int findStudentByName(String name) {
         for (int i = 0; i < students.size(); i++) {
             if (name.equalsIgnoreCase(students.get(i).getName())) {
@@ -102,6 +163,12 @@ public class StudentList {
         return -1;
     }
 
+    /**
+     * Find a student by or by its ID.
+     *
+     * @param id A Student's ID to serach for.
+     * @return The first position of the ID, or -1 otherwise.
+     */
     public int findStudentByID(String id) {
         for (int i = 0; i < students.size(); i++) {
             if (id.equalsIgnoreCase(students.get(i).getId())) {
@@ -122,6 +189,9 @@ public class StudentList {
 
     }
 
+    /**
+     * Loads Students from a file.
+     */
     public final void loadStudents() {
         ObjectInputStream ois = null;
         try {
@@ -148,6 +218,9 @@ public class StudentList {
         }
     }
 
+    /**
+     * Saves students to a file.
+     */
     public final void saveStudents() {
         ObjectOutputStream oos = null;
         try {
