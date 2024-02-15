@@ -12,8 +12,6 @@ import java.util.Scanner;
  */
 public class StudentManagement {
 
-    private static final Scanner scanner = new Scanner(System.in);
-
     /**
      * Ensures that the string does not exceed a certain length.
      *
@@ -117,6 +115,7 @@ public class StudentManagement {
 
     /**
      * Transforms a String into a date.
+     *
      * @param date The string to be transformed.
      * @return A Calendar objet, or null if a problem occurs.
      */
@@ -132,6 +131,7 @@ public class StudentManagement {
 
     /**
      * Formats a Calendar object to a String.
+     *
      * @param cal The Calendar object to be formatted.
      * @return A formatted date string, or an empty string if null.
      */
@@ -144,6 +144,7 @@ public class StudentManagement {
 
     /**
      * Removes trailing spaces from user input.
+     *
      * @param s The String to be formatted.
      * @return The string without trailing spaces.
      */
@@ -160,7 +161,13 @@ public class StudentManagement {
     }
 
     /**
+     * Creates a shared scanner object.
+     */
+    private static final Scanner scanner = new Scanner(System.in);
+
+    /**
      * Prompts the user to enter a letter to continue a treatment.
+     *
      * @param message The message to be displayed as an invite.
      * @param options The accepted letters.
      * @param defaultOption The default letter.
@@ -179,7 +186,8 @@ public class StudentManagement {
 
     /**
      * Prompts the user for a valid ID.
-     * @return 
+     *
+     * @return
      */
     public static String enterId() {
         String id;
@@ -200,6 +208,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user for a valid name.
+     *
      * @return A valid name.
      */
     public static String enterName() {
@@ -208,6 +217,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user for a valid name, proposing a default name.
+     *
      * @param defaultName The default name.
      * @return The user valid name.
      */
@@ -234,6 +244,7 @@ public class StudentManagement {
 
     /**
      * Prompts to enter a valid date of birth.
+     *
      * @return A valid birth date.
      */
     public static Calendar enterDateOfBirth() {
@@ -242,6 +253,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user to enter a valid date of birth.
+     *
      * @param defaultDate The current birth date.
      * @return A valid birth date.
      */
@@ -270,6 +282,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user to enter a valid grade.
+     *
      * @return A valid grade.
      */
     public static int enterGrade() {
@@ -278,15 +291,18 @@ public class StudentManagement {
 
     /**
      * Prompts the user to enter a valid grade, proposing a current value.
+     *
      * @param defaultVal The current grade.
      * @return A valid grade.
      */
     public static int enterGrade(int defaultVal) {
-        return enterNumber("Grade [0, 100]? ", defaultVal, 0, 100);
+        return enterNumber("Grade [0, 100]? ",
+                defaultVal, 0, 100);
     }
 
     /**
      * Prompts the user to enter a number within the range minVal and maxVal.
+     *
      * @param msg A message prompt.
      * @param minVal Minimum value.
      * @param maxVal Maximum value.
@@ -298,6 +314,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user to enter a number within the range minVal and maxVal.
+     *
      * @param msg A message prompt.
      * @param defaultVal Default value.
      * @param minVal Minimum value.
@@ -323,7 +340,8 @@ public class StudentManagement {
             }
             if (!isValid) {
                 System.out.printf("Incorrect value!\n"
-                        + "Should be between %d and %d.\n", minVal, maxVal);
+                        + "Should be between %d and %d.\n", 
+                        minVal, maxVal);
             }
         } while (!isValid);
 
@@ -332,6 +350,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user for student's information.
+     *
      * @param student The current student's information.
      */
     public static void enterStudentInfo(Student student) {
@@ -344,6 +363,7 @@ public class StudentManagement {
 
     /**
      * Prompts the user for student's information.
+     *
      * @return a Student object.
      */
     public static Student enterNewStudentInfo() {
@@ -364,16 +384,16 @@ public class StudentManagement {
     static {
         if (students.getStudentsCount() == 0) {
             students.addStudent(new Student("BCS0001",
-                    "Mohamed Anis Mani", 
+                    "Mohamed Anis Mani",
                     toCalendar("28/06/1975"), 90));
-            students.addStudent(new Student("BCS0002", "Sana Jedidi", 
+            students.addStudent(new Student("BCS0002", "Sana Jedidi",
                     toCalendar("24/08/1983"), 85));
-            students.addStudent(new Student("BCS0003", "Abderrazek Mani", 
+            students.addStudent(new Student("BCS0003", "Abderrazek Mani",
                     toCalendar("08/09/2012"), 95));
-            students.addStudent(new Student("BCS0004", "Yosri Mani", 
+            students.addStudent(new Student("BCS0004", "Yosri Mani",
                     toCalendar("28/07/1981"), 98));
             students.addStudent(new Student("BCS0005",
-                    "Mohamed Bachar Khalifa Hmissi", 
+                    "Mohamed Bachar Khalifa Hmissi",
                     toCalendar("10/01/2006"), 99));
             students.saveStudents();
         }
@@ -398,6 +418,7 @@ public class StudentManagement {
 
     /**
      * Displays student's information.
+     *
      * @param student The Student object.
      */
     public static void displayStudentInfo(Student student) {
@@ -467,6 +488,7 @@ public class StudentManagement {
 
     /**
      * Display students list.
+     *
      * @param start starting index.
      * @param end ending index.
      */
@@ -507,7 +529,7 @@ public class StudentManagement {
             System.out.println();
             return;
         }
-        if (students.deleteStudent(student)) {
+        if (students.removeStudent(student)) {
             students.saveStudents();
             System.out.println("Student deleted successfully!");
         } else {

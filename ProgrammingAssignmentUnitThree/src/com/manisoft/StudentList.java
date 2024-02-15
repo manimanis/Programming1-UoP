@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +17,11 @@ import java.util.logging.Logger;
 public class StudentList {
 
     private static int numStudents = 0;
-    private final ArrayList<Student> students = new ArrayList<>();
+    
+    private Student[] students;
+    private int maxStudentCount = 20;
+    private int studentsCount = 0;
+    // private final ArrayList<Student> students = new ArrayList<>();
     private final String filePath;
 
     /**
@@ -27,6 +30,7 @@ public class StudentList {
      * @param filePath
      */
     public StudentList(String filePath) {
+        this.students = new Student[maxStudentCount];
         this.filePath = filePath;
         File file = new File(filePath);
         if (file.exists()) {
@@ -48,7 +52,7 @@ public class StudentList {
      *
      * @return Student Array.
      */
-    public ArrayList<Student> getStudents() {
+    public Student[] getStudents() {
         return students;
     }
 
@@ -59,7 +63,7 @@ public class StudentList {
      * @return Student object.
      */
     public Student getStudent(int idx) {
-        return students.get(idx);
+        return students[idx];
     }
 
     /**
@@ -69,7 +73,7 @@ public class StudentList {
      * @param student The new object to store at idx position.
      */
     public void setStudent(int idx, Student student) {
-        students.set(idx, student);
+        students[idx] = student;
     }
 
     /**
@@ -78,7 +82,7 @@ public class StudentList {
      * @return students count.
      */
     public int getStudentsCount() {
-        return students.size();
+        return studentsCount;
     }
 
     /**
@@ -93,7 +97,15 @@ public class StudentList {
             return false;
         }
         numStudents++;
-        return students.add(student);
+        if (studentsCount + 1 > maxStudentCount) {
+            maxStudentCount += 20;
+            Student[] newStudents = new Student[maxStudentCount];
+            System.arraycopy(students, 0, newStudents, 0, studentsCount);
+            students = newStudents;
+        }
+        students[studentsCount] = student;
+        studentsCount++;
+        return true;
     }
 
     /**
@@ -111,7 +123,7 @@ public class StudentList {
         if (posName != -1 && posName != posId) {
             return false;
         }
-        students.set(posId, student);
+        setStudent(posId, student);
         return true;
     }
 
@@ -121,13 +133,33 @@ public class StudentList {
      * @param student The student object to be deleted.
      * @return true if the student is deleted, false otherwise.
      */
-    public boolean deleteStudent(Student student) {
+    public boolean removeStudent(Student student) {
         int posId = findStudentByID(student.getId());
-        if (posId == -1) {
+        return StudentList.this.removeStudent(posId);
+    }
+     
+    /**
+     * Delete a student from the record.
+     * 
+     * @param index The index of the student in the array.
+     * @return  true if th student is deleted, false otherwise.
+     */
+    public boolean removeStudent(int index) {
+        if (studentsCount == 0 || index < 0 || index >= studentsCount) {
             return false;
         }
-        students.remove(posId);
+        for (int i = index + 1; i < studentsCount; i++) {
+            students[i-1] = students[i];
+        }
+        studentsCount--;
         return true;
+    }
+    
+    /**
+     * Clear students list, by resetting stduents count to zero.
+     */
+    public void clear() {
+        studentsCount = 0;
     }
 
     /**
@@ -155,8 +187,8 @@ public class StudentList {
      * @return The first position of the name, or -1 otherwise.
      */
     public int findStudentByName(String name) {
-        for (int i = 0; i < students.size(); i++) {
-            if (name.equalsIgnoreCase(students.get(i).getName())) {
+        for (int i = 0; i < studentsCount; i++) {
+            if (name.equalsIgnoreCase(students[i].getName())) {
                 return i;
             }
         }
@@ -170,23 +202,12 @@ public class StudentList {
      * @return The first position of the ID, or -1 otherwise.
      */
     public int findStudentByID(String id) {
-        for (int i = 0; i < students.size(); i++) {
-            if (id.equalsIgnoreCase(students.get(i).getId())) {
+        for (int i = 0; i < studentsCount; i++) {
+            if (id.equalsIgnoreCase(students[i].getId())) {
                 return i;
             }
         }
         return -1;
-    }
-
-    /**
-     * Write a book to the output stream.
-     *
-     * @param oos
-     * @throws IOException
-     */
-    protected void writeObject(ObjectOutputStream oos)
-            throws IOException {
-
     }
 
     /**
@@ -199,9 +220,9 @@ public class StudentList {
             ois = new ObjectInputStream(new FileInputStream(fichier));
             this.numStudents = ois.readInt();
             int nbr = ois.readInt();
-            students.clear();
+            clear();
             for (int i = 0; i < nbr; i++) {
-                students.add((Student) ois.readObject());
+                addStudent((Student) ois.readObject());
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,7 +248,7 @@ public class StudentList {
             File fichier = new File(filePath);
             oos = new ObjectOutputStream(new FileOutputStream(fichier));
             oos.writeInt(numStudents);
-            oos.writeInt(students.size());
+            oos.writeInt(studentsCount);
             for (Student student : students) {
                 oos.writeObject(student);
             }
