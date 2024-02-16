@@ -235,7 +235,7 @@ public class StudentManagement {
             isValid = name.length() >= 5 && isAlphabetic(name, true);
             if (!isValid) {
                 System.out.println("Incorrect name!\n"
-                        + "Should be composed only of alphabetic letters.");
+                        + "Should be composed of at least 5 alphabetic letters.");
             }
         } while (!isValid);
 
