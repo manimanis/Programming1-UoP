@@ -1,6 +1,8 @@
 
 package discussionassignmentexamples;
 
+import java.util.Dictionary;
+
 /**
  *
  * @author manianis
@@ -10,4 +12,5 @@ public class DatabaseConnection {
     public static String user = "root";
     public static String pass = "***";
     public static String base = "mydatabase";
+ 
 }

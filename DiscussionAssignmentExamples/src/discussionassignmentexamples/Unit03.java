@@ -15,6 +15,7 @@ public class Unit03 {
         System.out.println(animal1.getAnimalsCount()); // 3
         System.out.println(animal2.getAnimalsCount()); // 3
         System.out.println(animal3.getAnimalsCount()); // 3
+        animal1.makeSound();
         
         // static methods are accessible using class name
         System.out.println(Animal.getAnimalsCount()); // 3

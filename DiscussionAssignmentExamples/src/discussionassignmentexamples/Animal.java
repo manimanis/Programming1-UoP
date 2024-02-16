@@ -9,6 +9,8 @@ package discussionassignmentexamples;
  * @author manianis
  */
 public class Animal {
+    
+    public static int test = -1;
 
     // Static variables members
     protected static int animalsCount;
