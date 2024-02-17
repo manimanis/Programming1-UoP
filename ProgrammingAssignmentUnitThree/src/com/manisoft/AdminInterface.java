@@ -24,19 +24,13 @@ public class AdminInterface {
                     0, 5);
 
             switch (choice) {
-                case 1 ->
-                    StudentManagement.addNewStudent();
-                case 2 ->
-                    StudentManagement.updateStudentInfo();
-                case 3 ->
-                    StudentManagement.displayStudentInfo();
-                case 4 ->
-                    StudentManagement.displayStudentsList();
-                case 5 ->
-                    StudentManagement.deleteStudentInfo();
+                case 1 -> StudentManagement.addNewStudent();
+                case 2 -> StudentManagement.updateStudentInfo();
+                case 3 -> StudentManagement.displayStudentInfo();
+                case 4 -> StudentManagement.displayStudentsList();
+                case 5 -> StudentManagement.deleteStudentInfo();
             }
         } while (choice != 0);
         System.out.println("Good bye, see you soon!");
     }
-
 }

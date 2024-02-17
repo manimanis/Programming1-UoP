@@ -26,7 +26,6 @@ public class StudentList {
 
     /**
      * Constructs a StudentList object.
-     *
      * @param filePath
      */
     public StudentList(String filePath) {
@@ -40,7 +39,6 @@ public class StudentList {
 
     /**
      * Returns last student's ID.
-     *
      * @return
      */
     public static String getNewStudentId() {
@@ -49,7 +47,6 @@ public class StudentList {
 
     /**
      * Return student's list array.
-     *
      * @return Student Array.
      */
     public Student[] getStudents() {
@@ -58,7 +55,6 @@ public class StudentList {
 
     /**
      * Get a student by its index in the user.
-     *
      * @param idx Student's index.
      * @return Student object.
      */
@@ -68,7 +64,6 @@ public class StudentList {
 
     /**
      * Modify student at the specified index in the array.
-     *
      * @param idx The index.
      * @param student The new object to store at idx position.
      */
@@ -78,7 +73,6 @@ public class StudentList {
 
     /**
      * Returns students count.
-     *
      * @return students count.
      */
     public int getStudentsCount() {
@@ -87,7 +81,6 @@ public class StudentList {
 
     /**
      * Add a new student.
-     *
      * @param student The Student object to be inserted.
      * @return true if the object is inserted, false otherwise.
      */
@@ -109,8 +102,7 @@ public class StudentList {
     }
 
     /**
-     * Update an student's information.
-     *
+     * Update a student's information.
      * @param student The Student object to be updated.
      * @return true if the object is updated, false otherwise.
      */
@@ -129,7 +121,6 @@ public class StudentList {
 
     /**
      * Delete a student from the record.
-     *
      * @param student The student object to be deleted.
      * @return true if the student is deleted, false otherwise.
      */
@@ -140,7 +131,6 @@ public class StudentList {
      
     /**
      * Delete a student from the record.
-     * 
      * @param index The index of the student in the array.
      * @return  true if th student is deleted, false otherwise.
      */
@@ -164,7 +154,6 @@ public class StudentList {
 
     /**
      * Find a student by its ID, or by its name.
-     *
      * @param student A Student's object to serach for.
      * @return The first object position in the students' array or -1 otherwise.
      */
@@ -182,7 +171,6 @@ public class StudentList {
 
     /**
      * Find a student by or by its name.
-     *
      * @param name A Student's name to serach for.
      * @return The first position of the name, or -1 otherwise.
      */
@@ -197,7 +185,6 @@ public class StudentList {
 
     /**
      * Find a student by or by its ID.
-     *
      * @param id A Student's ID to serach for.
      * @return The first position of the ID, or -1 otherwise.
      */
