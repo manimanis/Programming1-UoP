@@ -16,9 +16,11 @@ public class ProgrammingAssignmentUnitFour {
      */
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
-        // Stock prices for the period of Jan, 29 to Feb, 9
-        double[] stockPrices = new double[] { 58.32, 58.11, 58.60, 57.54, 56.92,
-                56.24, 55.83, 56.74, 56.7, 56.88 };
+        // Stock prices for 10 days in the period of Jan, 29 to Feb, 9
+        double[] stockPrices = new double[] {
+                58.32, 58.11, 58.60, 57.54, 56.92,
+                56.24, 55.83, 56.74, 56.70, 56.88
+        };
         double maxPr = findMaximumPrice(stockPrices);
         double minPr = findMinimumPrice(stockPrices);
         displayStocks(stockPrices);
@@ -26,7 +28,8 @@ public class ProgrammingAssignmentUnitFour {
         displayHistogram(stockPrices, minPr, maxPr);
         displayBarChart(stockPrices);
 
-        stockPrices = generateRandomStock(15, 10, 15);
+        // Random stock prices
+        stockPrices = generateRandomStock(15, 10, 15, 2);
         maxPr = findMaximumPrice(stockPrices);
         minPr = findMinimumPrice(stockPrices);
         displayStocks(stockPrices);
@@ -34,7 +37,23 @@ public class ProgrammingAssignmentUnitFour {
         displayHistogram(stockPrices, minPr, maxPr);
         displayBarChart(stockPrices);
 
-        List<double[]> arrStockPrices = Arrays.asList(stockPrices);
+        stockPrices = generateRandomStock(50, 10, 11, 1);
+        ArrayList<Double> arrStockPrices = copyArray(stockPrices);
+        ArrayList<Double> cumStockPrices = computeCumulativeSum(arrStockPrices);
+        displayCumulativeSum(arrStockPrices, cumStockPrices);
+
+        ArrayList<Double> distValues = new ArrayList<>();
+        ArrayList<Integer> valFreq = new ArrayList<>();
+        for (Double val : arrStockPrices) {
+            if (distValues.indexOf(val) == -1) {
+                distValues.add(val);
+            }
+        }
+        for (int i = 0; i < distValues.size(); i++) {
+            Double val = distValues.get(i);
+            valFreq.add(countOccurences(stockPrices, val));
+            System.out.println(val + " " + valFreq.get(i));
+        }
     }
 
     /**
@@ -59,15 +78,15 @@ public class ProgrammingAssignmentUnitFour {
      * is searched in the interval +/-delta
      *
      * @param stockPrices An array of stock prices.
-     * @param targetPrice target price
-     * @param delta       target price range
+     * @param minPrice    minimum price
+     * @param maxPrice    maximum price
      * @return the number of occurrence
      */
     public static int countOccurences(double[] stockPrices,
-            double targetPrice, double delta) {
+            double minPrice, double maxPrice) {
         int count = 0;
         for (int i = 0; i < stockPrices.length; i++) {
-            if (Math.abs(stockPrices[i] - targetPrice) <= delta) {
+            if (minPrice <= stockPrices[i] && stockPrices[i] <= maxPrice) {
                 count++;
             }
         }
@@ -82,7 +101,7 @@ public class ProgrammingAssignmentUnitFour {
      * @return the number of occurrence
      */
     public static int countOccurences(double[] stockPrices, double targetPrice) {
-        return countOccurences(stockPrices, targetPrice, 0.01);
+        return countOccurences(stockPrices, targetPrice, targetPrice);
     }
 
     /**
@@ -235,14 +254,18 @@ public class ProgrammingAssignmentUnitFour {
         double step = (max - min) / 50;
         for (int i = 0; i < stockPrices.length; i++) {
             if (i == 0) {
-                System.out.printf("Day | $%5.2f", min);
-                displayChar(' ', 44);
-                System.out.printf("| $%5.2f\n", max);
-                displayChar('─', 65);
+                double axis = min;
+                System.out.print("Day ");
+                for (int j = 0; j <= 50; j += 10) {
+                    System.out.printf("| $%5.2f  ", axis);
+                    axis += step * 10;
+                }
+                System.out.println();
+                System.out.print(duplicateChar('─', 65));
                 System.out.println();
             }
             System.out.printf("%3d |", i + 1);
-            displayChar('▓', (int) Math.ceil((stockPrices[i] - min + step) / step));
+            System.out.print(duplicateChar('▓', (int) Math.ceil((stockPrices[i] - min) / step)));
             System.out.printf(" $%5.2f\n", stockPrices[i]);
         }
     }
@@ -261,7 +284,7 @@ public class ProgrammingAssignmentUnitFour {
         System.out.println("\n--- Stock Prices Bar Chart ---\n");
         for (int i = 0; i < bins.length - 1; i++) {
             System.out.printf("[%5.2f, %5.2f] | ", bins[i], bins[i + 1]);
-            displayChar('▓', freq[i] * 30 / maxFr);
+            System.out.printf(duplicateChar('▓', freq[i] * 30 / maxFr));
             System.out.printf(" %d\n", freq[i]);
         }
     }
@@ -290,19 +313,49 @@ public class ProgrammingAssignmentUnitFour {
         System.out.printf("Q3 - Q1: %5.2f\n", interQuart);
     }
 
+    public static void displayCumulativeSum(ArrayList<Double> stocks,
+            ArrayList<Double> cumSum) {
+        System.out.println("\n--- Stock Prices Cumulative Sum ---\n");
+        System.out.println("Price      Sum");
+        System.out.println(duplicateChar('─', 20));
+        String format = "%5.2f   %"
+                + ((int) Math.log10(cumSum.get(cumSum.size() - 1)) + 4)
+                + ".2f\n";
+        for (int i = 0; i < stocks.size(); i++) {
+            System.out.printf(format, stocks.get(i), cumSum.get(i));
+        }
+    }
+
     /**
      * Generate count random stock prices in the specified interval.
+     * Numbers are rounded to two decimals.
      * 
-     * @param count The number of prices values to generate.
-     * @param min   The minimal price included.
-     * @param max   The maximal price included.
+     * @param count     The number of prices values to generate.
+     * @param min       The minimal price included.
+     * @param max       The maximal price included.
+     * @param precision Number of decimals
      * @return count random prices.
      */
-    public static double[] generateRandomStock(int count, double min, double max) {
+    public static double[] generateRandomStock(int count, double min, double max, int precision) {
         double[] items = new double[count];
-        double nextDown = Math.nextDown(1.0);
+        double nextDown = 1 - 1e-15;
+        double decimals = Math.pow(10, precision);
         for (int i = 0; i < count; i++) {
-            items[i] = Math.floor(((Math.random() / nextDown) * (max - min) + min) * 100) / 100;
+            items[i] = Math.floor(((Math.random() / nextDown) * (max - min) + min) * decimals) / decimals;
+        }
+        return items;
+    }
+
+    /**
+     * Convert a double array into an ArrayList<Double>
+     * 
+     * @param arr an array of doubles
+     * @return an ArrayList<Double>
+     */
+    public static ArrayList<Double> copyArray(double[] arr) {
+        ArrayList<Double> items = new ArrayList<>();
+        for (double val : arr) {
+            items.add(val);
         }
         return items;
     }
@@ -349,17 +402,41 @@ public class ProgrammingAssignmentUnitFour {
      * @return The index of the bin containing the value.
      */
     public static int indexOf(double[] arr, double value) {
-        for (int i = arr.length - 2; i >= 0; i--) {
-            if (value >= arr[i]) {
-                return i;
+        int d = 0, f = arr.length - 2;
+        while (f >= d) {
+            int mid = (d + f) / 2;
+            if (arr[mid] == value) {
+                return mid;
+            } else if (value < arr[mid]) {
+                f = mid - 1;
+            } else {
+                d = mid + 1;
             }
         }
-        return 0;
+        return f;
     }
 
-    private static void displayChar(char c, int count) {
+    // public static int indexOf2(double[] arr, double value) {
+    // for (int i = arr.length - 2; i >= 0; i--) {
+    // if (value >= arr[i]) {
+    // return i;
+    // }
+    // }
+    // return 0;
+    // }
+
+    /**
+     * Create a String from duplicating a character many times.
+     * 
+     * @param c     char to duplicate
+     * @param count number of repetitions
+     * @return a c character duplicated count times.
+     */
+    private static String duplicateChar(char c, int count) {
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < count; i++) {
-            System.out.print(c);
+            sb.append(c);
         }
+        return sb.toString();
     }
 }
