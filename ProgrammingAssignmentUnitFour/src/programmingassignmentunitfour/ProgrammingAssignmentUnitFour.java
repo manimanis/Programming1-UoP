@@ -103,7 +103,7 @@ public class ProgrammingAssignmentUnitFour {
 
     public static int min(double[] arr) {
         int mn = 0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 1; i < arr.length; i++) {
             if (arr[i] < arr[mn]) {
                 mn = i;
             }
@@ -113,7 +113,7 @@ public class ProgrammingAssignmentUnitFour {
 
     public static int min(int[] arr) {
         int mn = 0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 1; i < arr.length; i++) {
             if (arr[i] < arr[mn]) {
                 mn = i;
             }
@@ -123,7 +123,7 @@ public class ProgrammingAssignmentUnitFour {
 
     public static int max(double[] arr) {
         int mx = 0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 1; i < arr.length; i++) {
             if (arr[i] > arr[mx]) {
                 mx = i;
             }
@@ -133,7 +133,7 @@ public class ProgrammingAssignmentUnitFour {
 
     public static int max(int[] arr) {
         int mx = 0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 1; i < arr.length; i++) {
             if (arr[i] > arr[mx]) {
                 mx = i;
             }
@@ -173,10 +173,10 @@ public class ProgrammingAssignmentUnitFour {
         }
         double sum = 0.0;
         double avg = calculateAveragePrice(stockPrices);
-        for (int i = 1; i < stockPrices.length; i++) {
-            sum += (stockPrices[i] - avg) * (stockPrices[i] - avg);
+        for (int i = 0; i < stockPrices.length; i++) {
+            sum += stockPrices[i] * stockPrices[i];
         }
-        return Math.sqrt(sum / stockPrices.length);
+        return Math.sqrt(sum / stockPrices.length - avg * avg);
     }
 
     /**
