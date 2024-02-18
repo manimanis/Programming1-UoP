@@ -3,7 +3,7 @@ package programmingassignmentunitfour;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Locale;
 
 /**
  *
@@ -15,30 +15,26 @@ public class ProgrammingAssignmentUnitFour {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
         // Stock prices for the period of Jan, 29 to Feb, 9
         double[] stockPrices = new double[] { 58.32, 58.11, 58.60, 57.54, 56.92,
                 56.24, 55.83, 56.74, 56.7, 56.88 };
+        double maxPr = findMaximumPrice(stockPrices);
+        double minPr = findMinimumPrice(stockPrices);
+        displayStocks(stockPrices);
+        displaySummary(stockPrices);
+        displayHistogram(stockPrices, minPr, maxPr);
+        displayBarChart(stockPrices);
+
+        stockPrices = generateRandomStock(15, 10, 15);
+        maxPr = findMaximumPrice(stockPrices);
+        minPr = findMinimumPrice(stockPrices);
+        displayStocks(stockPrices);
+        displaySummary(stockPrices);
+        displayHistogram(stockPrices, minPr, maxPr);
+        displayBarChart(stockPrices);
+
         List<double[]> arrStockPrices = Arrays.asList(stockPrices);
-
-        double max = findMaximumPrice(stockPrices);
-        double min = findMinimumPrice(stockPrices);
-
-        displayStocks(stockPrices);
-        displayGraphic(stockPrices, min, max);
-        displaySummary(stockPrices);
-
-        stockPrices = generateRandomStock(15, 40, 80);
-        max = findMaximumPrice(stockPrices);
-        min = findMinimumPrice(stockPrices);
-        displayStocks(stockPrices);
-        displayGraphic(stockPrices, min, max);
-        displaySummary(stockPrices);
-
-        double[] bins = createBins(min, max, 5);
-        int[] freq = calculateOccurences(stockPrices, bins);
-        for (int i = 0; i < bins.length - 1; i++) {
-            System.out.println("[" + bins[i] + ", " + bins[i + 1] + "] " + freq[i]);
-        }
     }
 
     /**
@@ -56,25 +52,6 @@ public class ProgrammingAssignmentUnitFour {
             tsp += sp;
         }
         return tsp / stockPrices.length;
-    }
-
-    /**
-     * Calculate the maximum price of the stocks.
-     *
-     * @param stockPrices An array of stock prices.
-     * @return the maximum price
-     */
-    public static double findMaximumPrice(double[] stockPrices) {
-        if (stockPrices.length == 0) {
-            throw new IllegalArgumentException("The array is empty!");
-        }
-        double msp = stockPrices[0];
-        for (int i = 1; i < stockPrices.length; i++) {
-            if (stockPrices[i] > msp) {
-                msp = stockPrices[i];
-            }
-        }
-        return msp;
     }
 
     /**
@@ -124,6 +101,46 @@ public class ProgrammingAssignmentUnitFour {
         return cumSum;
     }
 
+    public static int min(double[] arr) {
+        int mn = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < arr[mn]) {
+                mn = i;
+            }
+        }
+        return mn;
+    }
+
+    public static int min(int[] arr) {
+        int mn = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < arr[mn]) {
+                mn = i;
+            }
+        }
+        return mn;
+    }
+
+    public static int max(double[] arr) {
+        int mx = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > arr[mx]) {
+                mx = i;
+            }
+        }
+        return mx;
+    }
+
+    public static int max(int[] arr) {
+        int mx = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > arr[mx]) {
+                mx = i;
+            }
+        }
+        return mx;
+    }
+
     /**
      * Calculate the minimum price of the stocks.
      *
@@ -131,16 +148,17 @@ public class ProgrammingAssignmentUnitFour {
      * @return the minimum price
      */
     public static double findMinimumPrice(double[] stockPrices) {
-        if (stockPrices.length == 0) {
-            throw new IllegalArgumentException("The array is empty!");
-        }
-        double msp = stockPrices[0];
-        for (int i = 1; i < stockPrices.length; i++) {
-            if (stockPrices[i] < msp) {
-                msp = stockPrices[i];
-            }
-        }
-        return msp;
+        return stockPrices[min(stockPrices)];
+    }
+
+    /**
+     * Calculate the maximum price of the stocks.
+     *
+     * @param stockPrices An array of stock prices.
+     * @return the maximum price
+     */
+    public static double findMaximumPrice(double[] stockPrices) {
+        return stockPrices[max(stockPrices)];
     }
 
     /**
@@ -163,7 +181,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Calculate the Quartiles of the stocks prices.
-     *
+     * 
      * @param stockPrices An array of stock prices.
      * @return the quartiles
      */
@@ -187,6 +205,11 @@ public class ProgrammingAssignmentUnitFour {
         return quart;
     }
 
+    /**
+     * Display the list of stock prices comma separated.
+     * 
+     * @param stockPrices The stock prices.
+     */
     public static void displayStocks(double[] stockPrices) {
         System.out.println("\n--- Stock List ---\n");
         boolean firstLoop = true;
@@ -200,14 +223,21 @@ public class ProgrammingAssignmentUnitFour {
         System.out.println();
     }
 
-    public static void displayGraphic(double[] stockPrices, double min, double max) {
+    /**
+     * Display an histogram of the stock prices.
+     * 
+     * @param stockPrices The stock prices.
+     * @param min         The minimal value in the histogram.
+     * @param max         The maximal value in the histogram.
+     */
+    public static void displayHistogram(double[] stockPrices, double min, double max) {
         System.out.println("\n--- Stock Prices Histogram ---\n");
         double step = (max - min) / 50;
         for (int i = 0; i < stockPrices.length; i++) {
             if (i == 0) {
-                System.out.printf("Day | $%5.2f", min - step);
+                System.out.printf("Day | $%5.2f", min);
                 displayChar(' ', 44);
-                System.out.printf("| $%5.2f\n", max + step);
+                System.out.printf("| $%5.2f\n", max);
                 displayChar('─', 65);
                 System.out.println();
             }
@@ -218,8 +248,28 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
+     * Display a bar chart of the stock prices.
      * 
-     * @param stockPrices
+     * @param stockPrices The stock prices.
+     */
+    public static void displayBarChart(double[] stockPrices) {
+        double minPr = findMinimumPrice(stockPrices);
+        double maxPr = findMaximumPrice(stockPrices);
+        double[] bins = createBins(minPr, maxPr, 5);
+        int[] freq = calculateOccurences(stockPrices, bins);
+        int maxFr = freq[max(freq)];
+        System.out.println("\n--- Stock Prices Bar Chart ---\n");
+        for (int i = 0; i < bins.length - 1; i++) {
+            System.out.printf("[%5.2f, %5.2f] | ", bins[i], bins[i + 1]);
+            displayChar('▓', freq[i] * 30 / maxFr);
+            System.out.printf(" %d\n", freq[i]);
+        }
+    }
+
+    /**
+     * Display a summary of the stock prices.
+     * 
+     * @param stockPrices The stock prices.
      */
     public static void displaySummary(double[] stockPrices) {
         double average = calculateAveragePrice(stockPrices);
@@ -241,11 +291,12 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
+     * Generate count random stock prices in the specified interval.
      * 
-     * @param count
-     * @param min
-     * @param max
-     * @return
+     * @param count The number of prices values to generate.
+     * @param min   The minimal price included.
+     * @param max   The maximal price included.
+     * @return count random prices.
      */
     public static double[] generateRandomStock(int count, double min, double max) {
         double[] items = new double[count];
@@ -257,11 +308,12 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
+     * Divide the [min, max] interval into binsCount bins.
      * 
-     * @param min
-     * @param max
-     * @param binsCount
-     * @return
+     * @param min       The minimal value
+     * @param max       The maximal value
+     * @param binsCount The number of bins.
+     * @return An array of key values of the bin.
      */
     public static double[] createBins(double min, double max, int binsCount) {
         double[] bins = new double[binsCount + 1];
@@ -273,27 +325,36 @@ public class ProgrammingAssignmentUnitFour {
         return bins;
     }
 
+    /**
+     * Calculate the frequencies of values in each bin.
+     * 
+     * @param stockPrices The stock prices
+     * @param bins        The stock prices bins.
+     * @return frequencies of each bin.
+     */
     public static int[] calculateOccurences(double[] stockPrices, double[] bins) {
-        int[] freq = new int[bins.length];
+        int[] freq = new int[bins.length - 1];
         for (int i = 0; i < stockPrices.length; i++) {
             int idx = indexOf(bins, stockPrices[i]);
-            System.out.println(stockPrices[i] + " " + idx);
             freq[idx]++;
         }
         return freq;
     }
 
+    /**
+     * Calculate in which interval the value is comprised.
+     * 
+     * @param arr   The arr to search in.
+     * @param value The value to search for.
+     * @return The index of the bin containing the value.
+     */
     public static int indexOf(double[] arr, double value) {
-        int d = 0, f = arr.length - 1, mid = 0;
-        while (f > d) {
-            mid = (d + f) / 2;
-            if (value >= arr[mid]) {
-                d = mid;
-            } else if (value < arr[mid]) {
-                f = mid - 1;
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (value >= arr[i]) {
+                return i;
             }
         }
-        return mid;
+        return 0;
     }
 
     private static void displayChar(char c, int count) {
