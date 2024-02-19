@@ -14,7 +14,16 @@ public class ProgrammingAssignmentUnitFour {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // Using US Locale to display properly the decimal char as 12.2
+        // not 12,2 because my operating system is French.
         Locale.setDefault(Locale.US);
+
+        testSet1();
+        testSet2();
+        testSet3();
+    }
+
+    public static void testSet1() {
         // Stock prices for 10 days in the period of Jan, 29 to Feb, 9
         double[] stockPrices = new double[] {
                 58.32, 58.11, 58.60, 57.54, 56.92,
@@ -26,33 +35,28 @@ public class ProgrammingAssignmentUnitFour {
         displaySummary(stockPrices);
         displayHistogram(stockPrices, minPr, maxPr);
         displayBarChart(stockPrices);
+    }
 
-        // Random stock prices
-        stockPrices = generateRandomStock(15, 10, 15, 2);
-        maxPr = findMaximumPrice(stockPrices);
-        minPr = findMinimumPrice(stockPrices);
-        displayStocks(stockPrices);
-        displaySummary(stockPrices);
-        displayHistogram(stockPrices, minPr, maxPr);
-        displayBarChart(stockPrices);
-
-        stockPrices = generateRandomStock(50, 10, 11, 1);
+    public static void testSet2() {
+        double[] stockPrices = generateRandomStock(10,
+                10, 40, 1);
         ArrayList<Double> arrStockPrices = copyArray(stockPrices);
-        ArrayList<Double> cumStockPrices = computeCumulativeSum(arrStockPrices);
+        ArrayList<Double> cumStockPrices = computeCumulativeSum(
+                arrStockPrices);
         displayCumulativeSum(arrStockPrices, cumStockPrices);
+    }
 
-        ArrayList<Double> distValues = new ArrayList<>();
-        ArrayList<Integer> valFreq = new ArrayList<>();
-        for (Double val : arrStockPrices) {
-            if (distValues.indexOf(val) == -1) {
-                distValues.add(val);
-            }
-        }
-        for (int i = 0; i < distValues.size(); i++) {
-            Double val = distValues.get(i);
-            valFreq.add(countOccurences(stockPrices, val));
-            System.out.println(val + " " + valFreq.get(i));
-        }
+    public static void testSet3() {
+        double[] stockPrices = generateRandomStock(105,
+                10, 20, 0);
+        displayStocks(stockPrices);
+
+        ArrayList<Double> arrStock = copyArray(stockPrices);
+        ArrayList<Double> dist = distinctValues(arrStock);
+        sortItems(dist);
+        ArrayList<Integer> freq = itemsFrequency(dist,
+                stockPrices);
+        displayOccurences(dist, freq);
     }
 
     /**
@@ -62,9 +66,6 @@ public class ProgrammingAssignmentUnitFour {
      * @return the average price
      */
     public static double calculateAveragePrice(double[] stockPrices) {
-        if (stockPrices.length == 0) {
-            throw new IllegalArgumentException("The array is empty!");
-        }
         double tsp = 0.0;
         for (double sp : stockPrices) {
             tsp += sp;
@@ -109,7 +110,8 @@ public class ProgrammingAssignmentUnitFour {
      * @param stockPrices An arrayList of stock prices.
      * @return an ArrayList of cumulative prices
      */
-    public static ArrayList<Double> computeCumulativeSum(ArrayList<Double> stockPrices) {
+    public static ArrayList<Double> computeCumulativeSum(
+            ArrayList<Double> stockPrices) {
         ArrayList<Double> cumSum = new ArrayList<>();
         double cs = 0.0;
         for (int i = 0; i < stockPrices.size(); i++) {
@@ -119,6 +121,12 @@ public class ProgrammingAssignmentUnitFour {
         return cumSum;
     }
 
+    /**
+     * Find the index of the minimal value in the array.
+     * 
+     * @param arr an array of double.
+     * @return The minimum index.
+     */
     public static int min(double[] arr) {
         int mn = 0;
         for (int i = 1; i < arr.length; i++) {
@@ -129,6 +137,12 @@ public class ProgrammingAssignmentUnitFour {
         return mn;
     }
 
+    /**
+     * Find the index of the minimal value in the array.
+     * 
+     * @param arr an array of int.
+     * @return The minimum index.
+     */
     public static int min(int[] arr) {
         int mn = 0;
         for (int i = 1; i < arr.length; i++) {
@@ -139,6 +153,12 @@ public class ProgrammingAssignmentUnitFour {
         return mn;
     }
 
+    /**
+     * Find the index of the maximal value in the array.
+     * 
+     * @param arr an array of double.
+     * @return The maximum index.
+     */
     public static int max(double[] arr) {
         int mx = 0;
         for (int i = 1; i < arr.length; i++) {
@@ -149,6 +169,12 @@ public class ProgrammingAssignmentUnitFour {
         return mx;
     }
 
+    /**
+     * Find the index of the maximal value in the array.
+     * 
+     * @param arr an array of int.
+     * @return The maximum index.
+     */
     public static int max(int[] arr) {
         int mx = 0;
         for (int i = 1; i < arr.length; i++) {
@@ -186,9 +212,6 @@ public class ProgrammingAssignmentUnitFour {
      * @return the maximum price
      */
     public static double calculateStandardDeviation(double[] stockPrices) {
-        if (stockPrices.length == 0) {
-            throw new IllegalArgumentException("The array is empty!");
-        }
         double sum = 0.0;
         double avg = calculateAveragePrice(stockPrices);
         for (int i = 0; i < stockPrices.length; i++) {
@@ -230,13 +253,20 @@ public class ProgrammingAssignmentUnitFour {
      */
     public static void displayStocks(double[] stockPrices) {
         System.out.println("\n--- Stock List ---\n");
-        boolean firstLoop = true;
-        for (double sp : stockPrices) {
-            if (!firstLoop) {
+        System.out.printf("Values for %d days.\n", stockPrices.length);
+        for (int i = 0; i < stockPrices.length; i++) {
+            if (i % 10 == 0) {
+                if (i > 0)
+                    System.out.println();
+                int end = i + 10;
+                if (end > stockPrices.length)
+                    end = stockPrices.length;
+                System.out.printf("Days %3d to %3d: ", i + 1, end);
+            }
+            if (i % 10 > 0) {
                 System.out.print(", ");
             }
-            System.out.print("$" + sp);
-            firstLoop = false;
+            System.out.print("$" + stockPrices[i]);
         }
         System.out.println();
     }
@@ -312,16 +342,38 @@ public class ProgrammingAssignmentUnitFour {
         System.out.printf("Q3 - Q1: %5.2f\n", interQuart);
     }
 
+    /**
+     * Display the cumulative sum of stock prices.
+     * 
+     * @param stocks The stock prices.
+     * @param cumSum The cumulative sum of stocks.
+     */
     public static void displayCumulativeSum(ArrayList<Double> stocks,
             ArrayList<Double> cumSum) {
         System.out.println("\n--- Stock Prices Cumulative Sum ---\n");
-        System.out.println("Price      Sum");
+        System.out.println("Price       Cum. Sum");
         System.out.println(duplicateChar('─', 20));
-        String format = "%5.2f   %"
+        String format = "%5.2f      %"
                 + ((int) Math.log10(cumSum.get(cumSum.size() - 1)) + 4)
                 + ".2f\n";
         for (int i = 0; i < stocks.size(); i++) {
             System.out.printf(format, stocks.get(i), cumSum.get(i));
+        }
+    }
+
+    /**
+     * Display each price frequency.
+     * 
+     * @param values The stock prices.
+     * @param freqs  The stock prices frequencies.
+     */
+    public static void displayOccurences(ArrayList<Double> values, ArrayList<Integer> freqs) {
+        System.out.println("\n--- Number of Occurences ---\n");
+        System.out.println("Price      Frequency");
+        System.out.println(duplicateChar('─', 20));
+        for (int i = 0; i < values.size(); i++) {
+            System.out.printf("%5.0f      %9d\n",
+                    values.get(i), freqs.get(i));
         }
     }
 
@@ -337,10 +389,8 @@ public class ProgrammingAssignmentUnitFour {
      */
     public static double[] generateRandomStock(int count, double min, double max, int precision) {
         double[] items = new double[count];
-        double nextDown = 1 - 1e-15;
-        double decimals = Math.pow(10, precision);
         for (int i = 0; i < count; i++) {
-            items[i] = Math.floor(((Math.random() / nextDown) * (max - min) + min) * decimals) / decimals;
+            items[i] = randDouble(min, max, precision);
         }
         return items;
     }
@@ -415,6 +465,55 @@ public class ProgrammingAssignmentUnitFour {
         return f;
     }
 
+    /**
+     * Find distint values in an ArrayList.
+     * 
+     * @param arr input values
+     * @return An ArrayList with distinct values
+     */
+    public static ArrayList<Double> distinctValues(ArrayList<Double> arr) {
+        ArrayList<Double> dist = new ArrayList<>();
+        for (double val : arr) {
+            if (dist.indexOf(val) == -1) {
+                dist.add(val);
+            }
+        }
+        return dist;
+    }
+
+    /**
+     * Compute items frequencies.
+     * 
+     * @param items       The items we want to count.
+     * @param stockPrices The stock prices.
+     * @return An ArrayList containing each item frequency.
+     */
+    public static ArrayList<Integer> itemsFrequency(ArrayList<Double> items, double[] stockPrices) {
+        ArrayList<Integer> freq = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            Double val = items.get(i);
+            freq.add(countOccurences(stockPrices, val));
+        }
+        return freq;
+    }
+
+    /**
+     * Sort items in ascending order using insertion sort algoritm.
+     * 
+     * @param items Items to be sorted.
+     */
+    public static void sortItems(ArrayList<Double> items) {
+        for (int i = 1; i < items.size(); i++) {
+            double t = items.get(i);
+            int j = i - 1;
+            while (j >= 0 && t < items.get(j)) {
+                items.set(j + 1, items.get(j));
+                j--;
+            }
+            items.set(j + 1, t);
+        }
+    }
+
     // public static int indexOf2(double[] arr, double value) {
     // for (int i = arr.length - 2; i >= 0; i--) {
     // if (value >= arr[i]) {
@@ -437,5 +536,20 @@ public class ProgrammingAssignmentUnitFour {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    /**
+     * Generate a random float.
+     * 
+     * @param min       minimum value.
+     * @param max       maximum value.
+     * @param precision number of digits.
+     * @return a random number in [min, max] interval.
+     */
+    private static double randDouble(double min, double max, int precision) {
+        // 10.00 - 11.00 ==> 1000 - 1100
+        double prec = Math.pow(10, precision);
+        double interval = (max - min) * prec + 1;
+        return (Math.floor(Math.random() * interval)) / prec + min;
     }
 }
