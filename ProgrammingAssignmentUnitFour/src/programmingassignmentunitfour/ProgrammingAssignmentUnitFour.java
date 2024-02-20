@@ -74,9 +74,8 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
-     * Calculate the number of occurrences of the 
-     * number targetPrice. The price is searched 
-     * in the interval [minPrice, maxPrice]
+     * calculates how many values of the stockPrices
+     *  array fit in the range [minPrice, maxPrice]
      *
      * @param stockPrices An array of stock prices.
      * @param minPrice    minimum price
