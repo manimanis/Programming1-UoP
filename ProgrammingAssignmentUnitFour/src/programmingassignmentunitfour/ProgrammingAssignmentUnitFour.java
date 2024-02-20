@@ -74,8 +74,9 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
-     * Calculate the number of occurrences of the number targetPrice. The price
-     * is searched in the interval +/-delta
+     * Calculate the number of occurrences of the 
+     * number targetPrice. The price is searched 
+     * in the interval [minPrice, maxPrice]
      *
      * @param stockPrices An array of stock prices.
      * @param minPrice    minimum price
@@ -86,7 +87,8 @@ public class ProgrammingAssignmentUnitFour {
             double minPrice, double maxPrice) {
         int count = 0;
         for (int i = 0; i < stockPrices.length; i++) {
-            if (minPrice <= stockPrices[i] && stockPrices[i] <= maxPrice) {
+            if (minPrice <= stockPrices[i]
+                    && stockPrices[i] <= maxPrice) {
                 count++;
             }
         }
@@ -100,7 +102,8 @@ public class ProgrammingAssignmentUnitFour {
      * @param targetPrice target price
      * @return the number of occurrence
      */
-    public static int countOccurences(double[] stockPrices, double targetPrice) {
+    public static int countOccurences(double[] stockPrices,
+            double targetPrice) {
         return countOccurences(stockPrices, targetPrice, targetPrice);
     }
 
