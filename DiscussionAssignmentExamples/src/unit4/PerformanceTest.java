@@ -73,11 +73,11 @@ public class PerformanceTest {
             n *= 10;
         }
     }
-    
+
     public static void benchmark2() {
         ArrayList<Integer> arrList = generateRandomNumbers(100000);
         int[] arr = toArray(arrList);
-        
+
         System.out.println("Sizeof ArrayList: " + VM.current().sizeOf(arrList));
         System.out.println("Sizeof array: " + VM.current().sizeOf(arr));
     }
@@ -90,7 +90,7 @@ public class PerformanceTest {
         }
         return arr;
     }
-    
+
     public static ArrayList<Integer> generateRandomNumbers(int count) {
         return generateRandomNumbers(count, 100, 99999);
     }
@@ -155,36 +155,97 @@ public class PerformanceTest {
     }
 
     public static void benchmark3() {
-        ArrayList<Integer> arrList = generateRandomNumbers(15, 10, 100);
-        System.out.println(arrList);
-        
+        ArrayList<Integer> arrList = generateRandomNumbers(
+                15, 10, 100);
+
+        // Printing
+        System.out.println("\nContent:\n" + arrList);
+
         // inserting
         arrList.add(17000);
-        
+        System.out.println("\nAfter instering\n" + arrList);
+
         // removing
-        arrList.remove((Integer)17000);
-        
-        //  Searching
+        arrList.remove((Integer) 17000);
+        System.out.println("\nAfter removing:\n" + arrList);
+
+        // Searching
         System.out.println("\nSearching data");
         int value, pos;
-        value = arrList.get(14);
-        pos = arrList.indexOf(value);
+        value = arrList.get(14); // Accessing
+        pos = arrList.indexOf(value); // Find first occurence
         System.out.println(value + " found at position " + pos);
 
-        // sorting
+        int newVal = (value % 10) * 10 + value / 10;
+        arrList.set(pos, newVal); // Mutating
+
         System.out.println("\nSorting even number precede odds");
+        // sorting
         arrList.sort((Integer o1, Integer o2) -> (o1 % 2) - (o2 % 2));
         System.out.println(arrList);
-        
+
+        System.out.println("\nDispaying digits sum > 10");
         // iterating over arraylist
-        System.out.println("\nDispaying digit sum > 10");
         for (int val : arrList) {
             int s = val / 10 + val % 10;
             if (s > 10) {
-                System.out.println(val);
+                System.out.print(val + ", ");
             }
         }
-   
+        System.out.println();
+    }
+
+}
+
+class Stack<T> {
+    ArrayList<T> st = new ArrayList<>();
+
+    public Stack() {
     }
     
-}
+    public void push(T elem) {
+        st.add(elem);
+    }
+    
+    public boolean isEmpty() {
+        return st.isEmpty();
+    }
+    
+    public T pop() {
+        return st.remove(st.size() - 1);
+    }
+};
+
+class ArrStack<T extends Object> {
+    T[] st;
+    int count;
+
+    @SuppressWarnings("unchecked")
+    public ArrStack() {
+        count = 0;
+        st = (T[]) new Object[10];
+    }
+    
+    public void push(T elem) {
+        if (count >= st.length) {
+            @SuppressWarnings("unchecked")
+            T[] stc = (T[]) new Object[st.length + 10];
+            for (int i = 0; i < st.length; i++) stc[i] = st[i];
+            st = stc;
+        }
+        st[count++] = elem;
+    }
+    
+    public boolean isEmpty() {
+        return count != 0;
+    }
+    
+    public T pop() {
+        if (count > 0) {
+            T elem = st[count - 1];
+            count--;
+            return elem;
+        }
+        return null;
+    }
+};

@@ -17,17 +17,17 @@ public class ProgrammingAssignmentUnitFour {
         // Using US Locale to display properly the decimal char as 12.2
         // not 12,2 because my operating system is French.
         Locale.setDefault(Locale.US);
-
+        
         testSet1();
         testSet2();
         testSet3();
     }
-
+    
     public static void testSet1() {
         // Stock prices for 10 days in the period of Jan, 29 to Feb, 9
-        double[] stockPrices = new double[] {
-                58.32, 58.11, 58.60, 57.54, 56.92,
-                56.24, 55.83, 56.74, 56.70, 56.88
+        double[] stockPrices = new double[]{
+            58.32, 58.11, 58.60, 57.54, 56.92,
+            56.24, 55.83, 56.74, 56.70, 56.88
         };
         double maxPr = findMaximumPrice(stockPrices);
         double minPr = findMinimumPrice(stockPrices);
@@ -36,7 +36,7 @@ public class ProgrammingAssignmentUnitFour {
         displayHistogram(stockPrices, minPr, maxPr);
         displayBarChart(stockPrices);
     }
-
+    
     public static void testSet2() {
         double[] stockPrices = generateRandomStock(10,
                 10, 40, 1);
@@ -45,12 +45,12 @@ public class ProgrammingAssignmentUnitFour {
                 arrStockPrices);
         displayCumulativeSum(arrStockPrices, cumStockPrices);
     }
-
+    
     public static void testSet3() {
         double[] stockPrices = generateRandomStock(105,
                 10, 20, 0);
         displayStocks(stockPrices);
-
+        
         ArrayList<Double> arrStock = copyArray(stockPrices);
         ArrayList<Double> dist = distinctValues(arrStock);
         sortItems(dist);
@@ -74,12 +74,26 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
-     * calculates how many values of the stockPrices
-     *  array fit in the range [minPrice, maxPrice]
+     * Calculate the average price of the stocks.
+     *
+     * @param stockPrices An ArrayList of stock prices.
+     * @return the average price
+     */
+    public static double calculateAveragePrice(ArrayList<Double> stockPrices) {
+        double tsp = 0.0;
+        for (double sp : stockPrices) {
+            tsp += sp;
+        }
+        return tsp / stockPrices.size();
+    }
+
+    /**
+     * calculates how many values of the stockPrices array fit in the range
+     * [minPrice, maxPrice]
      *
      * @param stockPrices An array of stock prices.
-     * @param minPrice    minimum price
-     * @param maxPrice    maximum price
+     * @param minPrice minimum price
+     * @param maxPrice maximum price
      * @return the number of occurrence
      */
     public static int countOccurences(double[] stockPrices,
@@ -95,6 +109,27 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
+     * calculates how many values of the stockPrices array fit in the range
+     * [minPrice, maxPrice]
+     *
+     * @param stockPrices An ArrayList of stock prices.
+     * @param minPrice minimum price
+     * @param maxPrice maximum price
+     * @return the number of occurrence
+     */
+    public static int countOccurences(ArrayList<Double> stockPrices,
+            double minPrice, double maxPrice) {
+        int count = 0;
+        for (int i = 0; i < stockPrices.size(); i++) {
+            if (minPrice <= stockPrices.get(i)
+                    && stockPrices.get(i) <= maxPrice) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Calculate the number of occurrences of the number targetPrice.
      *
      * @param stockPrices An array of stock prices.
@@ -102,6 +137,18 @@ public class ProgrammingAssignmentUnitFour {
      * @return the number of occurrence
      */
     public static int countOccurences(double[] stockPrices,
+            double targetPrice) {
+        return countOccurences(stockPrices, targetPrice, targetPrice);
+    }
+
+    /**
+     * Calculate the number of occurrences of the number targetPrice.
+     *
+     * @param stockPrices An array of stock prices.
+     * @param targetPrice target price
+     * @return the number of occurrence
+     */
+    public static int countOccurences(ArrayList<Double> stockPrices,
             double targetPrice) {
         return countOccurences(stockPrices, targetPrice, targetPrice);
     }
@@ -125,7 +172,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Find the index of the minimal value in the array.
-     * 
+     *
      * @param arr an array of double.
      * @return The minimum index.
      */
@@ -141,7 +188,23 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Find the index of the minimal value in the array.
-     * 
+     *
+     * @param arr an ArrayList of Double.
+     * @return The minimum index.
+     */
+    public static int min(ArrayList<Double> arr) {
+        int mn = 0;
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr.get(i) < arr.get(mn)) {
+                mn = i;
+            }
+        }
+        return mn;
+    }
+
+    /**
+     * Find the index of the minimal value in the array.
+     *
      * @param arr an array of int.
      * @return The minimum index.
      */
@@ -157,7 +220,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Find the index of the maximal value in the array.
-     * 
+     *
      * @param arr an array of double.
      * @return The maximum index.
      */
@@ -173,7 +236,23 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Find the index of the maximal value in the array.
-     * 
+     *
+     * @param arr an ArrayList of Double.
+     * @return The maximum index.
+     */
+    public static int max(ArrayList<Double> arr) {
+        int mx = 0;
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr.get(i) > arr.get(mx)) {
+                mx = i;
+            }
+        }
+        return mx;
+    }
+
+    /**
+     * Find the index of the maximal value in the array.
+     *
      * @param arr an array of int.
      * @return The maximum index.
      */
@@ -198,6 +277,16 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
+     * Calculate the minimum price of the stocks.
+     *
+     * @param stockPrices An ArrayList of stock prices.
+     * @return the minimum price
+     */
+    public static double findMinimumPrice(ArrayList<Double> stockPrices) {
+        return stockPrices.get(min(stockPrices));
+    }
+
+    /**
      * Calculate the maximum price of the stocks.
      *
      * @param stockPrices An array of stock prices.
@@ -205,6 +294,16 @@ public class ProgrammingAssignmentUnitFour {
      */
     public static double findMaximumPrice(double[] stockPrices) {
         return stockPrices[max(stockPrices)];
+    }
+
+    /**
+     * Calculate the maximum price of the stocks.
+     *
+     * @param stockPrices An ArrayList of stock prices.
+     * @return the maximum price
+     */
+    public static double findMaximumPrice(ArrayList<Double> stockPrices) {
+        return stockPrices.get(max(stockPrices));
     }
 
     /**
@@ -224,7 +323,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Calculate the Quartiles of the stocks prices.
-     * 
+     *
      * @param stockPrices An array of stock prices.
      * @return the quartiles
      */
@@ -250,7 +349,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display the list of stock prices comma separated.
-     * 
+     *
      * @param stockPrices The stock prices.
      */
     public static void displayStocks(double[] stockPrices) {
@@ -258,11 +357,13 @@ public class ProgrammingAssignmentUnitFour {
         System.out.printf("Values for %d days.\n", stockPrices.length);
         for (int i = 0; i < stockPrices.length; i++) {
             if (i % 10 == 0) {
-                if (i > 0)
+                if (i > 0) {
                     System.out.println();
+                }
                 int end = i + 10;
-                if (end > stockPrices.length)
+                if (end > stockPrices.length) {
                     end = stockPrices.length;
+                }
                 System.out.printf("Days %3d to %3d: ", i + 1, end);
             }
             if (i % 10 > 0) {
@@ -275,10 +376,10 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display an histogram of the stock prices.
-     * 
+     *
      * @param stockPrices The stock prices.
-     * @param min         The minimal value in the histogram.
-     * @param max         The maximal value in the histogram.
+     * @param min The minimal value in the histogram.
+     * @param max The maximal value in the histogram.
      */
     public static void displayHistogram(double[] stockPrices, double min, double max) {
         System.out.println("\n--- Stock Prices Histogram ---\n");
@@ -303,7 +404,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display a bar chart of the stock prices.
-     * 
+     *
      * @param stockPrices The stock prices.
      */
     public static void displayBarChart(double[] stockPrices) {
@@ -322,7 +423,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display a summary of the stock prices.
-     * 
+     *
      * @param stockPrices The stock prices.
      */
     public static void displaySummary(double[] stockPrices) {
@@ -332,7 +433,7 @@ public class ProgrammingAssignmentUnitFour {
         double min = findMinimumPrice(stockPrices);
         double[] quart = findQuartiles(stockPrices);
         double interQuart = quart[3] - quart[1];
-
+        
         System.out.println("\n--- Stock Prices Summary ---\n");
         System.out.printf("Average: %5.2f\n", average);
         System.out.printf("Standard Deviation: %5.2f\n", std);
@@ -346,7 +447,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display the cumulative sum of stock prices.
-     * 
+     *
      * @param stocks The stock prices.
      * @param cumSum The cumulative sum of stocks.
      */
@@ -365,9 +466,9 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Display each price frequency.
-     * 
+     *
      * @param values The stock prices.
-     * @param freqs  The stock prices frequencies.
+     * @param freqs The stock prices frequencies.
      */
     public static void displayOccurences(ArrayList<Double> values, ArrayList<Integer> freqs) {
         System.out.println("\n--- Number of Occurences ---\n");
@@ -380,12 +481,12 @@ public class ProgrammingAssignmentUnitFour {
     }
 
     /**
-     * Generate count random stock prices in the specified interval.
-     * Numbers are rounded to two decimals.
-     * 
-     * @param count     The number of prices values to generate.
-     * @param min       The minimal price included.
-     * @param max       The maximal price included.
+     * Generate count random stock prices in the specified interval. Numbers are
+     * rounded to two decimals.
+     *
+     * @param count The number of prices values to generate.
+     * @param min The minimal price included.
+     * @param max The maximal price included.
      * @param precision Number of decimals
      * @return count random prices.
      */
@@ -399,7 +500,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Convert a double array into an ArrayList<Double>
-     * 
+     *
      * @param arr an array of doubles
      * @return an ArrayList<Double>
      */
@@ -413,9 +514,9 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Divide the [min, max] interval into binsCount bins.
-     * 
-     * @param min       The minimal value
-     * @param max       The maximal value
+     *
+     * @param min The minimal value
+     * @param max The maximal value
      * @param binsCount The number of bins.
      * @return An array of key values of the bin.
      */
@@ -431,9 +532,9 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Calculate the frequencies of values in each bin.
-     * 
+     *
      * @param stockPrices The stock prices
-     * @param bins        The stock prices bins.
+     * @param bins The stock prices bins.
      * @return frequencies of each bin.
      */
     public static int[] calculateOccurences(double[] stockPrices, double[] bins) {
@@ -447,8 +548,8 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Calculate in which interval the value is comprised.
-     * 
-     * @param arr   The arr to search in.
+     *
+     * @param arr The arr to search in.
      * @param value The value to search for.
      * @return The index of the bin containing the value.
      */
@@ -469,7 +570,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Find distint values in an ArrayList.
-     * 
+     *
      * @param arr input values
      * @return An ArrayList with distinct values
      */
@@ -485,8 +586,8 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Compute items frequencies.
-     * 
-     * @param items       The items we want to count.
+     *
+     * @param items The items we want to count.
      * @param stockPrices The stock prices.
      * @return An ArrayList containing each item frequency.
      */
@@ -501,7 +602,7 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Sort items in ascending order using insertion sort algoritm.
-     * 
+     *
      * @param items Items to be sorted.
      */
     public static void sortItems(ArrayList<Double> items) {
@@ -524,11 +625,10 @@ public class ProgrammingAssignmentUnitFour {
     // }
     // return 0;
     // }
-
     /**
      * Create a String from duplicating a character many times.
-     * 
-     * @param c     char to duplicate
+     *
+     * @param c char to duplicate
      * @param count number of repetitions
      * @return a c character duplicated count times.
      */
@@ -542,9 +642,9 @@ public class ProgrammingAssignmentUnitFour {
 
     /**
      * Generate a random float.
-     * 
-     * @param min       minimum value.
-     * @param max       maximum value.
+     *
+     * @param min minimum value.
+     * @param max maximum value.
      * @param precision number of digits.
      * @return a random number in [min, max] interval.
      */
