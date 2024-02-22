@@ -1,7 +1,10 @@
 package unit4;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
+import org.openjdk.jol.vm.VM;
 
 /**
  *
@@ -26,40 +29,70 @@ public class PerformanceTest {
         System.out.println("After sorting:");
         displayArray(arr);
 
+        // benchmark1();
+        // benchmark2();
+        benchmark3();
+    }
+
+    public static void benchmark1() {
+        ArrayList<Integer> arrList;
+        int[] arr;
+        long perm;
+
         int n = 100;
         for (int i = 0; i < 4; i++) {
+            // Generate a random ArrayList of size n
             arrList = generateRandomNumbers(n);
+            // copy the same data to an array
             arr = toArray(arrList);
 
-            long startTime, endTime, elapsedTime;
+            long startTime, endTime, elapsedTime1, elapsedTime2;
 
             System.out.println("--- Sorting " + n + " integers ---");
 
-            // Array sorting
+            // Time Array sorting
             startTime = System.currentTimeMillis();
             perm = bubbleSort(arr);
             endTime = System.currentTimeMillis();
-            elapsedTime = endTime - startTime;
-            System.out.println("Array: " + elapsedTime + "ms in " + perm + " permutations");
+            elapsedTime1 = endTime - startTime;
+            System.out.println("Array: " + elapsedTime1 + "ms in "
+                    + perm + " permutations");
 
-            // ArraList sorting
+            // Time ArraList sorting
             startTime = System.currentTimeMillis();
             perm = bubbleSort(arrList);
             endTime = System.currentTimeMillis();
-            elapsedTime = endTime - startTime;
-            System.out.println("ArrayList: " + elapsedTime + "ms in " + perm + " permutations");
+            elapsedTime2 = endTime - startTime;
+            System.out.println("ArrayList: " + elapsedTime2 + "ms in "
+                    + perm + " permutations");
 
+            // calculate how faster is array compared to ArrayList
+            double tf = elapsedTime2 * 1.0 / elapsedTime1;
+            System.out.printf("Array is %5.2f times "
+                    + "faster than ArrayList.\n\n", tf);
             n *= 10;
         }
     }
+    
+    public static void benchmark2() {
+        ArrayList<Integer> arrList = generateRandomNumbers(100000);
+        int[] arr = toArray(arrList);
+        
+        System.out.println("Sizeof ArrayList: " + VM.current().sizeOf(arrList));
+        System.out.println("Sizeof array: " + VM.current().sizeOf(arr));
+    }
 
-    public static ArrayList<Integer> generateRandomNumbers(int count) {
+    public static ArrayList<Integer> generateRandomNumbers(int count, int min, int max) {
         ArrayList<Integer> arr = new ArrayList<>();
         Random rand = new Random();
         for (int i = 0; i < count; i++) {
-            arr.add(rand.nextInt(100, 99999));
+            arr.add(rand.nextInt(min, max));
         }
         return arr;
+    }
+    
+    public static ArrayList<Integer> generateRandomNumbers(int count) {
+        return generateRandomNumbers(count, 100, 99999);
     }
 
     public static int[] toArray(ArrayList<Integer> arrList) {
@@ -120,4 +153,38 @@ public class PerformanceTest {
         }
         System.out.println(']');
     }
+
+    public static void benchmark3() {
+        ArrayList<Integer> arrList = generateRandomNumbers(15, 10, 100);
+        System.out.println(arrList);
+        
+        // inserting
+        arrList.add(17000);
+        
+        // removing
+        arrList.remove((Integer)17000);
+        
+        //  Searching
+        System.out.println("\nSearching data");
+        int value, pos;
+        value = arrList.get(14);
+        pos = arrList.indexOf(value);
+        System.out.println(value + " found at position " + pos);
+
+        // sorting
+        System.out.println("\nSorting even number precede odds");
+        arrList.sort((Integer o1, Integer o2) -> (o1 % 2) - (o2 % 2));
+        System.out.println(arrList);
+        
+        // iterating over arraylist
+        System.out.println("\nDispaying digit sum > 10");
+        for (int val : arrList) {
+            int s = val / 10 + val % 10;
+            if (s > 10) {
+                System.out.println(val);
+            }
+        }
+   
+    }
+    
 }
