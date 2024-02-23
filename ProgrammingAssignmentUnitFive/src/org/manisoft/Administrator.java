@@ -13,11 +13,12 @@ public class Administrator {
             System.out.println("1. Students Management");
             System.out.println("2. Courses Management");
             System.out.println("3. Enrollment Management");
+            System.out.println("4. Grades Management");
             System.out.println("");
             System.out.println("0. Exit");
 
             choice = InputUtil.enterNumber("Your choice ? ",
-                    0, 3);
+                    0, 4);
             switch (choice) {
                 case 1 ->
                     studentsManagement();
@@ -25,6 +26,8 @@ public class Administrator {
                     coursesManagement();
                 case 3 ->
                     enrollmentManagement();
+                case 4 ->
+                    gradesManagement();
             }
         } while (choice != 0);
         System.out.println("See you soon, goodbye!");
@@ -49,7 +52,9 @@ public class Administrator {
                 case 2 ->
                     CourseManagement.addNewStudent();
                 case 3 ->
-                    CourseManagement.updateStudentInfo();                    
+                    CourseManagement.updateStudentInfo();
+                case 4 ->
+                    CourseManagement.deleteStudentInfo();
             }
         } while (choice != 0);
     }
@@ -74,11 +79,53 @@ public class Administrator {
                     CourseManagement.addNewCourse();
                 case 3 ->
                     CourseManagement.updateCourseInfo();
+                case 4 ->
+                    CourseManagement.deleteCourseInfo();
             }
         } while (choice != 0);
     }
 
     private static void enrollmentManagement() {
+        int choice;
+        do {
+            System.out.println("\n--- Enrollment Management Menu ---\n");
+            System.out.println("1. Show Student's Enrollments");
+            System.out.println("2. Show Course's Enrollments");
+            System.out.println("3. Enroll Student");
+            System.out.println("4. Unenroll Student");
+            System.out.println("");
+            System.out.println("0. Back to main Menu");
 
+            choice = InputUtil.enterNumber("Your choice ? ",
+                    0, 3);
+            switch (choice) {
+                case 1 ->
+                    CourseManagement.showStudentEnrollments();
+                case 2 ->
+                    CourseManagement.showCourseEnrollments();
+                case 3 ->
+                    CourseManagement.enrollStudent();
+                case 4 ->
+                    CourseManagement.unenrollStudent();
+            }
+        } while (choice != 0);
+    }
+
+    private static void gradesManagement() {
+        int choice;
+        do {
+            System.out.println("\n--- Grades Management Menu ---\n");
+            System.out.println("1. Show Student's Grades");
+
+            System.out.println("");
+            System.out.println("0. Back to main Menu");
+
+            choice = InputUtil.enterNumber("Your choice ? ",
+                    0, 3);
+            switch (choice) {
+                case 1 ->
+                    CourseManagement.showStudentGrades();
+            }
+        } while (choice != 0);
     }
 }

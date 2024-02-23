@@ -17,6 +17,10 @@ public class Course implements Serializable, Comparable<Course> {
     private int capacity;
     private int gradesCount;
 
+    public Course(String code, String name) {
+        this(code, name, 10, 3);
+    }
+    
     public Course(String code, String name, int capacity, int gradesCount) {
         this.code = code;
         this.name = name;
@@ -58,6 +62,14 @@ public class Course implements Serializable, Comparable<Course> {
 
     public void setGradesCount(int gradesCount) {
         this.gradesCount = gradesCount;
+    }
+    
+    public void display() {
+        System.out.println("Course Information");
+        System.out.println("Code: " + code);
+        System.out.println("Name: " + name);
+        System.out.println("Capacity: " + capacity);
+        System.out.println("Grades Count: " + gradesCount);
     }
 
     @Override

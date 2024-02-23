@@ -59,7 +59,7 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
     }
     
     public void calcAvgGrade() {
-        if (grades != null) {
+        if (grades == null) {
             return;
         }
         
@@ -72,6 +72,13 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
     
     public int getAvgGrade() {
         return avgGrade;
+    }
+    
+    public void display() {
+        System.out.println("Enrolled Course Information");
+        student.display();
+        System.out.println();
+        course.display();
     }
 
     @Override

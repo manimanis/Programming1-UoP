@@ -46,6 +46,12 @@ public class Student implements Serializable, Comparable<Student> {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public void display() {
+        System.out.println("Stduent Information");
+        System.out.println("ID: " + ID);
+        System.out.println("Name: " + name);
+    }
 
     @Override
     public int hashCode() {
