@@ -14,6 +14,17 @@ import java.util.Objects;
 public class Student implements Serializable, Comparable<Student> {
     private String ID;
     private String name;
+    
+    private static int index;
+    
+    public static String genStudentID() {
+        index++;
+        return String.format("BCS%04d", index);
+    }
+
+    public Student() {
+        this("", "");
+    }  
 
     public Student(String ID, String name) {
         this.ID = ID;
@@ -71,12 +82,12 @@ public class Student implements Serializable, Comparable<Student> {
 
     @Override
     public String toString() {
-        return String.format("%-10s %60s", 
+        return String.format("%-10s %-60s", 
                 ID, StrUtil.formatStr(name, 60));
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         return new Student(ID, name);
     }
     

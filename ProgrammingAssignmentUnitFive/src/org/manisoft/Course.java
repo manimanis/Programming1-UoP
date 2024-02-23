@@ -24,6 +24,10 @@ public class Course implements Serializable, Comparable<Course> {
         this.gradesCount = gradesCount;
     }
 
+    public Course() {
+        this("", "", 10, 5);
+    }
+
     public String getCode() {
         return code;
     }
@@ -95,7 +99,7 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         return new Course(code, name, capacity, gradesCount);
     }
     

@@ -73,18 +73,33 @@ public class StrUtil {
     }
 
     /**
-     * Verifies that s is a valid ID.
+     * Verifies that s is a valid student ID.
      *
      * @param s The string to be verified.
      * @return true if the string is a valid ID.
      */
-    public static boolean isValidId(String s) {
+    public static boolean isValidStudentId(String s) {
         if (s.length() != 7) {
             return false;
         }
         return s.length() == 7
                 && isAlphabetic(s.substring(0, 3))
                 && isNumeric(s.substring(3));
+    }
+    
+    /**
+     * Verifies that s is a valid course Code.
+     *
+     * @param s The string to be verified.
+     * @return true if the string is a valid code.
+     */
+    public static boolean isValidCourseCode(String s) {
+        if (s.length() != 6) {
+            return false;
+        }
+        return s.length() == 6
+                && isAlphabetic(s.substring(0, 2))
+                && isNumeric(s.substring(2));
     }
 
     /**
@@ -122,29 +137,5 @@ public class StrUtil {
             }
         }
         return sb.toString();
-    }
-
-    /**
-     * Creates a shared scanner object.
-     */
-    private static final Scanner scanner = new Scanner(System.in);
-
-    /**
-     * Prompts the user to enter a letter to continue a treatment.
-     *
-     * @param message The message to be displayed as an invite.
-     * @param options The accepted letters.
-     * @param defaultOption The default letter.
-     * @return The user choice.
-     */
-    public static char promptContinue(String message, String options,
-            char defaultOption) {
-        String inp = null;
-        do {
-            System.out.print(message + "[" + defaultOption + "] ");
-            inp = scanner.nextLine().toUpperCase().trim();
-            inp = (inp.length() == 0) ? ("" + defaultOption) : inp;
-        } while (inp.length() != 1 || !options.contains(inp));
-        return inp.charAt(0);
     }
 }
