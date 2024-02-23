@@ -4,8 +4,6 @@
  */
 package org.manisoft;
 
-import java.util.Scanner;
-
 /**
  *
  * @author manianis
@@ -135,6 +133,21 @@ public class StrUtil {
                     || (s.charAt(i) == ' ' && s.charAt(i - 1) != ' ')) {
                 sb.append(s.charAt(i));
             }
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Duplicate a String count times.
+     * 
+     * @param s
+     * @param count
+     * @return 
+     */
+    public static String duplicateStr(String s, int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(s);
         }
         return sb.toString();
     }

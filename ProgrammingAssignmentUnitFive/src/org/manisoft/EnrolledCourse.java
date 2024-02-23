@@ -75,10 +75,20 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
     }
     
     public void display() {
-        System.out.println("Enrolled Course Information");
+        System.out.println("\n*** Enrolled Course Information ***\n");
+        
         student.display();
         System.out.println();
         course.display();
+        System.out.println();
+        System.out.println("Grades");
+        System.out.println(StrUtil.duplicateStr("-", 20));
+        for (int i = 0; i < grades.length; i++) {
+            if (i > 0) System.out.print(", ");
+            System.out.printf("%d: %3d", i+1, grades[i]);
+        }
+        System.out.println();
+        System.out.printf("Average Grade: %3d\n", avgGrade);
     }
 
     @Override

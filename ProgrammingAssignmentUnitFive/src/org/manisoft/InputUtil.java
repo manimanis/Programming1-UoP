@@ -242,8 +242,8 @@ public class InputUtil {
      *
      * @return A valid grade.
      */
-    public static int enterGrade() {
-        return enterGrade(Integer.MIN_VALUE);
+    public static int enterGrade(String message) {
+        return enterGrade(message, Integer.MIN_VALUE);
     }
 
     /**
@@ -252,8 +252,7 @@ public class InputUtil {
      * @param defaultVal The current grade.
      * @return A valid grade.
      */
-    public static int enterGrade(int defaultVal) {
-        return enterNumber("Grade [0, 100]? ",
-                defaultVal, 0, 100);
+    public static int enterGrade(String message, int defaultVal) {
+        return enterNumber(message, defaultVal, 0, 100);
     }
 }

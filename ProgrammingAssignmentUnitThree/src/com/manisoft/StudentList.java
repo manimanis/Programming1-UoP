@@ -204,6 +204,9 @@ public class StudentList {
         ObjectInputStream ois = null;
         try {
             File fichier = new File(filePath);
+            if (!fichier.exists()) {
+                return;
+            }
             ois = new ObjectInputStream(new FileInputStream(fichier));
             this.numStudents = ois.readInt();
             int nbr = ois.readInt();

@@ -1,11 +1,22 @@
 
 package org.manisoft;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author manianis
  */
 public class StudentList extends DistinctArrayList<Student> {
+    
+    private int index;
+    
+    public String genStudentID() {
+        index++;
+        return String.format("BCS%04d", index);
+    }
 
     /**
      * Find a student by his ID.
@@ -36,5 +47,29 @@ public class StudentList extends DistinctArrayList<Student> {
         }
         return null;
     }
-    
+
+    /**
+     * Reads a StudentList from the input stream.
+     *
+     * @param ois
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    protected void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        index = ois.readInt();
+        super.readObject(ois);
+    }
+
+    /**
+     * Writes a StudentList to the output stream.
+     *
+     * @param oos
+     * @throws IOException
+     */
+    protected void writeObject(ObjectOutputStream oos)
+            throws IOException {
+        oos.writeInt(index);
+        super.writeObject(oos);
+    }    
 }

@@ -14,13 +14,6 @@ import java.util.Objects;
 public class Student implements Serializable, Comparable<Student> {
     private String ID;
     private String name;
-    
-    private static int index;
-    
-    public static String genStudentID() {
-        index++;
-        return String.format("BCS%04d", index);
-    }
 
     public Student() {
         this("", "");
@@ -48,7 +41,8 @@ public class Student implements Serializable, Comparable<Student> {
     }
     
     public void display() {
-        System.out.println("Stduent Information");
+        System.out.println("Student Information");
+        System.out.println(StrUtil.duplicateStr("-", 20));
         System.out.println("ID: " + ID);
         System.out.println("Name: " + name);
     }

@@ -116,6 +116,7 @@ public class Administrator {
         do {
             System.out.println("\n--- Grades Management Menu ---\n");
             System.out.println("1. Show Student's Grades");
+            System.out.println("2. Change Student's Grades");
 
             System.out.println("");
             System.out.println("0. Back to main Menu");
@@ -125,6 +126,8 @@ public class Administrator {
             switch (choice) {
                 case 1 ->
                     CourseManagement.showStudentGrades();
+                case 2 ->
+                    CourseManagement.changeStudentGrades();
             }
         } while (choice != 0);
     }

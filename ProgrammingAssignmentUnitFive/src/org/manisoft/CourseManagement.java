@@ -1,6 +1,15 @@
 package org.manisoft;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -8,24 +17,74 @@ import java.util.ArrayList;
  */
 public class CourseManagement {
 
+    private static String filePath = "courses.obj";
     private static StudentList students = new StudentList();
     private static CourseList courses = new CourseList();
     private static EnrolledCoursesList enrollment = new EnrolledCoursesList();
-    
+
     static {
-        Student student1 = new Student(Student.genStudentID(), "Amine");
-        Student student2 = new Student(Student.genStudentID(), "Zaher");
-        Course course1 = new Course("CS1101", "Programming Fundamentals");
-        Course course2 = new Course("CS1102", "Programming One");
-        students.add(student1);
-        students.add(student2);
-        courses.add(course1);
-        courses.add(course2);
-        enrollment.enrollToCourse(student1, course1);
-        enrollment.enrollToCourse(student2, course2);
+        loadData();
+        if (students.isEmpty()) {
+            Student student1 = new Student(students.genStudentID(), "Amine");
+            Student student2 = new Student(students.genStudentID(), "Zaher");
+            Course course1 = new Course("CS1101", "Programming Fundamentals");
+            Course course2 = new Course("CS1102", "Programming One");
+            students.add(student1);
+            students.add(student2);
+            courses.add(course1);
+            courses.add(course2);
+            enrollment.enrollToCourse(student1, course1);
+            enrollment.enrollToCourse(student2, course2);
+            saveData();
+        }
     }
 
     private final static int PAGE_SIZE = 10;
+
+    public static void loadData() {
+        ObjectInputStream ois = null;
+        File fichier = new File(filePath);
+        if (!fichier.exists()) {
+            return;
+        }
+        try {
+            ois = new ObjectInputStream(new FileInputStream(fichier));
+            students = (StudentList) ois.readObject();
+            courses = (CourseList) ois.readObject();
+            enrollment = (EnrolledCoursesList) ois.readObject();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public static void saveData() {
+        ObjectOutputStream oos = null;
+        try {
+            File fichier = new File(filePath);
+            oos = new ObjectOutputStream(new FileOutputStream(fichier));
+            oos.writeObject(students);
+            oos.writeObject(courses);
+            oos.writeObject(enrollment);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                oos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     public static void displayStudents(int start, int end) {
         end = (end > students.size()) ? students.size() : end;
@@ -90,7 +149,7 @@ public class CourseManagement {
             System.out.println(ec.getCourse() + " " + ec.getAvgGrade());
         }
     }
-    
+
     public static void displayStudentsEnrolledToCourse(Course course) {
         ArrayList<EnrolledCourse> enr = enrollment.enrollByCourse(course);
         System.out.println("\n*** List of Students ***\n");
@@ -129,13 +188,14 @@ public class CourseManagement {
             System.out.println("This student name already exists!");
             return;
         }
-        student.setID(Student.genStudentID());
+        student.setID(students.genStudentID());
 
         // Generate a new ID
         System.out.println("New Student ID: " + student.getID());
 
         // Insert the student
         if (students.add(student)) {
+            saveData();
             System.out.println("Student "
                     + student.getID() + " " + student.getName()
                     + " inserted!");
@@ -175,11 +235,12 @@ public class CourseManagement {
         // Update students record
         int pos = students.indexOf(student);
         students.set(pos, copySt);
+        saveData();
         System.out.println("Student "
                 + copySt.getID() + " " + copySt.getName()
                 + " updated!");
     }
-    
+
     /**
      * Prompts the user for student removal
      */
@@ -204,6 +265,7 @@ public class CourseManagement {
         if (ans == 'Y') {
             enrollment.removeStudent(student);
             students.remove(student);
+            saveData();
             System.out.println("The student is removed!");
         }
     }
@@ -255,6 +317,7 @@ public class CourseManagement {
 
         // Insert new course
         if (courses.add(course)) {
+            saveData();
             System.out.println("Course "
                     + course.getCode() + " " + course.getName()
                     + " inserted!");
@@ -303,11 +366,12 @@ public class CourseManagement {
         // Uodate course
         int pos = courses.indexOf(oCourse);
         courses.set(pos, nCourse);
+        saveData();
         System.out.println("Course "
                 + nCourse.getCode() + " " + nCourse.getName()
                 + " updated!");
     }
-    
+
     /**
      * Prompts the user for course removal
      */
@@ -331,11 +395,12 @@ public class CourseManagement {
         if (ans == 'Y') {
             enrollment.removeCourse(course);
             courses.remove(course);
+            saveData();
             System.out.println("The course is removed!");
         }
     }
-     
-    public  static  void showStudentEnrollments() {
+
+    public static void showStudentEnrollments() {
         System.out.println("\n--- Student Enrollments ---\n");
 
         // Enter student ID
@@ -345,11 +410,11 @@ public class CourseManagement {
             System.out.println("No student found!");
             return;
         }
-        
+
         displayCoursesEnrolledByStudent(student);
     }
-    
-    public  static  void showCourseEnrollments() {
+
+    public static void showCourseEnrollments() {
         System.out.println("\n--- Course Enrollments ---\n");
 
         // Enter Course Code
@@ -359,10 +424,10 @@ public class CourseManagement {
             System.out.println("No course found!");
             return;
         }
-        
+
         displayStudentsEnrolledToCourse(course);
     }
-    
+
     /**
      * Enroll a student to a specific course
      */
@@ -376,7 +441,7 @@ public class CourseManagement {
             System.out.println("No student found!");
             return;
         }
-        
+
         // Enter course code
         String code = InputUtil.enterCourseCode();
         Course course = courses.getByCode(code);
@@ -384,21 +449,22 @@ public class CourseManagement {
             System.out.println("No course found!");
             return;
         }
-        
+
         if (enrollment.isEnrolled(student, course)) {
             System.out.println("The student is aleardy enrolled!");
             return;
         }
-        
+
         student.display();
         System.out.println();
         course.display();
-        
+
         EnrolledCourse ec = new EnrolledCourse(course, student);
         enrollment.enrollToCourse(ec);
+        saveData();
         System.out.println("The student is enrolled to the course!");
     }
-    
+
     /**
      * Unenroll a student to a specific course
      */
@@ -412,7 +478,7 @@ public class CourseManagement {
             System.out.println("No student found!");
             return;
         }
-        
+
         // Enter course code
         String code = InputUtil.enterCourseCode();
         Course course = courses.getByCode(code);
@@ -420,24 +486,25 @@ public class CourseManagement {
             System.out.println("No course found!");
             return;
         }
-        
+
         if (!enrollment.isEnrolled(student, course)) {
             System.out.println("The student is not enrolled!");
             return;
         }
-        
+
         EnrolledCourse ec = enrollment.getEnroll(student, course);
         ec.display();
-        
+
         char ans = InputUtil.promptContinue("Do you want to remove"
                 + " this course enrollment? (Y/N)",
                 "YN", 'N');
         if (ans == 'Y') {
             enrollment.leaveFromCourse(ec);
+            saveData();
             System.out.println("The student left the course!");
         }
     }
-    
+
     public static void showStudentGrades() {
         System.out.println("\n--- Student grades ---\n");
 
@@ -448,7 +515,7 @@ public class CourseManagement {
             System.out.println("No student found!");
             return;
         }
-        
+
         // Enter course code
         String code = InputUtil.enterCourseCode();
         Course course = courses.getByCode(code);
@@ -456,7 +523,51 @@ public class CourseManagement {
             System.out.println("No course found!");
             return;
         }
+
+        if (!enrollment.isEnrolled(student, course)) {
+            System.out.println("The student is not enrolled!");
+            return;
+        }
+
+        EnrolledCourse ec = enrollment.getEnroll(student, course);
+        ec.display();
+    }
+
+    public static void changeStudentGrades() {
+        System.out.println("\n--- Student grades ---\n");
+
+        // Enter student ID
+        String Id = InputUtil.enterStudentId();
+        Student student = students.getByID(Id);
+        if (student == null) {
+            System.out.println("No student found!");
+            return;
+        }
+
+        // Enter course code
+        String code = InputUtil.enterCourseCode();
+        Course course = courses.getByCode(code);
+        if (course == null) {
+            System.out.println("No course found!");
+            return;
+        }
+
+        if (!enrollment.isEnrolled(student, course)) {
+            System.out.println("The student is not enrolled!");
+            return;
+        }
+
+        EnrolledCourse ec = enrollment.getEnroll(student, course);
+        ec.display();
+
+        for (int i = 0; i < ec.getGradesCount(); i++) {
+            System.out.print("Grade " + (i + 1) + ": ");
+            ec.setGrade(i, InputUtil.enterGrade("[0, 100]? ", ec.getGrade(i)));
+        }
+
+        System.out.println("Average grade: " + ec.getAvgGrade());
         
-        
+        saveData();
+        System.out.println("Grades changed!");
     }
 }

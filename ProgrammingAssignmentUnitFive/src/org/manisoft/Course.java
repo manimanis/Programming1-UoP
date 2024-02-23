@@ -66,6 +66,7 @@ public class Course implements Serializable, Comparable<Course> {
     
     public void display() {
         System.out.println("Course Information");
+        System.out.println(StrUtil.duplicateStr("-", 20));
         System.out.println("Code: " + code);
         System.out.println("Name: " + name);
         System.out.println("Capacity: " + capacity);
