@@ -23,7 +23,7 @@ public class StudentGrades {
 
     public static String gradeToString(double grade) {
         if (grade == NOT_SET || !isValidGrade(grade)) {
-            return "UNSET";
+            return "--.--";
         } else if (grade == ABSENT) {
             return "ABSENT";
         }
