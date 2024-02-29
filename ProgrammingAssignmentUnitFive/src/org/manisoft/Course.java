@@ -32,38 +32,73 @@ public class Course implements Serializable, Comparable<Course> {
         this("", "", 10, 5);
     }
 
+    /**
+     * Returns course's code.
+     * @return 
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Sets course's code.
+     * @param code 
+     */
     public void setCode(String code) {
         this.code = code;
     }
 
+    /**
+     * Returns course's name.
+     * @return 
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets course's name.
+     * @param name 
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns course's capacity.
+     * @return 
+     */
     public int getCapacity() {
         return capacity;
     }
 
+    /**
+     * Changes course's capacity.
+     * @param capacity 
+     */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
+    /**
+     * Returns number of grades in the course.
+     * @return 
+     */
     public int getGradesCount() {
         return gradesCount;
     }
 
+    /**
+     * Sets the number of grades for this course.
+     * @param gradesCount 
+     */
     public void setGradesCount(int gradesCount) {
         this.gradesCount = gradesCount;
     }
     
+    /**
+     * Display course's information in a pretty format.
+     */
     public void display() {
         System.out.println("Course Information");
         System.out.println(StrUtil.duplicateStr("-", 20));

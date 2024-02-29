@@ -15,31 +15,58 @@ public class Student implements Serializable, Comparable<Student> {
     private String ID;
     private String name;
 
+    /**
+     * Student default.
+     */
     public Student() {
         this("", "");
     }  
 
+    /**
+     * Student Constructor.
+     * @param ID
+     * @param name 
+     */
     public Student(String ID, String name) {
         this.ID = ID;
         this.name = name;
     }
 
+    /**
+     * The student ID getter.
+     * @return 
+     */
     public String getID() {
         return ID;
     }
 
+    /**
+     * The student ID setter.
+     * @param ID 
+     */
     public void setID(String ID) {
         this.ID = ID;
     }
 
+    /**
+     * The student name getter.
+     * @return 
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * The student name setter.
+     * @param name 
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * Display Student Information in apretty format.
+     */
     public void display() {
         System.out.println("Student Information");
         System.out.println(StrUtil.duplicateStr("-", 20));
@@ -47,6 +74,10 @@ public class Student implements Serializable, Comparable<Student> {
         System.out.println("Name: " + name);
     }
 
+    /**
+     * A hash for the object to be used with HashMap.
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -54,6 +85,11 @@ public class Student implements Serializable, Comparable<Student> {
         return hash;
     }
 
+    /**
+     * Compares if two stduents are equals.
+     * @param obj
+     * @return 
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -69,6 +105,11 @@ public class Student implements Serializable, Comparable<Student> {
         return Objects.equals(this.ID, other.ID);
     }
 
+    /**
+     * Compares two Students.
+     * @param o
+     * @return positive, zero, or negative value.
+     */
     @Override
     public int compareTo(Student o) {
         if (o == this) {

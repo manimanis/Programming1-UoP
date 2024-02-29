@@ -41,6 +41,9 @@ public class CourseManagement {
 
     private final static int PAGE_SIZE = 10;
 
+    /**
+     * Load data from a file.
+     */
     public static void loadData() {
         ObjectInputStream ois = null;
         File fichier = new File(filePath);
@@ -65,6 +68,9 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Saves data to a file.
+     */
     public static void saveData() {
         ObjectOutputStream oos = null;
         try {
@@ -86,6 +92,11 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Display students informations.
+     * @param start starting index.
+     * @param end ending index.
+     */
     public static void displayStudents(int start, int end) {
         end = (end > students.size()) ? students.size() : end;
         for (int i = start; i < end; i++) {
@@ -93,6 +104,9 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Displat all students.
+     */
     public static void displayStudents() {
         int pages = students.size() / PAGE_SIZE
                 + ((students.size() % PAGE_SIZE != 0) ? 1 : 0);
@@ -114,6 +128,11 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Display courses information.
+     * @param start starting index
+     * @param end ending index
+     */
     public static void displayCourses(int start, int end) {
         end = (end > courses.size()) ? courses.size() : end;
         for (int i = start; i < end; i++) {
@@ -121,6 +140,9 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Display all courses.
+     */
     public static void displayCourses() {
         int pages = courses.size() / PAGE_SIZE
                 + ((courses.size() % PAGE_SIZE != 0) ? 1 : 0);
@@ -142,6 +164,10 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Display list of courses the student is enrolled in.
+     * @param student 
+     */
     public static void displayCoursesEnrolledByStudent(Student student) {
         ArrayList<EnrolledCourse> enr = enrollment.enrollByStudent(student);
         System.out.println("\n*** List of Courses ***\n");
@@ -150,6 +176,10 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Displat list of students enrolled in the course.
+     * @param course 
+     */
     public static void displayStudentsEnrolledToCourse(Course course) {
         ArrayList<EnrolledCourse> enr = enrollment.enrollByCourse(course);
         System.out.println("\n*** List of Students ***\n");
@@ -158,6 +188,10 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Display enrolled course information.
+     * @param course 
+     */
     public static void displayEnrolledCourse(EnrolledCourse course) {
         System.out.println("\n--- Enrolled Course ---\n");
         System.out.println("Course: " + course.getCourse());
@@ -324,6 +358,9 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Prompts the user to update course's information.
+     */
     public static void updateCourseInfo() {
         System.out.println("\n--- Update Course ---\n");
         // Enter course code 
@@ -373,7 +410,7 @@ public class CourseManagement {
     }
 
     /**
-     * Prompts the user for course removal
+     * Prompts the user for course removal.
      */
     public static void deleteCourseInfo() {
         System.out.println("\n--- Delete Course ---\n");
@@ -400,6 +437,10 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Prompts the user for student ID and display the list of courses
+     * he is enrolled in.
+     */
     public static void showStudentEnrollments() {
         System.out.println("\n--- Student Enrollments ---\n");
 
@@ -414,6 +455,10 @@ public class CourseManagement {
         displayCoursesEnrolledByStudent(student);
     }
 
+    /**
+     * Prompts the user for course's code and display the list of students
+     * how are enrolled in.
+     */
     public static void showCourseEnrollments() {
         System.out.println("\n--- Course Enrollments ---\n");
 
@@ -429,7 +474,8 @@ public class CourseManagement {
     }
 
     /**
-     * Enroll a student to a specific course
+     * Prompts the user for information about student to enroll 
+     * in a specific course.
      */
     public static void enrollStudent() {
         System.out.println("\n--- New Student Enrollment ---\n");
@@ -466,7 +512,7 @@ public class CourseManagement {
     }
 
     /**
-     * Unenroll a student to a specific course
+     * Unenroll a student to a specific course.
      */
     public static void unenrollStudent() {
         System.out.println("\n--- Student's Enrollment ---\n");
@@ -505,6 +551,10 @@ public class CourseManagement {
         }
     }
 
+    /**
+     * Prompts the user for the student's ID and the course's code
+     * than displays their grades.
+     */
     public static void showStudentGrades() {
         System.out.println("\n--- Student grades ---\n");
 
@@ -533,6 +583,10 @@ public class CourseManagement {
         ec.display();
     }
 
+    /**
+     * Prompts the user for the student's ID and the course's code
+     * than changes their grades.
+     */
     public static void changeStudentGrades() {
         System.out.println("\n--- Student grades ---\n");
 

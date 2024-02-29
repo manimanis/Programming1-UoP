@@ -13,6 +13,11 @@ import java.util.ArrayList;
  */
 public class DistinctArrayList<T> extends ArrayList<T> {
 
+    /**
+     * Add the item only if it does not exists.
+     * @param item
+     * @return 
+     */
     @Override
     public boolean add(T item) {
         int pos = indexOf(item);
@@ -22,6 +27,12 @@ public class DistinctArrayList<T> extends ArrayList<T> {
         return super.add(item);
     }
 
+    /**
+     * Replaces the default implementation, we cannot insert an
+     * item at a position.
+     * @param index
+     * @param item 
+     */
     @Override
     public void add(int index, T item) {
         this.add(item);

@@ -29,35 +29,68 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
         calcAvgGrade();
     }   
 
+    /**
+     * The enrolled Course.
+     * @return 
+     */
     public Course getCourse() {
         return course;
     }
 
+    /**
+     * Enroll to the course.
+     * @param course 
+     */
     public void setCourse(Course course) {
         this.course = course;
     }
 
+    /**
+     * The enrolled Student.
+     * @return 
+     */
     public Student getStudent() {
         return student;
     }
 
+    /**
+     * Enroll a student to the course.
+     * @param student 
+     */
     public void setStudent(Student student) {
         this.student = student;
     }
     
+    /**
+     * Number of grades.
+     * @return 
+     */
     public int getGradesCount() {
         return grades.length;
     }
     
+    /**
+     * Change one student's grade.
+     * @param index
+     * @param grade 
+     */
     public void setGrade(int index, int grade) {
         grades[index] = grade;
         calcAvgGrade();
     }
     
+    /**
+     * Get one student's grade.
+     * @param index
+     * @return 
+     */
     public int getGrade(int index) {
         return grades[index];
     }
     
+    /**
+     * Recalc grade's average.
+     */
     public void calcAvgGrade() {
         if (grades == null) {
             return;
@@ -70,10 +103,17 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
         avgGrade = s / grades.length;
     }
     
+    /**
+     * Return grades average.
+     * @return 
+     */
     public int getAvgGrade() {
         return avgGrade;
     }
     
+    /**
+     * Print enrolled course information in pretty formatting.
+     */
     public void display() {
         System.out.println("\n*** Enrolled Course Information ***\n");
         

@@ -13,6 +13,10 @@ public class StudentList extends DistinctArrayList<Student> {
     
     private int index;
     
+    /**
+     * Generate a new Student ID.
+     * @return Student ID.
+     */
     public String genStudentID() {
         index++;
         return String.format("BCS%04d", index);

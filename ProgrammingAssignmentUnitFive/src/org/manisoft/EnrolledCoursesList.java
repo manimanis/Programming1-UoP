@@ -38,10 +38,21 @@ class EnrolledCoursesList implements Serializable {
         return courses.indexOf(course);
     }
     
+    /**
+     * Enroll a student to a course.
+     * @param student
+     * @param course
+     * @return true if the student enrollment is accepted.
+     */
     public boolean enrollToCourse(Student student, Course course) {
         return enrollToCourse(new EnrolledCourse(course, student));
     }
     
+    /**
+     * Enroll a student to a course.
+     * @param course
+     * @return true if the student enrollment is accepted.
+     */
     public boolean enrollToCourse(EnrolledCourse course) {
         if (contains(course)) {
             return false;
@@ -49,6 +60,11 @@ class EnrolledCoursesList implements Serializable {
         return courses.add(course);
     }
     
+    /**
+     * A student leaves a course.
+     * @param course
+     * @return 
+     */
     public boolean leaveFromCourse(EnrolledCourse course) {
         if (!contains(course)) {
             return false;
@@ -57,7 +73,7 @@ class EnrolledCoursesList implements Serializable {
     }
     
     /**
-     * Remove all the leaving student enrollments.
+     * Remove all leaving student enrollments.
      * 
      * @param student Student to remove
      */
@@ -76,7 +92,7 @@ class EnrolledCoursesList implements Serializable {
     }
     
     /**
-     * Remove all the leaving course enrollments.
+     * Remove all leaving course enrollments.
      * 
      * @param course Course to remove
      */

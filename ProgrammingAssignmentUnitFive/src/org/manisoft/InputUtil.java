@@ -1,3 +1,4 @@
+
 package org.manisoft;
 
 import java.util.Scanner;
