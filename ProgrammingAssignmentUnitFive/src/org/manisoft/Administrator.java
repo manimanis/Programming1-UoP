@@ -6,6 +6,9 @@ package org.manisoft;
  */
 public class Administrator {
 
+    /**
+     * Application Main Menu.
+     */
     public static void mainMenu() {
         int choice;
         do {
@@ -33,6 +36,9 @@ public class Administrator {
         System.out.println("See you soon, goodbye!");
     }
 
+    /**
+     * Menu for students management.
+     */
     private static void studentsManagement() {
         int choice;
         do {
@@ -45,7 +51,7 @@ public class Administrator {
             System.out.println("0. Back to main Menu");
 
             choice = InputUtil.enterNumber("Your choice ? ",
-                    0, 3);
+                    0, 4);
             switch (choice) {
                 case 1 ->
                     CourseManagement.displayStudents();
@@ -59,6 +65,9 @@ public class Administrator {
         } while (choice != 0);
     }
 
+    /**
+     * Menu for courses management.
+     */
     private static void coursesManagement() {
         int choice;
         do {
@@ -71,7 +80,7 @@ public class Administrator {
             System.out.println("0. Back to main Menu");
 
             choice = InputUtil.enterNumber("Your choice ? ",
-                    0, 3);
+                    0, 4);
             switch (choice) {
                 case 1 ->
                     CourseManagement.displayCourses();
@@ -85,6 +94,9 @@ public class Administrator {
         } while (choice != 0);
     }
 
+    /**
+     * Menu for courses enrollment.
+     */
     private static void enrollmentManagement() {
         int choice;
         do {
@@ -97,7 +109,7 @@ public class Administrator {
             System.out.println("0. Back to main Menu");
 
             choice = InputUtil.enterNumber("Your choice ? ",
-                    0, 3);
+                    0, 4);
             switch (choice) {
                 case 1 ->
                     CourseManagement.showStudentEnrollments();
@@ -111,6 +123,9 @@ public class Administrator {
         } while (choice != 0);
     }
 
+    /**
+     * Menu to change students grades.
+     */
     private static void gradesManagement() {
         int choice;
         do {
@@ -122,7 +137,7 @@ public class Administrator {
             System.out.println("0. Back to main Menu");
 
             choice = InputUtil.enterNumber("Your choice ? ",
-                    0, 3);
+                    0, 2);
             switch (choice) {
                 case 1 ->
                     CourseManagement.showStudentGrades();
