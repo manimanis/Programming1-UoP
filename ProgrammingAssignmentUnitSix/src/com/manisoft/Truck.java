@@ -41,4 +41,15 @@ public class Truck extends AbstractVehicle implements TruckVehicle {
         System.out.println("Capacity (tons): " + capacity);
         System.out.println("Transmission type: " + transmission);
     }
+    
+    @Override
+    public void input() {
+        super.input();
+        capacity = InputUtil.enterNumber("Capacity (Kg)? ", 
+                (int)(capacity * 1000), 1000, 60000) / 1000.0;
+        int tt = InputUtil.enterNumber(
+                "Transmission Type (0: Manual, 1: Automatic)? ",
+                transmission.ordinal(), 0, 1);
+        transmission = TransmissionType.valueOf(tt);
+    }
 }

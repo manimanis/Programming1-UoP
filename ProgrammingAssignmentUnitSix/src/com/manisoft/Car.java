@@ -10,6 +10,10 @@ public class Car extends AbstractVehicle implements CarVehicle {
     private int numDoors;
     private FuelType fuelType;
 
+    public Car() {
+        this(6, FuelType.PETROL, "", "", 2023);
+    }
+
     public Car(int numDoors, FuelType fuelType, String make, String model, int year) {
         super("Car", make, model, year);
         this.numDoors = numDoors;
@@ -42,5 +46,14 @@ public class Car extends AbstractVehicle implements CarVehicle {
         System.out.println("Number of doors: " + numDoors);
         System.out.println("Fuel type: " + fuelType);
     }
-    
+
+    @Override
+    public void input() {
+        super.input();
+        numDoors = InputUtil.enterNumber("Number of doors? ",
+                numDoors, 2, 10);
+        int ft = InputUtil.enterNumber("Fuel type (0: Petrol, "
+                + "1: Diesel, 2: Electric)? ", fuelType.ordinal(), 0, 2);
+        fuelType = FuelType.valueOf(ft);
+    }
 }

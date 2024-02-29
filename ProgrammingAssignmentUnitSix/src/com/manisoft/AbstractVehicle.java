@@ -54,9 +54,17 @@ public class AbstractVehicle implements Vehicle {
 
     @Override
     public void display() {
-        System.out.println(vehicleType);
+        System.out.println("\n--- " + vehicleType + " Information ---\n");
         System.out.println("Make: " + make);
         System.out.println("Model:" + model);
         System.out.println("Manufacture year: " + year);
+    }
+
+    @Override
+    public void input() {
+        System.out.println("\n--- Enter " + vehicleType + " Information ---\n");
+        make = InputUtil.enterString("Make? ", make, 3, 64);
+        model = InputUtil.enterString("Model? ", model, 3, 64);
+        year = InputUtil.enterNumber("Manufacture Year? ", year, 2000, 2024);
     }
 }

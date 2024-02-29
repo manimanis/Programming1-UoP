@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package org.manisoft;
+
+package com.manisoft;
 
 /**
  *
@@ -68,36 +65,6 @@ public class StrUtil {
             }
         }
         return true;
-    }
-
-    /**
-     * Verifies that s is a valid student ID.
-     *
-     * @param s The string to be verified.
-     * @return true if the string is a valid ID.
-     */
-    public static boolean isValidStudentId(String s) {
-        if (s.length() != 7) {
-            return false;
-        }
-        return s.length() == 7
-                && isAlphabetic(s.substring(0, 3))
-                && isNumeric(s.substring(3));
-    }
-    
-    /**
-     * Verifies that s is a valid course Code.
-     *
-     * @param s The string to be verified.
-     * @return true if the string is a valid code.
-     */
-    public static boolean isValidCourseCode(String s) {
-        if (s.length() != 6) {
-            return false;
-        }
-        return s.length() == 6
-                && isAlphabetic(s.substring(0, 2))
-                && isNumeric(s.substring(2));
     }
 
     /**

@@ -16,4 +16,5 @@ public interface Vehicle {
     void setYearManufacture(int year);
     
     void display();
+    void input();
 }

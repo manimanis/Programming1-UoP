@@ -8,5 +8,14 @@ package com.manisoft;
 public enum FuelType {
     PETROL,
     DIESEL,
-    ELECTRIC
+    ELECTRIC;
+    
+    public static FuelType valueOf(int index) {
+        return switch (index) {
+            case 0 -> FuelType.PETROL;
+            case 1 -> FuelType.DIESEL;
+            case 2 -> FuelType.ELECTRIC;
+            default -> null;
+        };
+    }
 }

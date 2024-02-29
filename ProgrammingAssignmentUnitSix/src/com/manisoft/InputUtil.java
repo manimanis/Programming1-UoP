@@ -1,4 +1,4 @@
-package org.manisoft;
+package com.manisoft;
 
 import java.util.Scanner;
 
@@ -81,178 +81,35 @@ public class InputUtil {
         return value;
     }
 
-    /**
-     * Prompts the user for a valid ID.
-     *
-     * @return
-     */
-    public static String enterStudentId() {
-        String id;
+    public static String enterString(String msg,
+            String defaultVal, int minLength, int maxLength) {
+        String val = "";
+        String curValue = defaultVal;
         boolean isValid;
 
         do {
-            System.out.print("ID? ");
-            id = scanner.nextLine().toUpperCase();
-            isValid = StrUtil.isValidStudentId(id);
+            System.out.print(msg);
+            if (curValue == null || curValue.isEmpty()) {
+                curValue = "empty";
+            }
+            System.out.print("[" + curValue + "] ");
+            try {
+                String tempVal = StrUtil.removeSpaces(
+                        scanner.nextLine().trim());
+                val = (tempVal.isEmpty()) ? defaultVal : tempVal;
+                isValid = (tempVal.length() >= minLength
+                        && tempVal.length() <= maxLength) 
+                        || (val.equalsIgnoreCase(defaultVal));
+            } catch (NumberFormatException e) {
+                isValid = false;
+            }
             if (!isValid) {
-                System.out.println("Incorrect ID!\n"
-                        + "Should be composed of 3 letters and 4 digits.");
+                System.out.printf("Incorrect input!\n"
+                        + "Should have between %d and %d characters.\n",
+                        minLength, maxLength);
             }
         } while (!isValid);
 
-        return id;
-    }
-
-    /**
-     * Prompts the user for a valid name.
-     *
-     * @return A valid name.
-     */
-    public static String enterStudentName() {
-        return enterStudentName("");
-    }
-
-    /**
-     * Prompts the user for a valid name, proposing a default name.
-     *
-     * @param defaultName The default name.
-     * @return The user valid name.
-     */
-    public static String enterStudentName(String defaultName) {
-        String name;
-        boolean isValid;
-
-        do {
-            System.out.print("Name? ");
-            if (!defaultName.isEmpty()) {
-                System.out.print("[" + defaultName + "] ");
-            }
-            name = StrUtil.toTitleCase(
-                    StrUtil.removeSpaces(scanner.nextLine()));
-            name = (name.isEmpty()) ? defaultName : name;
-            isValid = name.length() == 0 || (name.length() >= 5
-                    && StrUtil.isAlphabetic(name, true));
-            if (!isValid) {
-                System.out.println("Incorrect name!\n"
-                        + "Should be composed of at least 5 alphabetic letters.");
-            }
-        } while (!isValid);
-
-        return name;
-    }
-
-    /**
-     * Prompts the user for a valid course code.
-     *
-     * @return
-     */
-    public static String enterCourseCode() {
-        return enterCourseCode("");
-    }
-
-    /**
-     * Prompts the user for a valid course code, proposing a default code.
-     *
-     * @param defCode The default code.
-     * @return The course valid code.
-     */
-    public static String enterCourseCode(String defCode) {
-        String code;
-        boolean isValid;
-
-        do {
-            System.out.print("Code? ");
-            if (!defCode.isEmpty()) {
-                System.out.print("[" + defCode + "] ");
-            }
-            code = scanner.nextLine().toUpperCase();
-            isValid = StrUtil.isValidCourseCode(code);
-            if (!isValid) {
-                System.out.println("Incorrect course code!\n"
-                        + "Should be composed of 2 letters and 4 digits.");
-            }
-        } while (!isValid);
-
-        return code;
-    }
-
-    /**
-     * Prompts the user for a valid course name.
-     *
-     * @return A valid name.
-     */
-    public static String enterCourseName() {
-        return enterStudentName("");
-    }
-
-    /**
-     * Prompts the user for a valid course name, proposing a default name.
-     *
-     * @param defaultName The default name.
-     * @return The user valid name.
-     */
-    public static String enterCourseName(String defaultName) {
-        return enterStudentName(defaultName);
-    }
-
-    /**
-     * Prompts the user to enter a valid course capacity.
-     *
-     * @return A valid course capacity.
-     */
-    public static int enterCourseCap() {
-        return enterCourseCap(Integer.MIN_VALUE);
-    }
-
-    /**
-     * Prompts the user to enter a valid course capacity, proposing a current
-     * value.
-     *
-     * @param defaultVal The current capacity.
-     * @return A valid capacity.
-     */
-    public static int enterCourseCap(int defaultVal) {
-        return enterNumber("Capacity [5, 40]? ",
-                defaultVal, 5, 40);
-    }
-
-    /**
-     * Prompts the user to enter a valid course grade count.
-     *
-     * @return A valid course capacity.
-     */
-    public static int enterCourseGradesCount() {
-        return enterCourseGradesCount(Integer.MIN_VALUE);
-    }
-
-    /**
-     * Prompts the user to enter a valid course capacity, proposing a current
-     * value.
-     *
-     * @param defaultVal The current capacity.
-     * @return A valid capacity.
-     */
-    public static int enterCourseGradesCount(int defaultVal) {
-        return enterNumber("Grades Count [1, 20]? ",
-                defaultVal, 1, 20);
-    }
-
-    /**
-     * Prompts the user to enter a valid grade.
-     *
-     * @return A valid grade.
-     */
-    public static int enterGrade(String message) {
-        return enterGrade(message, Integer.MIN_VALUE);
-    }
-
-    /**
-     * Prompts the user to enter a valid grade, proposing a current value.
-     *
-     * @param defaultVal The current grade.
-     * @return A valid grade.
-     */
-    public static int enterGrade(String message, int defaultVal) {
-        return enterNumber(message, defaultVal, 0, 100);
+        return val;
     }
 }
