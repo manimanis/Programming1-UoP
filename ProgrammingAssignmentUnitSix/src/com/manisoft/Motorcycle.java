@@ -10,8 +10,12 @@ public class Motorcycle extends AbstractVehicle implements MotorVehicle {
     private int numWheels;
     private MotorcycleType type;
 
+    public Motorcycle() {
+        this(2, MotorcycleType.SPORT, "", "", 2024);
+    }  
+
     public Motorcycle(int numWeels, MotorcycleType type, String make, String model, int year) {
-        super("Motorcycle", make, model, year);
+        super(VehicleType.MOTORCYCLE, make, model, year);
         this.numWheels = numWeels;
         this.type = type;
     }

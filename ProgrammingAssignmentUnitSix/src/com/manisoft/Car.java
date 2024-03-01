@@ -11,11 +11,11 @@ public class Car extends AbstractVehicle implements CarVehicle {
     private FuelType fuelType;
 
     public Car() {
-        this(6, FuelType.PETROL, "", "", 2023);
+        this(6, FuelType.PETROL, "", "", 2024);
     }
 
     public Car(int numDoors, FuelType fuelType, String make, String model, int year) {
-        super("Car", make, model, year);
+        super(VehicleType.CAR, make, model, year);
         this.numDoors = numDoors;
         this.fuelType = fuelType;
     }

@@ -9,9 +9,10 @@ import java.util.ArrayList;
  */
 public class ProgrammingAssignmentUnitSix {
     
-    private ArrayList<Vehicle> vehicles = new ArrayList<>();
+    private DistinctArrayList<Vehicle> vehicles;
     
     public void mainMenu() {
+        vehicles.add(AbstractVehicle.createVehicle(VehicleType.CAR));
     }
 
     /**
