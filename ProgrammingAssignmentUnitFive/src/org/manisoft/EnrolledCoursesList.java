@@ -139,6 +139,36 @@ class EnrolledCoursesList implements Serializable {
     }
     
     /**
+     * Track the number of enrolled students to the specified course.
+     * @param course
+     * @return 
+     */
+    public int getNumberOfEnrolledStudents(Course course) {
+        int count = 0;
+        for (EnrolledCourse ec : courses) {
+            if (course.equals(ec.getCourse())) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * Track the number of enrolled courses for the specified stduent.
+     * @param course
+     * @return 
+     */
+    public int getNumberOfEnrolledCourses(Student student) {
+        int count = 0;
+        for (EnrolledCourse ec : courses) {
+            if (student.equals(ec.getStudent())) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
      * List of enrollment of one student.
      * 
      * @param student A student object.

@@ -12,5 +12,4 @@ public class ProgrammingAssignmentUnitFive {
     public static void main(String[] args) {
         Administrator.mainMenu();
     }
-
 }
