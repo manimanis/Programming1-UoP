@@ -1,12 +1,15 @@
 package com.manisoft;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
  *
  * @author manianis
  */
-public class AbstractVehicle implements Vehicle {
+public class VehicleBase implements Vehicle {
 
     protected VehicleType vehicleType;
     protected String make;
@@ -30,14 +33,15 @@ public class AbstractVehicle implements Vehicle {
         return vehicle;
     }
 
-    public AbstractVehicle(VehicleType vehicleType, String make, String model, int year) {
+    public VehicleBase(VehicleType vehicleType, String make, String model, int year) {
         this.vehicleType = vehicleType;
         this.make = make;
         this.model = model;
         this.year = year;
     }
 
-    public VehicleType getCarType() {
+    @Override
+    public VehicleType getType() {
         return vehicleType;
     }
 
@@ -92,7 +96,7 @@ public class AbstractVehicle implements Vehicle {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractVehicle other = (AbstractVehicle) obj;
+        final VehicleBase other = (VehicleBase) obj;
         if (this.year != other.year) {
             return false;
         }
@@ -105,6 +109,13 @@ public class AbstractVehicle implements Vehicle {
         return this.vehicleType == other.vehicleType;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%c %-20s %-20s %d", 
+                vehicleType.toString().charAt(0),
+                make, model, year);
+    }
+    
     @Override
     public void display() {
         System.out.println("\n--- " + vehicleType + " Information ---\n");
@@ -120,4 +131,23 @@ public class AbstractVehicle implements Vehicle {
         model = InputUtil.enterString("Model? ", model, 3, 64);
         year = InputUtil.enterNumber("Manufacture Year? ", year, 2000, 2024);
     }
+
+    @Override
+    public void readObject(ObjectInputStream ois) 
+            throws IOException, ClassNotFoundException {
+        vehicleType = VehicleType.valueOf(ois.readInt());
+        make = ois.readUTF();
+        model = ois.readUTF();
+        year = ois.readInt();
+    }
+
+    @Override
+    public void writeObject(ObjectOutputStream oos) 
+            throws IOException, ClassNotFoundException {
+        oos.writeInt(vehicleType.ordinal());
+        oos.writeUTF(make);
+        oos.writeUTF(model);
+        oos.writeInt(year);
+    }
+
 }

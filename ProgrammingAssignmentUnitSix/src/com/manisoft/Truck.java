@@ -1,10 +1,14 @@
 package com.manisoft;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author manianis
  */
-public class Truck extends AbstractVehicle implements TruckVehicle {
+public class Truck extends VehicleBase implements TruckVehicle {
 
     private double capacity;
     private TransmissionType transmission;
@@ -55,5 +59,21 @@ public class Truck extends AbstractVehicle implements TruckVehicle {
                 "Transmission Type (0: Manual, 1: Automatic)? ",
                 transmission.ordinal(), 0, 1);
         transmission = TransmissionType.valueOf(tt);
+    }
+    
+    @Override
+    public void readObject(ObjectInputStream ois) 
+            throws IOException, ClassNotFoundException {
+        super.readObject(ois);
+        capacity = ois.readDouble();
+        transmission = TransmissionType.valueOf(ois.readInt());
+    }
+
+    @Override
+    public void writeObject(ObjectOutputStream oos) 
+            throws IOException, ClassNotFoundException {
+        super.writeObject(oos);
+        oos.writeDouble(capacity);
+        oos.writeInt(transmission.ordinal());
     }
 }

@@ -1,11 +1,15 @@
 
 package com.manisoft;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author manianis
  */
-public class Motorcycle extends AbstractVehicle implements MotorVehicle {
+public class Motorcycle extends VehicleBase implements MotorVehicle {
     
     private int numWheels;
     private MotorcycleType type;
@@ -57,6 +61,21 @@ public class Motorcycle extends AbstractVehicle implements MotorVehicle {
                 type.ordinal(), 0, 2);
         type = MotorcycleType.valueOf(mt);
     }
-    
+
+    @Override
+    public void readObject(ObjectInputStream ois) 
+            throws IOException, ClassNotFoundException {
+        super.readObject(ois);
+        numWheels = ois.readInt();
+        type = MotorcycleType.valueOf(ois.readInt());
+    }
+
+    @Override
+    public void writeObject(ObjectOutputStream oos) 
+            throws IOException, ClassNotFoundException {
+        super.writeObject(oos);
+        oos.writeInt(numWheels);
+        oos.writeInt(type.ordinal());
+    }
     
 }

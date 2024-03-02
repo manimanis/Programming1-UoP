@@ -1,11 +1,15 @@
 
 package com.manisoft;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author manianis
  */
-public class Car extends AbstractVehicle implements CarVehicle {
+public class Car extends VehicleBase implements CarVehicle {
     
     private int numDoors;
     private FuelType fuelType;
@@ -56,4 +60,22 @@ public class Car extends AbstractVehicle implements CarVehicle {
                 + "1: Diesel, 2: Electric)? ", fuelType.ordinal(), 0, 2);
         fuelType = FuelType.valueOf(ft);
     }
+
+    @Override
+    public void readObject(ObjectInputStream ois) 
+            throws IOException, ClassNotFoundException {
+        super.readObject(ois);
+        numDoors = ois.readInt();
+        fuelType = FuelType.valueOf(ois.readInt());
+    }
+
+    @Override
+    public void writeObject(ObjectOutputStream oos) 
+            throws IOException, ClassNotFoundException {
+        super.writeObject(oos);
+        oos.writeInt(numDoors);
+        oos.writeInt(fuelType.ordinal());
+    }
+    
+    
 }
