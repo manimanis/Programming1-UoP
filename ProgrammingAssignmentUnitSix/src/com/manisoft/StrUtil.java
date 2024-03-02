@@ -19,6 +19,27 @@ public class StrUtil {
         }
         return s.substring(0, length - 3) + "...";
     }
+    
+    public static String left(String s, int nbCars) {
+        if (s.length() >= nbCars) {
+            return s.substring(0, nbCars);
+        }
+        return s;
+    }
+    
+    public static int calcNumDigits(int value) {
+        int nd = 1;
+        long p = 1L;
+        while (value <= p) {
+            p *= 10;
+        }
+        return nd;
+    }
+    
+    public static String format(int val, int digits) {
+        String fs = "%" + digits + "d";
+        return String.format(fs, val);
+    }
 
     /**
      * Verifies that s is composed only of alphabetic letters.

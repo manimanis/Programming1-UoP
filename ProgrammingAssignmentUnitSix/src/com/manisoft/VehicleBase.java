@@ -111,8 +111,8 @@ public class VehicleBase implements Vehicle {
 
     @Override
     public String toString() {
-        return String.format("%c %-20s %-20s %d", 
-                vehicleType.toString().charAt(0),
+        return String.format("%-5s %-20s %-20s %d", 
+                StrUtil.left(vehicleType.toString(), 5),
                 make, model, year);
     }
     
@@ -127,8 +127,8 @@ public class VehicleBase implements Vehicle {
     @Override
     public void input() {
         System.out.println("\n--- Enter " + vehicleType + " Information ---\n");
-        make = InputUtil.enterString("Make? ", make, 3, 64);
-        model = InputUtil.enterString("Model? ", model, 3, 64);
+        make = InputUtil.enterString("Make? ", make, 2, 64);
+        model = InputUtil.enterString("Model? ", model, 2, 64);
         year = InputUtil.enterNumber("Manufacture Year? ", year, 2000, 2024);
     }
 
