@@ -27,6 +27,11 @@ public class ProgrammingAssignmentUnitSix {
             vehicleList.add(new Truck(0.760, TransmissionType.MANUAL, "Ford", "Maverick", 2024));
             vehicleList.add(new Car(6, FuelType.PETROL, "BMW", "e46", 2024));
             vehicleList.add(new Motorcycle(2, MotorcycleType.OFF_ROAD, "Suzuki", "Raider R150", 2024));
+            vehicleList.add(new Car(6, FuelType.ELECTRIC, "Audi", "A3", 2024));
+            vehicleList.add(new Car(6, FuelType.ELECTRIC, "Ford", "Bronco Sport", 2023));
+            vehicleList.add(new Car(6, FuelType.ELECTRIC, "Porsche", "Cayenne", 2024));
+            vehicleList.add(new Truck(3.5, TransmissionType.AUTOMATIC, "Chevrolet", "Silverado 2500HD", 2024));
+            vehicleList.add(new Truck(2.6, TransmissionType.AUTOMATIC, "GMC", "Sierra 1500", 2023));
             saveData();
         }
     }
@@ -60,6 +65,8 @@ public class ProgrammingAssignmentUnitSix {
                     addNewVehicle();
                 case 6 ->
                     changeVehicleInformation();
+                case 7 ->
+                    deleteVehicle();
             }
         } while (choice != 0);
         System.out.println("See you soon, goodbye!");
@@ -105,8 +112,8 @@ public class ProgrammingAssignmentUnitSix {
         System.out.println("\n--- Add New Vehicle ---\n");
         int index = InputUtil.enterNumber(
                 "Enter Vehicle Index [1, " + vehicleList.size() + "]? ",
-                0, 0, vehicleList.size());
-        if (index == 0) {
+                0, 0, vehicleList.size()) - 1;
+        if (index == -1) {
             System.out.println("Operation canceled!");
             return;
         }
@@ -128,6 +135,29 @@ public class ProgrammingAssignmentUnitSix {
         } while (pos != -1 && pos != index);
         vehicleList.set(index, vehicle);
         System.out.println("Vehicle changed successfully!");
+        saveData();
+    }
+
+    public void deleteVehicle() {
+        System.out.println("\n--- Delete Vehicle ---\n");
+        int index = InputUtil.enterNumber(
+                "Enter Vehicle Index [1, " + vehicleList.size() + "]? ",
+                0, 0, vehicleList.size()) - 1;
+        if (index == -1) {
+            System.out.println("Operation canceled!");
+            return;
+        }
+        Vehicle vehicle = vehicleList.get(index);
+        vehicle.display();
+        char ans = InputUtil.promptContinue(
+                "Do you like want to delete this vehicle (Y/N)? ",
+                "YN", 'N');
+        if (ans == 'N') {
+            System.out.println("Operation canceled!");
+            return;
+        }
+        vehicleList.removeAt(index);
+        System.out.println("Vehicle deleted successfully!");
         saveData();
     }
 
