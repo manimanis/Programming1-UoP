@@ -76,7 +76,7 @@ public class VehicleList implements Serializable {
 
     public void displayVehiclesByType(VehicleType type, int start, int end) {
         int j = -1;
-        int nd = StrUtil.calcNumDigits(end);
+        int nd = StrUtil.calcNumDigits(vehicles.size());
         System.out.println(StrUtil.duplicateStr(" ", nd) + " Type  Make                 Model                year");
         System.out.println(StrUtil.duplicateStr("-", 60));
         for (int i = 0; i < vehicles.size(); i++) {
@@ -112,7 +112,7 @@ public class VehicleList implements Serializable {
             if (numPages > 1) {
                 System.out.println("Page " + (i + 1) + "/" + numPages);
             }
-            VehicleList.this.displayVehiclesByType(type, start, end);
+            displayVehiclesByType(type, start, end);
             if (i + 1 < numPages) {
                 char ans = InputUtil.promptContinue(
                         "Continue (Y/N)? ", "YN", 'Y');
@@ -122,7 +122,7 @@ public class VehicleList implements Serializable {
 
     public void displayVehicles(int start, int end) {
         int j = -1;
-        int nd = StrUtil.calcNumDigits(end);
+        int nd = StrUtil.calcNumDigits(vehicles.size());
         System.out.println(StrUtil.duplicateStr(" ", nd) + " Type  Make                 Model                year");
         System.out.println(StrUtil.duplicateStr("-", 60));
         for (int i = start; i < end; i++) {
@@ -150,7 +150,7 @@ public class VehicleList implements Serializable {
             if (numPages > 1) {
                 System.out.println("Page " + (i + 1) + "/" + numPages);
             }
-            VehicleList.this.displayVehicles(start, end);
+            displayVehicles(start, end);
             if (i + 1 < numPages) {
                 char ans = InputUtil.promptContinue(
                         "Continue (Y/N)? ", "YN", 'Y');
@@ -174,7 +174,4 @@ public class VehicleList implements Serializable {
             oos.writeObject(vehicle);
         }
     }
-
-    
-
 }

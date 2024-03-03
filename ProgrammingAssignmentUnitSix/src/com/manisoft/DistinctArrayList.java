@@ -1,4 +1,3 @@
-
 package com.manisoft;
 
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class DistinctArrayList<T> extends ArrayList<T> {
     
     
     /**
-     * Reads a StudentList from the input stream.
+     * Reads a DistinctArrayList from the input stream.
      *
      * @param ois
      * @throws IOException
@@ -56,7 +55,7 @@ public class DistinctArrayList<T> extends ArrayList<T> {
     }
 
     /**
-     * Writes a StudentList to the output stream.
+     * Writes a DistinctArrayList to the output stream.
      *
      * @param oos
      * @throws IOException

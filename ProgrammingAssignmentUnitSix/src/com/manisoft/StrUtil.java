@@ -30,8 +30,9 @@ public class StrUtil {
     public static int calcNumDigits(int value) {
         int nd = 1;
         long p = 1L;
-        while (value <= p) {
+        while (value > p) {
             p *= 10;
+            nd++;
         }
         return nd;
     }
