@@ -1,5 +1,9 @@
-package org.manisoft;
+package org.manisoft.entities;
 
+import org.manisoft.utilities.InputUtil;
+import org.manisoft.containers.StudentList;
+
+import org.manisoft.containers.CourseList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.manisoft.containers.EnrolledCoursesList;
 
 /**
  *

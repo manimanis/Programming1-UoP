@@ -1,10 +1,10 @@
-package org.manisoft;
+package org.manisoft.entities;
 
 /**
  *
  * @author manianis
  */
-public class ProgrammingAssignmentUnitFive {
+public class ProgrammingAssignmentUnitSeven {
 
     /**
      * @param args the command line arguments

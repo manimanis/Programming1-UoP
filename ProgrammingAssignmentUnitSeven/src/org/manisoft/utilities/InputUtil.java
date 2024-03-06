@@ -1,5 +1,5 @@
 
-package org.manisoft;
+package org.manisoft.utilities;
 
 import java.util.Scanner;
 

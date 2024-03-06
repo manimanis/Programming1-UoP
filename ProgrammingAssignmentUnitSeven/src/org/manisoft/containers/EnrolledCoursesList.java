@@ -1,17 +1,20 @@
 
-package org.manisoft;
+package org.manisoft.containers;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import org.manisoft.entities.Course;
+import org.manisoft.entities.EnrolledCourse;
+import org.manisoft.entities.Student;
 
 /**
  *
  * @author manianis
  */
-class EnrolledCoursesList implements Serializable {
+public class EnrolledCoursesList implements Serializable {
     private ArrayList<EnrolledCourse> courses = new ArrayList<>();
 
     public EnrolledCoursesList() {

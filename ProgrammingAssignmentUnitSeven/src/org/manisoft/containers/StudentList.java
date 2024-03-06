@@ -1,9 +1,11 @@
 
-package org.manisoft;
+package org.manisoft.containers;
 
+import org.manisoft.containers.DistinctArrayList;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import org.manisoft.entities.Student;
 
 /**
  *

@@ -1,5 +1,7 @@
 
-package org.manisoft;
+package org.manisoft.containers;
+
+import org.manisoft.entities.Course;
 
 /**
  *

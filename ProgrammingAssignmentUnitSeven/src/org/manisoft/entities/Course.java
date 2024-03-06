@@ -1,6 +1,7 @@
 
-package org.manisoft;
+package org.manisoft.entities;
 
+import org.manisoft.utilities.StrUtil;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

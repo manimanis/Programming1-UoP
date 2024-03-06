@@ -1,4 +1,6 @@
-package org.manisoft;
+package org.manisoft.entities;
+
+import org.manisoft.utilities.InputUtil;
 
 /**
  *
