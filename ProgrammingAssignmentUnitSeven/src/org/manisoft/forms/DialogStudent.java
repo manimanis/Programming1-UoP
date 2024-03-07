@@ -1,56 +1,67 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package org.manisoft.forms;
 
 import java.awt.Frame;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.manisoft.entities.Student;
+import org.manisoft.utilities.StrUtil;
 
 /**
  *
  * @author manianis
  */
-public class DialogStudent extends JDialog {
-    
-    private Student student = new Student();
-    private int dialogResult = JOptionPane.CANCEL_OPTION;
+public class DialogStudent extends DialogBase<Student> {
 
     /**
      * Creates new form DialogStudent
+     *
+     * @param parent
+     * @param opType
      */
-    public DialogStudent(Frame parent, boolean modal) {
-        super(parent, modal);
+    public DialogStudent(Frame parent, OperationType opType) {
+        super(parent, opType);
         initComponents();
-        
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-        updateDialog();
-    }
-
-    public int getDialogResult() {
-        return dialogResult;
+        init();
     }
     
-    public void updateDialog() {
-        txtID.setText(student.getID());
-        txtName.setName(student.getName());
+    protected void init() {
+        txtID.setEnabled(false);
+        txtName.setEnabled(opType != OperationType.REMOVE);
     }
-    
-    public void updateEntity() {
-        student.setID(txtID.getText());
-        student.setName(txtName.getText());
+
+    @Override
+    public void updateInterface() {
+        txtID.setText(data.getID());
+        txtName.setText(data.getName());
     }
-    
+
+    @Override
+    public void updateData() {
+        data.setID(txtID.getText());
+        data.setName(txtName.getText());
+    }
+
+    @Override
     public boolean isValidData() {
+        if (opType != OperationType.ADD) {
+            String ID = txtID.getText();
+            if (!StrUtil.isValidStudentId(ID)) {
+                JOptionPane.showMessageDialog(null,
+                        "ID is incorrect!",
+                        "Incorrect Input",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        String name = StrUtil.toTitleCase(txtName.getText().trim());
+        if (name.length() < 3 || name.length() > 32
+                || !StrUtil.isAlphabetic(name, true)) {
+            JOptionPane.showMessageDialog(null,
+                    """
+                    Name is incorrect!
+                    Between 3 and 32 alphabetic characters.""",
+                    "Incorrect Input",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         return true;
     }
 
@@ -170,15 +181,11 @@ public class DialogStudent extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
-        dialogResult = JOptionPane.OK_OPTION;
-        if (isValidData()) {
-            setVisible(false);
-        }
+        acceptChanges();
     }//GEN-LAST:event_okBtnActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dialogResult = JOptionPane.CANCEL_OPTION;
-        setVisible(false);
+        cancelChanges();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
