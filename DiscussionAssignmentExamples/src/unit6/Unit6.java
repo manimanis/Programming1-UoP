@@ -10,12 +10,16 @@ import java.util.ArrayList;
  * @author manianis
  */
 public class Unit6 {
+
     public static void main(String[] args) {
         Drawing drawing = new Drawing();
         drawing.addForm(new Circle());
         drawing.addForm(new Square());
         drawing.addForm(new Triangle());
         drawing.draw();
+        
+        Shape shape = new Circle();
+        shape.draw();
     }
 }
 
@@ -28,13 +32,26 @@ abstract class Shape {
         this.type = type;
         this.rectangle = rectangle;
     }
+    
+    public Point getPosition() {
+        return rectangle.getLocation();
+    }
 
     public void setPosition(Point origin) {
         rectangle.setLocation(origin);
     }
+    
+    public Dimension getSize() {
+        return rectangle.getSize();
+    }
 
     public void setSize(Dimension size) {
         rectangle.setSize(size);
+    }
+    
+    public void translate(int dx, int dy) {
+        rectangle.x += dx;
+        rectangle.y += dy;
     }
 
     public abstract void draw();
@@ -48,7 +65,11 @@ class Circle extends Shape {
 
     @Override
     public void draw() {
-        // Code to draw a circle
+        Point center = new Point((int) rectangle.getWidth() / 2,
+                (int) rectangle.getHeight() / 2);
+        int radius = center.x > center.y ? center.y : center.x;
+        System.out.println("The circle center is " + center);
+        System.out.println("The circle radius is " + radius);
     }
 }
 
@@ -60,7 +81,7 @@ class Square extends Shape {
 
     @Override
     public void draw() {
-        // Code to draw a rectangle
+
     }
 }
 
@@ -71,6 +92,10 @@ class Triangle extends Shape {
     public Triangle() {
         super("Triangle", new Rectangle(0, 0, 200, 200));
         summitPoint = new Point((int) (rectangle.getWidth() / 2), 0);
+    }
+    
+    public void moveSummit(int toPos) {
+        summitPoint.x = toPos;
     }
 
     @Override
@@ -86,15 +111,15 @@ class Drawing extends Shape {
     public Drawing() {
         super("Drawing", new Rectangle(0, 0, 200, 200));
     }
-    
+
     public void addForm(Shape shape) {
         shapes.add(shape);
     }
-    
+
     @Override
     public void draw() {
         for (Shape shape : shapes) {
             shape.draw();
         }
-    }   
+    }
 }
