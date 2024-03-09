@@ -1,8 +1,9 @@
-
 package org.manisoft.forms;
 
+import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Student;
@@ -12,11 +13,12 @@ import org.manisoft.models.StudentsModel;
  *
  * @author manianis
  */
-public class PanelStudents extends javax.swing.JPanel {
+public class PanelStudents extends JPanel 
+        implements DataManagementInterface<Student> {
 
     private StudentsModel studentsModel = new StudentsModel();
     private StudentList studentList = null;
-    
+
     /**
      * Creates new form PanelStudents
      */
@@ -50,6 +52,11 @@ public class PanelStudents extends javax.swing.JPanel {
         removeBtn = new javax.swing.JButton();
 
         table.setModel(studentsModel);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         scrollPane.setViewportView(table);
 
         addBtn.setText("New");
@@ -119,7 +126,8 @@ public class PanelStudents extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+    @Override
+    public Student addNew() {
         Student student = new Student();
         student.setID("-");
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -129,11 +137,46 @@ public class PanelStudents extends javax.swing.JPanel {
         dlg.setTitle("New Student");
         dlg.setVisible(true);
         if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
-            return;
+            return null;
         }
         student.setID(studentList.genStudentID());
-        studentList.add(student);
-        studentsModel.fireTableDataChanged();
+        return student;
+    }
+
+    @Override
+    public Student editItem(int index) {
+        Student student = (Student) studentList.get(index).clone();
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        DialogStudent dlg = new DialogStudent(topFrame, OperationType.EDIT);
+        dlg.setLocationRelativeTo(topFrame);
+        dlg.setData(student);
+        dlg.setTitle("Edit Student");
+        dlg.setVisible(true);
+        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
+            return null;
+        }
+        return student;
+    }
+
+    @Override
+    public Student removeItem(int index) {
+        Student student = (Student) studentList.get(index).clone();
+        int res = JOptionPane.showConfirmDialog(
+                null, "Do you want to delete this student?",
+                "Delete a Student",
+                JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.NO_OPTION) {
+            return null;
+        }
+        return student;
+    }
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        Student student = addNew();
+        if (student != null) {
+            studentList.add(student);
+            studentsModel.fireTableDataChanged();
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
@@ -142,18 +185,11 @@ public class PanelStudents extends javax.swing.JPanel {
             return;
         }
         int rowIndex = table.convertRowIndexToModel(selItem);
-        Student student = (Student) studentList.get(rowIndex).clone();
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DialogStudent dlg = new DialogStudent(topFrame, OperationType.EDIT);
-        dlg.setLocationRelativeTo(topFrame);
-        dlg.setData(student);
-        dlg.setTitle("Edit Student");
-        dlg.setVisible(true);
-        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
-            return;
+        Student student = editItem(rowIndex);
+        if (student != null) {
+            studentList.set(rowIndex, student);
+            studentsModel.fireTableRowsUpdated(rowIndex, rowIndex);
         }
-        studentList.set(rowIndex, student);
-        studentsModel.fireTableRowsUpdated(rowIndex, rowIndex);
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
@@ -162,16 +198,18 @@ public class PanelStudents extends javax.swing.JPanel {
             return;
         }
         int rowIndex = table.convertRowIndexToModel(selItem);
-        Student student = (Student) studentList.get(rowIndex).clone();
-        int res = JOptionPane.showConfirmDialog(
-                null, "Do you want to delete this student?", 
-                "Delete a Student", JOptionPane.YES_NO_OPTION);
-        if (res == JOptionPane.NO_OPTION) {
-            return;
+        Student student = removeItem(rowIndex);
+        if (student != null) {
+            studentList.remove(rowIndex);
+            studentsModel.fireTableRowsDeleted(selItem, selItem);
         }
-        studentList.remove(rowIndex);
-        studentsModel.fireTableRowsDeleted(selItem, selItem);
     }//GEN-LAST:event_removeBtnActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
+            editBtnActionPerformed(null);
+        }
+    }//GEN-LAST:event_tableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,4 +220,5 @@ public class PanelStudents extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
+
 }

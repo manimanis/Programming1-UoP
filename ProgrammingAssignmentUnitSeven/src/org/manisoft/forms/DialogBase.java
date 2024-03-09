@@ -54,8 +54,9 @@ public class DialogBase<T extends Object> extends JDialog {
     }
     
     public void acceptChanges() {
-        dialogResult = JOptionPane.OK_OPTION;
+        dialogResult = JOptionPane.CANCEL_OPTION;
         if (isValidData()) {
+            dialogResult = JOptionPane.OK_OPTION;
             updateData();
             setVisible(false);
         }

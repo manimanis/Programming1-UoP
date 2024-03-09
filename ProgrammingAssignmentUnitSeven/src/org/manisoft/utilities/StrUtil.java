@@ -89,12 +89,11 @@ public class StrUtil {
      * @return true if the string is a valid code.
      */
     public static boolean isValidCourseCode(String s) {
-        if (s.length() != 6) {
+        if (s.length() <= 4) {
             return false;
         }
-        return s.length() == 6
-                && isAlphabetic(s.substring(0, 2))
-                && isNumeric(s.substring(2));
+        return isAlphabetic(s.substring(0, s.length() - 4))
+                && isNumeric(s.substring(s.length() - 4));
     }
 
     /**

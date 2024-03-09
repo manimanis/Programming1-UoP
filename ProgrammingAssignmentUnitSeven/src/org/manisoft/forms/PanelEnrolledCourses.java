@@ -1,31 +1,57 @@
-
 package org.manisoft.forms;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.CourseList;
+import org.manisoft.containers.EnrolledCoursesList;
+import org.manisoft.containers.EnrollmentList;
+import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
-import org.manisoft.entities.Student;
+import org.manisoft.entities.EnrolledCourse;
 import org.manisoft.models.CoursesModel;
+import org.manisoft.models.EnrolledCourseModel;
 
 /**
  *
  * @author manianis
  */
-public class PanelCourses extends JPanel 
-        implements DataManagementInterface<Course>{
+public class PanelEnrolledCourses extends JPanel
+        implements DataManagementInterface<EnrolledCourse> {
 
-    private CoursesModel coursesModel = new CoursesModel();
+    private EnrolledCourseModel enrolledCoursesModel = new EnrolledCourseModel();
+    private StudentList studentList = null;
+    private EnrolledCoursesList enrolledCoursesList = null;
     private CourseList courseList = null;
-    
+
+    private Course selectedCourse = null;
+    private EnrollmentList enrollmentList = null;
+
     /**
      * Creates new form PanelStudents
      */
-    public PanelCourses() {
+    public PanelEnrolledCourses() {
         initComponents();
+    }
+
+    public EnrolledCoursesList getEnrolledCoursesList() {
+        return enrolledCoursesList;
+    }
+
+    public void setEnrolledCoursesList(EnrolledCoursesList courseList) {
+        this.enrolledCoursesList = courseList;
+        setSelectedCourse(comboCourses.getSelectedIndex());
+    }
+
+    public StudentList getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(StudentList studentList) {
+        this.studentList = studentList;
     }
 
     public CourseList getCourseList() {
@@ -34,52 +60,82 @@ public class PanelCourses extends JPanel
 
     public void setCourseList(CourseList courseList) {
         this.courseList = courseList;
-        coursesModel.setCourseList(courseList);
+        initCoursesCombo();
     }
-    
+
+    private void initCoursesCombo() {
+        comboCourses.removeAllItems();
+        for (Course course : courseList) {
+            comboCourses.addItem(course.toString());
+        }
+        if (courseList.size() > 0) {
+            setSelectedCourse(0);
+        }
+    }
+
     @Override
-    public Course addNew() {
-        Course course = new Course();
+    public EnrolledCourse addNew() {
+        EnrolledCourse course = new EnrolledCourse(null, null);
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         DialogCourse dlg = new DialogCourse(topFrame, OperationType.ADD);
         dlg.setLocationRelativeTo(topFrame);
-        dlg.setData(course);
+        // dlg.setData(course);
         dlg.setTitle("New Course");
         dlg.setVisible(true);
         if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
             return null;
         }
-        return dlg.getData();
+        return null; // dlg.getData();
     }
 
     @Override
-    public Course editItem(int index) {
-        Course course = (Course) courseList.get(index).clone();
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DialogCourse dlg = new DialogCourse(topFrame, OperationType.EDIT);
-        dlg.setLocationRelativeTo(topFrame);
-        dlg.setData(course);
-        dlg.setTitle("Edit Student");
-        dlg.setVisible(true);
-        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
-            return null;
-        }
-        return dlg.getData();
+    public EnrolledCourse editItem(int index) {
+//        EnrolledCourse course = (EnrolledCourse) enrolledCoursesList.getClass().clone();
+//        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//        DialogCourse dlg = new DialogCourse(topFrame, OperationType.EDIT);
+//        dlg.setLocationRelativeTo(topFrame);
+//        // dlg.setData(course);
+//        dlg.setTitle("Edit Student");
+//        dlg.setVisible(true);
+//        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
+//            return null;
+//        }
+//        return dlg.getData();
+        return null;
     }
 
     @Override
-    public Course removeItem(int index) {
-        Course course = (Course) courseList.get(index);
-        int res = JOptionPane.showConfirmDialog(
-                null, "Do you want to delete this student?",
-                "Delete a Student",
-                JOptionPane.YES_NO_OPTION);
-        if (res == JOptionPane.NO_OPTION) {
-            return null;
-        }
-        return course;
+    public EnrolledCourse removeItem(int index) {
+//        Course course = (Course) enrolledCoursesList.get(index);
+//        int res = JOptionPane.showConfirmDialog(
+//                null, "Do you want to delete this student?",
+//                "Delete a Student",
+//                JOptionPane.YES_NO_OPTION);
+//        if (res == JOptionPane.NO_OPTION) {
+//            return null;
+//        }
+//        return course;
+        return null;
     }
-    
+
+    public void setSelectedCourse(int index) {
+        if (index >= 0 && index < courseList.size()) {
+            setSelectedCourse(courseList.get(index));
+        }
+    }
+
+    public void setSelectedCourse(Course selectedCourse) {
+        this.selectedCourse = selectedCourse;
+        if (selectedCourse != null && enrolledCoursesList != null) {
+            enrollmentList = enrolledCoursesList.enrollByCourse(selectedCourse);
+            enrolledCoursesModel.setCourseList(enrollmentList);
+        }
+    }
+
+    public Course getSelectedCourse() {
+        return selectedCourse;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,8 +151,9 @@ public class PanelCourses extends JPanel
         addBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
         removeBtn = new javax.swing.JButton();
+        comboCourses = new javax.swing.JComboBox<>();
 
-        table.setModel(coursesModel);
+        table.setModel(enrolledCoursesModel);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);
@@ -149,6 +206,13 @@ public class PanelCourses extends JPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        comboCourses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboCourses.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboCoursesItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,14 +221,17 @@ public class PanelCourses extends JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addComponent(ctrlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ctrlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comboCourses, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboCourses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ctrlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -172,10 +239,10 @@ public class PanelCourses extends JPanel
     }// </editor-fold>//GEN-END:initComponents
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        Course course = addNew();
+        EnrolledCourse course = addNew();
         if (course != null) {
-            courseList.add(course);
-            coursesModel.fireTableDataChanged();
+//            enrolledCoursesList.add(course);
+            enrolledCoursesModel.fireTableDataChanged();
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -185,10 +252,10 @@ public class PanelCourses extends JPanel
             return;
         }
         int rowIndex = table.convertRowIndexToModel(selItem);
-        Course course = editItem(rowIndex);
+        EnrolledCourse course = editItem(rowIndex);
         if (course != null) {
-            courseList.set(rowIndex, course);
-            coursesModel.fireTableRowsUpdated(rowIndex, rowIndex);
+            // enrolledCoursesList.set(rowIndex, course);
+            enrolledCoursesModel.fireTableRowsUpdated(rowIndex, rowIndex);
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -198,22 +265,28 @@ public class PanelCourses extends JPanel
             return;
         }
         int rowIndex = table.convertRowIndexToModel(selItem);
-        Course course = removeItem(rowIndex);
+        EnrolledCourse course = removeItem(rowIndex);
         if (course != null) {
-            courseList.remove(rowIndex);
-            coursesModel.fireTableRowsDeleted(selItem, selItem);
+            // enrolledCoursesList.remove(rowIndex);
+            enrolledCoursesModel.fireTableRowsDeleted(selItem, selItem);
         }
     }//GEN-LAST:event_removeBtnActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
+        if (evt.getButton() == MouseEvent.BUTTON1
+                && evt.getClickCount() == 2) {
             editBtnActionPerformed(null);
         }
     }//GEN-LAST:event_tableMouseClicked
 
+    private void comboCoursesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCoursesItemStateChanged
+        setSelectedCourse(comboCourses.getSelectedIndex());
+    }//GEN-LAST:event_comboCoursesItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JComboBox<String> comboCourses;
     private javax.swing.JPanel ctrlPanel;
     private javax.swing.JButton editBtn;
     private javax.swing.JButton removeBtn;

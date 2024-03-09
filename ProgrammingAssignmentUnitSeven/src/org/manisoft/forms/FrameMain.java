@@ -1,4 +1,3 @@
-
 package org.manisoft.forms;
 
 import java.awt.BorderLayout;
@@ -12,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.CourseList;
 import org.manisoft.containers.EnrolledCoursesList;
@@ -27,18 +27,23 @@ import org.manisoft.entities.Student;
  * @author manianis
  */
 public class FrameMain extends javax.swing.JFrame {
-    
+
     private String filePath = "courses.obj";
     private StudentList students = new StudentList();
     private CourseList courses = new CourseList();
     private EnrolledCoursesList enrollment = new EnrolledCoursesList();
+
+    JPanel currPanel = null;
+    PanelStudents panelStudents;
+    PanelCourses panelCourses;
+    PanelEnrolledCourses panelEnrolledCourses;
 
     /**
      * Creates new form FrameMain
      */
     public FrameMain() {
         initComponents();
-        
+
         loadData();
         if (students.isEmpty()) {
             Student student1 = new Student(students.genStudentID(), "Amine");
@@ -53,6 +58,9 @@ public class FrameMain extends javax.swing.JFrame {
             enrollment.enrollToCourse(student2, course2);
             saveData();
         }
+
+        Container pane = getContentPane();
+        pane.setLayout(new BorderLayout());
     }
 
     /**
@@ -130,7 +138,6 @@ public class FrameMain extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     public void loadData() {
         ObjectInputStream ois = null;
         File fichier = new File(filePath);
@@ -179,38 +186,52 @@ public class FrameMain extends javax.swing.JFrame {
         }
     }
 
-
+    private void displayPanel(JPanel panel) {
+        if (panel == currPanel) {
+            return;
+        }
+        if (currPanel != null) {
+            getContentPane().remove(currPanel);
+        }
+        getContentPane().add(panel, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(this);
+        currPanel = panel;
+    }
+    
     private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
 
     }//GEN-LAST:event_exitMenuActionPerformed
 
     private void studentsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsMenuActionPerformed
-        PanelStudents panelStudents = new PanelStudents();
-        Container pane = getContentPane();
-        pane.setLayout(new BorderLayout());
-        pane.add(panelStudents, BorderLayout.CENTER);
-        SwingUtilities.updateComponentTreeUI(this);
+        if (panelStudents == null) {
+            panelStudents = new PanelStudents();
+        }
+        displayPanel(panelStudents);
         panelStudents.setStudentList(students);
     }//GEN-LAST:event_studentsMenuActionPerformed
 
     private void coursesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coursesMenuActionPerformed
-        PanelCourses panelCourses =  new PanelCourses();
-        Container pane = getContentPane();
-        pane.setLayout(new BorderLayout());
-        pane.add(panelCourses, BorderLayout.CENTER);
-        SwingUtilities.updateComponentTreeUI(this);
+        if (panelCourses == null) {
+            panelCourses = new PanelCourses();
+        }
+        displayPanel(panelCourses);
         panelCourses.setCourseList(courses);
     }//GEN-LAST:event_coursesMenuActionPerformed
 
     private void studentsEnrollMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsEnrollMenuActionPerformed
-        // TODO add your handling code here:
+        if (panelEnrolledCourses == null) {
+            panelEnrolledCourses = new PanelEnrolledCourses();
+        }
+        displayPanel(panelEnrolledCourses);
+        panelEnrolledCourses.setCourseList(courses);
+        panelEnrolledCourses.setStudentList(students);
+        panelEnrolledCourses.setEnrolledCoursesList(enrollment);
     }//GEN-LAST:event_studentsEnrollMenuActionPerformed
 
     private void gradesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradesMenuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_gradesMenuActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */

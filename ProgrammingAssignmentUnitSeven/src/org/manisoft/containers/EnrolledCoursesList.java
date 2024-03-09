@@ -177,8 +177,8 @@ public class EnrolledCoursesList implements Serializable {
      * @param student A student object.
      * @return 
      */
-    public ArrayList<EnrolledCourse> enrollByStudent(Student student) {
-        ArrayList<EnrolledCourse> res = new ArrayList<>();
+    public EnrollmentList enrollByStudent(Student student) {
+        EnrollmentList res = new EnrollmentList();
         for (EnrolledCourse ec : courses) {
             if (student.equals(ec.getStudent())) {
                 res.add(ec);
@@ -192,8 +192,8 @@ public class EnrolledCoursesList implements Serializable {
      * @param course
      * @return 
      */
-    public ArrayList<EnrolledCourse> enrollByCourse(Course course) {
-        ArrayList<EnrolledCourse> res = new ArrayList<>();
+    public EnrollmentList enrollByCourse(Course course) {
+        EnrollmentList res = new EnrollmentList();
         for (EnrolledCourse ec : courses) {
             if (course.equals(ec.getCourse())) {
                 res.add(ec);
