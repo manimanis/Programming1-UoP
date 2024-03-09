@@ -18,8 +18,6 @@ import org.manisoft.containers.EnrolledCoursesList;
 import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.CourseManagement;
-import static org.manisoft.entities.CourseManagement.loadData;
-import static org.manisoft.entities.CourseManagement.saveData;
 import org.manisoft.entities.Student;
 
 /**
@@ -197,7 +195,7 @@ public class FrameMain extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(this);
         currPanel = panel;
     }
-    
+
     private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
 
     }//GEN-LAST:event_exitMenuActionPerformed
@@ -232,6 +230,8 @@ public class FrameMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_gradesMenuActionPerformed
 
+    public static FrameMain frameMain;
+
     /**
      * @param args the command line arguments
      */
@@ -260,10 +260,9 @@ public class FrameMain extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrameMain().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            frameMain = new FrameMain();
+            frameMain.setVisible(true);
         });
     }
 

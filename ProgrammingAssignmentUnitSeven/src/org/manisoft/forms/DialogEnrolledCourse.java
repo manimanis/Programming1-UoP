@@ -2,15 +2,17 @@ package org.manisoft.forms;
 
 import java.awt.Frame;
 import javax.swing.JOptionPane;
-import org.manisoft.entities.Course;
+import org.manisoft.containers.StudentList;
+import org.manisoft.entities.EnrolledCourse;
 import org.manisoft.entities.Student;
-import org.manisoft.utilities.StrUtil;
 
 /**
  *
  * @author manianis
  */
-public class DialogCourse extends DialogBase<Course> {
+public class DialogEnrolledCourse extends DialogBase<EnrolledCourse> {
+    
+    private StudentList studentList;
 
     /**
      * Creates new form DialogStudent
@@ -18,92 +20,39 @@ public class DialogCourse extends DialogBase<Course> {
      * @param parent
      * @param opType
      */
-    public DialogCourse(Frame parent, OperationType opType) {
+    public DialogEnrolledCourse(Frame parent, OperationType opType) {
         super(parent, opType);
         initComponents();
     }
 
+    public void setStudentList(StudentList studentList) {
+        this.studentList = studentList;
+        comboStudents.removeAllItems();
+        for (Student student : studentList) {
+            comboStudents.addItem(student.toString());
+        }
+    }
+    
     @Override
     public void updateInterface() {
-        txtCode.setText(data.getCode());
-        txtName.setText(data.getName());
-        txtCapacity.setText(data.getCapacity() + "");
-        txtGradesCount.setText(data.getGradesCount() + "");
+        txtCode.setText(data.getCourse().getCode());
+        txtName.setText(data.getCourse().getName());
+        comboStudents.setSelectedItem(data.getStudent());
     }
 
     @Override
     public void updateData() {
-        data.setCode(txtCode.getText());
-        data.setName(txtName.getText());
-        data.setCapacity(Integer.parseInt(txtCapacity.getText()));
-        data.setGradesCount(Integer.parseInt(txtGradesCount.getText()));
+        data.setStudent(studentList.get(comboStudents.getSelectedIndex()));
     }
 
     @Override
-    public boolean isValidData() {
-        boolean error = false;
-        
-        String code = txtCode.getText();
-        if (!StrUtil.isValidCourseCode(code)) {
-            JOptionPane.showMessageDialog(null,
-                    "Code is incorrect!",
-                    "Incorrect Input",
-                    JOptionPane.WARNING_MESSAGE);
+    public boolean isValidData() {     
+        if (comboStudents.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(null, 
+                    "Please select a student to enroll to this course!", 
+                    "Invalid data", JOptionPane.OK_OPTION);
             return false;
         }
-
-        String name = StrUtil.toTitleCase(txtName.getText().trim());
-        if (name.length() < 3 || name.length() > 32
-                || !StrUtil.isAlphabetic(name, true)) {
-            JOptionPane.showMessageDialog(null,
-                    """
-                    Name is incorrect!
-                    Between 3 and 32 alphabetic characters.""",
-                    "Incorrect Input",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        try {
-            int capacity = Integer.parseInt(txtCapacity.getText());
-            if (capacity < 1 || capacity > 50) {
-                error = true;
-            }
-        }
-        catch (NumberFormatException e) {
-            error = true;
-        }
-        
-        if (error) {
-            JOptionPane.showMessageDialog(null,
-                    """
-                    Capacity is incorrect!
-                    Must be an integer between 2 and 50.""",
-                    "Incorrect Input",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        try {
-            int gradesCount = Integer.parseInt(txtGradesCount.getText());
-            if (gradesCount < 1 || gradesCount > 20) {
-                error = true;
-            }
-        }
-        catch (NumberFormatException e) {
-            error = true;
-        }
-        
-        if (error) {
-            JOptionPane.showMessageDialog(null,
-                    """
-                    Grades count is incorrect!
-                    Must be an integer between 2 and 20.""",
-                    "Incorrect Input",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
         return true;
     }
 
@@ -123,9 +72,7 @@ public class DialogCourse extends DialogBase<Course> {
         labelName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         lblCapacity = new javax.swing.JLabel();
-        txtCapacity = new javax.swing.JTextField();
-        lblGradesCount = new javax.swing.JLabel();
-        txtGradesCount = new javax.swing.JTextField();
+        comboStudents = new javax.swing.JComboBox<>();
         okBtn = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
 
@@ -138,7 +85,7 @@ public class DialogCourse extends DialogBase<Course> {
 
         lblTitle.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitle.setText("Course's Information");
+        lblTitle.setText("Enroll a Student to the Course");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -159,6 +106,8 @@ public class DialogCourse extends DialogBase<Course> {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(labelCode, gridBagConstraints);
+
+        txtCode.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -179,6 +128,8 @@ public class DialogCourse extends DialogBase<Course> {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(labelName, gridBagConstraints);
+
+        txtName.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -190,7 +141,7 @@ public class DialogCourse extends DialogBase<Course> {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtName, gridBagConstraints);
 
-        lblCapacity.setText("Capacity");
+        lblCapacity.setText("Student");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -199,36 +150,14 @@ public class DialogCourse extends DialogBase<Course> {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblCapacity, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.ipady = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtCapacity, gridBagConstraints);
-
-        lblGradesCount.setText("Grades Count");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.ipady = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblGradesCount, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.ipady = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtGradesCount, gridBagConstraints);
+        getContentPane().add(comboStudents, gridBagConstraints);
 
         okBtn.setText("OK");
         okBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -273,15 +202,13 @@ public class DialogCourse extends DialogBase<Course> {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBtn;
+    private javax.swing.JComboBox<String> comboStudents;
     private javax.swing.JLabel labelCode;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel lblCapacity;
-    private javax.swing.JLabel lblGradesCount;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JButton okBtn;
-    private javax.swing.JTextField txtCapacity;
     private javax.swing.JTextField txtCode;
-    private javax.swing.JTextField txtGradesCount;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }

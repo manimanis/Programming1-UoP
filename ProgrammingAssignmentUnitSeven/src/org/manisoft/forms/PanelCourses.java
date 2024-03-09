@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.CourseList;
 import org.manisoft.entities.Course;
-import org.manisoft.entities.Student;
 import org.manisoft.models.CoursesModel;
 
 /**
@@ -176,6 +175,7 @@ public class PanelCourses extends JPanel
         if (course != null) {
             courseList.add(course);
             coursesModel.fireTableDataChanged();
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -189,6 +189,7 @@ public class PanelCourses extends JPanel
         if (course != null) {
             courseList.set(rowIndex, course);
             coursesModel.fireTableRowsUpdated(rowIndex, rowIndex);
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -202,6 +203,7 @@ public class PanelCourses extends JPanel
         if (course != null) {
             courseList.remove(rowIndex);
             coursesModel.fireTableRowsDeleted(selItem, selItem);
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_removeBtnActionPerformed
 

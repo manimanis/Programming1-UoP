@@ -176,6 +176,7 @@ public class PanelStudents extends JPanel
         if (student != null) {
             studentList.add(student);
             studentsModel.fireTableDataChanged();
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -189,6 +190,7 @@ public class PanelStudents extends JPanel
         if (student != null) {
             studentList.set(rowIndex, student);
             studentsModel.fireTableRowsUpdated(rowIndex, rowIndex);
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -202,6 +204,7 @@ public class PanelStudents extends JPanel
         if (student != null) {
             studentList.remove(rowIndex);
             studentsModel.fireTableRowsDeleted(selItem, selItem);
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_removeBtnActionPerformed
 

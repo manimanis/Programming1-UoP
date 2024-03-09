@@ -1,9 +1,7 @@
 package org.manisoft.models;
 
 import javax.swing.table.AbstractTableModel;
-import org.manisoft.containers.CourseList;
 import org.manisoft.containers.EnrollmentList;
-import org.manisoft.entities.Course;
 import org.manisoft.entities.EnrolledCourse;
 
 /**

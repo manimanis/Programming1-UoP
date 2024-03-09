@@ -1,7 +1,6 @@
 package org.manisoft.forms;
 
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -12,7 +11,6 @@ import org.manisoft.containers.EnrollmentList;
 import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.EnrolledCourse;
-import org.manisoft.models.CoursesModel;
 import org.manisoft.models.EnrolledCourseModel;
 
 /**
@@ -68,24 +66,28 @@ public class PanelEnrolledCourses extends JPanel
         for (Course course : courseList) {
             comboCourses.addItem(course.toString());
         }
-        if (courseList.size() > 0) {
+        if (!courseList.isEmpty()) {
             setSelectedCourse(0);
         }
     }
 
     @Override
     public EnrolledCourse addNew() {
-        EnrolledCourse course = new EnrolledCourse(null, null);
+        EnrolledCourse course = new EnrolledCourse(selectedCourse);
+        StudentList availStudentsList = StudentList.findNotEnrolledStudents(
+                studentList, enrollmentList);
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DialogCourse dlg = new DialogCourse(topFrame, OperationType.ADD);
+        DialogEnrolledCourse dlg = new DialogEnrolledCourse(
+                topFrame, OperationType.ADD);
         dlg.setLocationRelativeTo(topFrame);
-        // dlg.setData(course);
-        dlg.setTitle("New Course");
+        dlg.setStudentList(availStudentsList);
+        dlg.setData(course);
+        dlg.setTitle("Enroll a student");
         dlg.setVisible(true);
         if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
             return null;
         }
-        return null; // dlg.getData();
+        return dlg.getData();
     }
 
     @Override
@@ -241,8 +243,10 @@ public class PanelEnrolledCourses extends JPanel
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         EnrolledCourse course = addNew();
         if (course != null) {
-//            enrolledCoursesList.add(course);
+            enrollmentList.add(course);
+            enrolledCoursesList.enrollToCourse(course);
             enrolledCoursesModel.fireTableDataChanged();
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -255,6 +259,7 @@ public class PanelEnrolledCourses extends JPanel
         EnrolledCourse course = editItem(rowIndex);
         if (course != null) {
             // enrolledCoursesList.set(rowIndex, course);
+            // enrolledCoursesList.leaveFromCourse();
             enrolledCoursesModel.fireTableRowsUpdated(rowIndex, rowIndex);
         }
     }//GEN-LAST:event_editBtnActionPerformed

@@ -38,6 +38,17 @@ public class StudentList extends DistinctArrayList<Student> {
         return null;
     }
     
+    public static StudentList findNotEnrolledStudents(StudentList studentList,
+            EnrollmentList enrollmentList) {
+        StudentList newList = new StudentList();
+        for (Student student : studentList) {
+            if (enrollmentList.findStudent(student) == -1) {
+                newList.add(student);
+            }
+        }
+        return newList;
+    }
+    
     /**
      * Find a student by his name.
      * 
@@ -60,6 +71,7 @@ public class StudentList extends DistinctArrayList<Student> {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    @Override
     protected void readObject(ObjectInputStream ois)
             throws IOException, ClassNotFoundException {
         index = ois.readInt();
@@ -72,6 +84,7 @@ public class StudentList extends DistinctArrayList<Student> {
      * @param oos
      * @throws IOException
      */
+    @Override
     protected void writeObject(ObjectOutputStream oos)
             throws IOException {
         oos.writeInt(index);

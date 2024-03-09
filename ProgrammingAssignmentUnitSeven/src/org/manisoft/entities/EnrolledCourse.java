@@ -18,6 +18,14 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
     private Student student;
     private int[] grades;
     private int avgGrade = -1;
+
+    public EnrolledCourse() {
+        this(null, null, null);
+    }  
+    
+    public EnrolledCourse(Course course) {
+        this(course, null, new int[course.getGradesCount()]);
+    }
     
     public EnrolledCourse(Course course, Student student) {
         this(course, student, new int[course.getGradesCount()]);
