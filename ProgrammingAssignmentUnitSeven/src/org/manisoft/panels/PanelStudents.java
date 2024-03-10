@@ -1,4 +1,4 @@
-package org.manisoft.forms;
+package org.manisoft.panels;
 
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Student;
+import org.manisoft.dialogs.DataManagementInterface;
+import org.manisoft.dialogs.DialogStudent;
+import org.manisoft.forms.FrameMain;
+import org.manisoft.dialogs.OperationType;
 import org.manisoft.models.StudentsModel;
 
 /**

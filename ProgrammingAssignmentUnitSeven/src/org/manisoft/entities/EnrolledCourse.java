@@ -182,7 +182,7 @@ public class EnrolledCourse implements Serializable, Comparable<EnrolledCourse> 
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         int[] gradesCopy = Arrays.copyOf(grades, grades.length);
         return new EnrolledCourse(course, student, gradesCopy);
     }

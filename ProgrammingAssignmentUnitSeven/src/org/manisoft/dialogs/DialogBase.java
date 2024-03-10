@@ -1,5 +1,5 @@
 
-package org.manisoft.forms;
+package org.manisoft.dialogs;
 
 import java.awt.Frame;
 import javax.swing.JDialog;

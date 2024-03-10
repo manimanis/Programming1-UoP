@@ -1,5 +1,5 @@
 
-package org.manisoft.forms;
+package org.manisoft.dialogs;
 
 /**
  *

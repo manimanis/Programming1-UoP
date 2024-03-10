@@ -1,5 +1,8 @@
 package org.manisoft.forms;
 
+import org.manisoft.panels.PanelStudents;
+import org.manisoft.panels.PanelEnrolledCourses;
+import org.manisoft.panels.PanelCourses;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.io.File;
@@ -19,6 +22,7 @@ import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.CourseManagement;
 import org.manisoft.entities.Student;
+import org.manisoft.panels.PanelGrades;
 
 /**
  *
@@ -31,10 +35,11 @@ public class FrameMain extends javax.swing.JFrame {
     private CourseList courses = new CourseList();
     private EnrolledCoursesList enrollment = new EnrolledCoursesList();
 
-    JPanel currPanel = null;
-    PanelStudents panelStudents;
-    PanelCourses panelCourses;
-    PanelEnrolledCourses panelEnrolledCourses;
+    private JPanel currPanel = null;
+    private PanelStudents panelStudents;
+    private PanelCourses panelCourses;
+    private PanelEnrolledCourses panelEnrolledCourses;
+    private PanelGrades panelGrades;
 
     /**
      * Creates new form FrameMain
@@ -227,7 +232,13 @@ public class FrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_studentsEnrollMenuActionPerformed
 
     private void gradesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradesMenuActionPerformed
-        // TODO add your handling code here:
+        if (panelGrades == null) {
+            panelGrades = new PanelGrades();
+        }
+        displayPanel(panelGrades);
+        panelGrades.setCourseList(courses);
+        panelGrades.setStudentList(students);
+        panelGrades.setEnrolledCoursesList(enrollment);
     }//GEN-LAST:event_gradesMenuActionPerformed
 
     public static FrameMain frameMain;

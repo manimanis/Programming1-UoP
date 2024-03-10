@@ -1,4 +1,4 @@
-package org.manisoft.forms;
+package org.manisoft.panels;
 
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
@@ -11,56 +11,61 @@ import org.manisoft.containers.EnrollmentList;
 import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.EnrolledCourse;
-import org.manisoft.models.EnrolledCourseModel;
+import org.manisoft.dialogs.DataManagementInterface;
+import org.manisoft.dialogs.DialogEnrolledCourse;
+import org.manisoft.dialogs.DialogGrades;
+import org.manisoft.forms.FrameMain;
+import org.manisoft.dialogs.OperationType;
+import org.manisoft.models.GradesModel;
 
 /**
  *
  * @author manianis
  */
-public class PanelEnrolledCourses extends JPanel
+public class PanelGrades extends JPanel
         implements DataManagementInterface<EnrolledCourse> {
-
-    private EnrolledCourseModel enrolledCoursesModel = new EnrolledCourseModel();
+    
+    private GradesModel gradesModel = new GradesModel();
     private StudentList studentList = null;
     private EnrolledCoursesList enrolledCoursesList = null;
     private CourseList courseList = null;
-
+    
     private Course selectedCourse = null;
     private EnrollmentList enrollmentList = null;
 
     /**
      * Creates new form PanelStudents
      */
-    public PanelEnrolledCourses() {
+    public PanelGrades() {
         initComponents();
     }
-
+    
     public EnrolledCoursesList getEnrolledCoursesList() {
         return enrolledCoursesList;
     }
-
+    
     public void setEnrolledCoursesList(EnrolledCoursesList courseList) {
         this.enrolledCoursesList = courseList;
         setSelectedCourse(comboCourses.getSelectedIndex());
     }
-
+    
     public StudentList getStudentList() {
         return studentList;
     }
-
+    
     public void setStudentList(StudentList studentList) {
         this.studentList = studentList;
     }
-
+    
     public CourseList getCourseList() {
         return courseList;
     }
-
+    
     public void setCourseList(CourseList courseList) {
         this.courseList = courseList;
         initCoursesCombo();
     }
-
+    
     private void initCoursesCombo() {
         comboCourses.removeAllItems();
         for (Course course : courseList) {
@@ -70,17 +75,15 @@ public class PanelEnrolledCourses extends JPanel
             setSelectedCourse(0);
         }
     }
-
+    
     @Override
     public EnrolledCourse addNew() {
         EnrolledCourse course = new EnrolledCourse(selectedCourse);
         StudentList availStudentsList = StudentList.findNotEnrolledStudents(
                 studentList, enrollmentList);
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DialogEnrolledCourse dlg = new DialogEnrolledCourse(
-                topFrame, OperationType.ADD);
+        DialogGrades dlg = new DialogGrades(topFrame, OperationType.ADD);
         dlg.setLocationRelativeTo(topFrame);
-        dlg.setStudentList(availStudentsList);
         dlg.setData(course);
         dlg.setTitle("Enroll a student");
         dlg.setVisible(true);
@@ -89,51 +92,52 @@ public class PanelEnrolledCourses extends JPanel
         }
         return dlg.getData();
     }
-
+    
     @Override
     public EnrolledCourse editItem(int index) {
-//        EnrolledCourse course = (EnrolledCourse) enrolledCoursesList.getClass().clone();
-//        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-//        DialogCourse dlg = new DialogCourse(topFrame, OperationType.EDIT);
-//        dlg.setLocationRelativeTo(topFrame);
-//        // dlg.setData(course);
-//        dlg.setTitle("Edit Student");
-//        dlg.setVisible(true);
-//        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
-//            return null;
-//        }
-//        return dlg.getData();
-        return null;
+        EnrolledCourse course = (EnrolledCourse) enrollmentList.get(index).clone();
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        StudentList availStudentsList = StudentList.findNotEnrolledStudents(
+                studentList, enrollmentList);
+        availStudentsList.add(course.getStudent());
+        DialogGrades dlg = new DialogGrades(topFrame, OperationType.EDIT);
+        dlg.setLocationRelativeTo(topFrame);
+        dlg.setData(course);
+        dlg.setTitle("Edit Student's Grades");
+        dlg.setVisible(true);
+        if (dlg.getDialogResult() == JOptionPane.CANCEL_OPTION) {
+            return null;
+        }
+        return dlg.getData();
     }
-
+    
     @Override
     public EnrolledCourse removeItem(int index) {
-//        Course course = (Course) enrolledCoursesList.get(index);
-//        int res = JOptionPane.showConfirmDialog(
-//                null, "Do you want to delete this student?",
-//                "Delete a Student",
-//                JOptionPane.YES_NO_OPTION);
-//        if (res == JOptionPane.NO_OPTION) {
-//            return null;
-//        }
-//        return course;
-        return null;
+        EnrolledCourse course = (EnrolledCourse) enrollmentList.get(index);
+        int res = JOptionPane.showConfirmDialog(
+                null, "Do you want to cancel this enrollment?",
+                "Cancel a Student's Enrollment",
+                JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.NO_OPTION) {
+            return null;
+        }
+        return course;
     }
-
+    
     public void setSelectedCourse(int index) {
         if (index >= 0 && index < courseList.size()) {
             setSelectedCourse(courseList.get(index));
         }
     }
-
+    
     public void setSelectedCourse(Course selectedCourse) {
         this.selectedCourse = selectedCourse;
         if (selectedCourse != null && enrolledCoursesList != null) {
             enrollmentList = enrolledCoursesList.enrollByCourse(selectedCourse);
-            enrolledCoursesModel.setCourseList(enrollmentList);
+            gradesModel.setCourseList(enrollmentList);
         }
     }
-
+    
     public Course getSelectedCourse() {
         return selectedCourse;
     }
@@ -146,16 +150,32 @@ public class PanelEnrolledCourses extends JPanel
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        comboCourses = new javax.swing.JComboBox<>();
         scrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         ctrlPanel = new javax.swing.JPanel();
-        addBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
-        removeBtn = new javax.swing.JButton();
-        comboCourses = new javax.swing.JComboBox<>();
 
-        table.setModel(enrolledCoursesModel);
+        setLayout(new java.awt.GridBagLayout());
+
+        comboCourses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboCourses.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboCoursesItemStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 448;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        add(comboCourses, gridBagConstraints);
+
+        table.setModel(gradesModel);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);
@@ -163,24 +183,22 @@ public class PanelEnrolledCourses extends JPanel
         });
         scrollPane.setViewportView(table);
 
-        addBtn.setText("New");
-        addBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBtnActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 508;
+        gridBagConstraints.ipady = 191;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        add(scrollPane, gridBagConstraints);
 
         editBtn.setText("Edit");
         editBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editBtnActionPerformed(evt);
-            }
-        });
-
-        removeBtn.setText("Remove");
-        removeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeBtnActionPerformed(evt);
             }
         });
 
@@ -190,65 +208,26 @@ public class PanelEnrolledCourses extends JPanel
             ctrlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ctrlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(addBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(removeBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(452, Short.MAX_VALUE))
         );
         ctrlPanelLayout.setVerticalGroup(
             ctrlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ctrlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(ctrlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBtn)
-                    .addComponent(editBtn)
-                    .addComponent(removeBtn))
+                .addComponent(editBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        comboCourses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboCourses.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                comboCoursesItemStateChanged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addComponent(ctrlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(comboCourses, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(comboCourses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ctrlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 271;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        add(ctrlPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        EnrolledCourse course = addNew();
-        if (course != null) {
-            enrollmentList.add(course);
-            enrolledCoursesList.enrollToCourse(course);
-            enrolledCoursesModel.fireTableDataChanged();
-            FrameMain.frameMain.saveData();
-        }
-    }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         int selItem = table.getSelectedRow();
@@ -258,24 +237,14 @@ public class PanelEnrolledCourses extends JPanel
         int rowIndex = table.convertRowIndexToModel(selItem);
         EnrolledCourse course = editItem(rowIndex);
         if (course != null) {
-            // enrolledCoursesList.set(rowIndex, course);
-            // enrolledCoursesList.leaveFromCourse();
-            enrolledCoursesModel.fireTableRowsUpdated(rowIndex, rowIndex);
+            enrollmentList.set(rowIndex, course);
+            EnrolledCourse oldCourse = enrollmentList.get(rowIndex);
+            enrolledCoursesList.leaveFromCourse(oldCourse);
+            enrolledCoursesList.enrollToCourse(course);
+            gradesModel.fireTableRowsUpdated(rowIndex, rowIndex);
+            FrameMain.frameMain.saveData();
         }
     }//GEN-LAST:event_editBtnActionPerformed
-
-    private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
-        int selItem = table.getSelectedRow();
-        if (selItem == -1) {
-            return;
-        }
-        int rowIndex = table.convertRowIndexToModel(selItem);
-        EnrolledCourse course = removeItem(rowIndex);
-        if (course != null) {
-            // enrolledCoursesList.remove(rowIndex);
-            enrolledCoursesModel.fireTableRowsDeleted(selItem, selItem);
-        }
-    }//GEN-LAST:event_removeBtnActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1
@@ -290,11 +259,9 @@ public class PanelEnrolledCourses extends JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addBtn;
     private javax.swing.JComboBox<String> comboCourses;
     private javax.swing.JPanel ctrlPanel;
     private javax.swing.JButton editBtn;
-    private javax.swing.JButton removeBtn;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
