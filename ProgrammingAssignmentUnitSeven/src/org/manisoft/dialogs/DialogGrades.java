@@ -2,11 +2,11 @@ package org.manisoft.dialogs;
 
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
 import org.manisoft.entities.EnrolledCourse;
 
 /**
@@ -16,6 +16,7 @@ import org.manisoft.entities.EnrolledCourse;
 public class DialogGrades extends DialogBase<EnrolledCourse> {
     
     private ArrayList<JTextField> txtGrades = new ArrayList<>();
+    private static final int NUM_GRADES_PER_LINE = 5;
 
     /**
      * Creates new form DialogStudent
@@ -43,24 +44,24 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 10, 2, 10);
         getContentPane().add(label, gridBagConstraints);
         
         for (int i = 0; i < data.getGradesCount(); i++) {
             JTextField txtGrade = new JTextField();
             txtGrades.add(txtGrade);
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1 + i % 3;
-            gridBagConstraints.gridy = 3 + i / 3;
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 1 + i % NUM_GRADES_PER_LINE;
+            gridBagConstraints.gridy = 3 + i / NUM_GRADES_PER_LINE;
             gridBagConstraints.ipadx = 2;
             gridBagConstraints.ipady = 2;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.insets = new Insets(2, 10, 2, 10);
             getContentPane().add(txtGrade, gridBagConstraints);
         }
-        int lines = data.getGradesCount() / 3
-                + (data.getGradesCount() % 3 != 0 ? 1 : 0);
+        int lines = data.getGradesCount() / NUM_GRADES_PER_LINE
+                + (data.getGradesCount() % NUM_GRADES_PER_LINE != 0 ? 1 : 0);
         setSize(getWidth(),
                 250 + (txtCourse.getHeight() + 4) * lines);
         updateInterface();
@@ -128,8 +129,8 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {80, 80, 80, 80};
-        layout.columnWeights = new double[] {1.0, 1.0, 1.0, 1.0};
+        layout.columnWidths = new int[] {90, 90, 90, 90, 90, 90};
+        layout.columnWeights = new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         layout.rowWeights = new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         getContentPane().setLayout(layout);
 
@@ -139,11 +140,13 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         getContentPane().add(lblTitle, gridBagConstraints);
 
@@ -154,19 +157,19 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         getContentPane().add(labelCourse, gridBagConstraints);
 
         txtCourse.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         getContentPane().add(txtCourse, gridBagConstraints);
 
         lblStudent.setText("Student");
@@ -176,16 +179,16 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         getContentPane().add(lblStudent, gridBagConstraints);
 
         txtStudent.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         getContentPane().add(txtStudent, gridBagConstraints);
 
         okBtn.setText("OK");
@@ -197,10 +200,11 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         getContentPane().add(okBtn, gridBagConstraints);
 
         cancelBtn.setText("Cancel");
@@ -212,13 +216,14 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         getContentPane().add(cancelBtn, gridBagConstraints);
 
-        setBounds(0, 0, 410, 163);
+        setBounds(0, 0, 658, 163);
     }// </editor-fold>//GEN-END:initComponents
 
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed

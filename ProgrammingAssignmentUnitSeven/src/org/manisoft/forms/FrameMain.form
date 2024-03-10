@@ -23,7 +23,18 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Management"/>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="managementMenuStateChanged"/>
+          </Events>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="welcomeMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Welcome Page"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="welcomeMenuActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="studentsMenu">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Students"/>

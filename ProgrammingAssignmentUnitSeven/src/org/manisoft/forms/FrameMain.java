@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.manisoft.containers.CourseList;
@@ -23,30 +24,37 @@ import org.manisoft.entities.Course;
 import org.manisoft.entities.CourseManagement;
 import org.manisoft.entities.Student;
 import org.manisoft.panels.PanelGrades;
+import org.manisoft.panels.PanelWelcome;
 
 /**
  *
  * @author manianis
  */
-public class FrameMain extends javax.swing.JFrame {
+public final class FrameMain extends javax.swing.JFrame {
 
-    private String filePath = "courses.obj";
+    private String filePath;
     private StudentList students = new StudentList();
     private CourseList courses = new CourseList();
     private EnrolledCoursesList enrollment = new EnrolledCoursesList();
 
+    private static final int PANEL_WELCOME = 0;
+    private static final int PANEL_STUDENTS = 1;
+    private static final int PANEL_COURSES = 2;
+    private static final int PANEL_ENROLLMENTS = 3;
+    private static final int PANEL_GRADES = 4;
+
     private JPanel currPanel = null;
-    private PanelStudents panelStudents;
-    private PanelCourses panelCourses;
-    private PanelEnrolledCourses panelEnrolledCourses;
-    private PanelGrades panelGrades;
+    private final JPanel[] winPanels;
 
     /**
      * Creates new form FrameMain
+     *
+     * @param filePath
      */
-    public FrameMain() {
+    public FrameMain(String filePath) {
         initComponents();
 
+        this.filePath = filePath;
         loadData();
         if (students.isEmpty()) {
             Student student1 = new Student(students.genStudentID(), "Amine");
@@ -61,9 +69,8 @@ public class FrameMain extends javax.swing.JFrame {
             enrollment.enrollToCourse(student2, course2);
             saveData();
         }
-
-        Container pane = getContentPane();
-        pane.setLayout(new BorderLayout());
+        winPanels = new JPanel[5];
+        startWelcomePage();
     }
 
     /**
@@ -79,6 +86,7 @@ public class FrameMain extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         exitMenu = new javax.swing.JMenuItem();
         managementMenu = new javax.swing.JMenu();
+        welcomeMenu = new javax.swing.JMenuItem();
         studentsMenu = new javax.swing.JMenuItem();
         coursesMenu = new javax.swing.JMenuItem();
         studentsEnrollMenu = new javax.swing.JMenuItem();
@@ -100,6 +108,19 @@ public class FrameMain extends javax.swing.JFrame {
         menuBar.add(fileMenu);
 
         managementMenu.setText("Management");
+        managementMenu.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                managementMenuStateChanged(evt);
+            }
+        });
+
+        welcomeMenu.setText("Welcome Page");
+        welcomeMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                welcomeMenuActionPerformed(evt);
+            }
+        });
+        managementMenu.add(welcomeMenu);
 
         studentsMenu.setText("Students");
         studentsMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -153,14 +174,17 @@ public class FrameMain extends javax.swing.JFrame {
             courses = (CourseList) ois.readObject();
             enrollment = (EnrolledCoursesList) ois.readObject();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseManagement.class.getName())
+                    .log(Level.SEVERE, null, ex);
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseManagement.class.getName())
+                    .log(Level.SEVERE, null, ex);
         } finally {
             try {
                 ois.close();
             } catch (IOException ex) {
-                Logger.getLogger(CourseManagement.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CourseManagement.class.getName())
+                        .log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -177,14 +201,17 @@ public class FrameMain extends javax.swing.JFrame {
             oos.writeObject(courses);
             oos.writeObject(enrollment);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentList.class.getName())
+                    .log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentList.class.getName())
+                    .log(Level.SEVERE, null, ex);
         } finally {
             try {
                 oos.close();
             } catch (IOException ex) {
-                Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StudentList.class.getName())
+                        .log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -201,45 +228,87 @@ public class FrameMain extends javax.swing.JFrame {
         currPanel = panel;
     }
 
-    private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
+    public void startWelcomePage() {
+        if (winPanels[PANEL_WELCOME] == null) {
+            winPanels[PANEL_WELCOME] = new PanelWelcome();
+        }
+        displayPanel(winPanels[PANEL_WELCOME]);
+    }
 
+    public void startStudentsManagement() {
+        if (winPanels[PANEL_STUDENTS] == null) {
+            winPanels[PANEL_STUDENTS] = new PanelStudents();
+        }
+        displayPanel(winPanels[PANEL_STUDENTS]);
+        ((PanelStudents) winPanels[PANEL_STUDENTS])
+                .setStudentList(students);
+    }
+
+    public void startCoursesManagement() {
+        if (winPanels[PANEL_COURSES] == null) {
+            winPanels[PANEL_COURSES] = new PanelCourses();
+        }
+        displayPanel(winPanels[PANEL_COURSES]);
+        ((PanelCourses) winPanels[PANEL_COURSES])
+                .setCourseList(courses);
+    }
+
+    public void startEnrollmentsManagement() {
+        if (winPanels[PANEL_ENROLLMENTS] == null) {
+            winPanels[PANEL_ENROLLMENTS] = new PanelEnrolledCourses();
+        }
+        displayPanel(winPanels[PANEL_ENROLLMENTS]);
+        ((PanelEnrolledCourses) winPanels[PANEL_ENROLLMENTS])
+                .setCourseList(courses);
+        ((PanelEnrolledCourses) winPanels[PANEL_ENROLLMENTS])
+                .setStudentList(students);
+        ((PanelEnrolledCourses) winPanels[PANEL_ENROLLMENTS])
+                .setEnrolledCoursesList(enrollment);
+    }
+
+    public void startGradesManagement() {
+        if (winPanels[PANEL_GRADES] == null) {
+            winPanels[PANEL_GRADES] = new PanelGrades();
+        }
+        displayPanel(winPanels[PANEL_GRADES]);
+        ((PanelGrades) winPanels[PANEL_GRADES])
+                .setCourseList(courses);
+        ((PanelGrades) winPanels[PANEL_GRADES])
+                .setStudentList(students);
+        ((PanelGrades) winPanels[PANEL_GRADES])
+                .setEnrolledCoursesList(enrollment);
+    }
+
+    private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
+        System.exit(0);
     }//GEN-LAST:event_exitMenuActionPerformed
 
     private void studentsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsMenuActionPerformed
-        if (panelStudents == null) {
-            panelStudents = new PanelStudents();
-        }
-        displayPanel(panelStudents);
-        panelStudents.setStudentList(students);
+        startStudentsManagement();
     }//GEN-LAST:event_studentsMenuActionPerformed
 
     private void coursesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coursesMenuActionPerformed
-        if (panelCourses == null) {
-            panelCourses = new PanelCourses();
-        }
-        displayPanel(panelCourses);
-        panelCourses.setCourseList(courses);
+        startCoursesManagement();
     }//GEN-LAST:event_coursesMenuActionPerformed
 
     private void studentsEnrollMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsEnrollMenuActionPerformed
-        if (panelEnrolledCourses == null) {
-            panelEnrolledCourses = new PanelEnrolledCourses();
-        }
-        displayPanel(panelEnrolledCourses);
-        panelEnrolledCourses.setCourseList(courses);
-        panelEnrolledCourses.setStudentList(students);
-        panelEnrolledCourses.setEnrolledCoursesList(enrollment);
+        startEnrollmentsManagement();
     }//GEN-LAST:event_studentsEnrollMenuActionPerformed
 
     private void gradesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradesMenuActionPerformed
-        if (panelGrades == null) {
-            panelGrades = new PanelGrades();
-        }
-        displayPanel(panelGrades);
-        panelGrades.setCourseList(courses);
-        panelGrades.setStudentList(students);
-        panelGrades.setEnrolledCoursesList(enrollment);
+        startGradesManagement();
     }//GEN-LAST:event_gradesMenuActionPerformed
+
+    private void welcomeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_welcomeMenuActionPerformed
+        startWelcomePage();
+    }//GEN-LAST:event_welcomeMenuActionPerformed
+
+    private void managementMenuStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_managementMenuStateChanged
+        for (int i = 0; i < managementMenu.getItemCount(); i++) {
+            JMenuItem menuItem = managementMenu.getItem(i);
+            menuItem.setVisible(currPanel != winPanels[i]);
+        }
+    }//GEN-LAST:event_managementMenuStateChanged
 
     public static FrameMain frameMain;
 
@@ -272,7 +341,7 @@ public class FrameMain extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            frameMain = new FrameMain();
+            frameMain = new FrameMain("courses.obj");
             frameMain.setVisible(true);
         });
     }
@@ -286,5 +355,6 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem studentsEnrollMenu;
     private javax.swing.JMenuItem studentsMenu;
+    private javax.swing.JMenuItem welcomeMenu;
     // End of variables declaration//GEN-END:variables
 }

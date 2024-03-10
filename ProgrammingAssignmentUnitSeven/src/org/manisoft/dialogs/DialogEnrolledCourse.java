@@ -30,7 +30,7 @@ public class DialogEnrolledCourse extends DialogBase<EnrolledCourse> {
         this.studentList = studentList;
         comboStudents.removeAllItems();
         for (Student student : studentList) {
-            comboStudents.addItem(student.toString());
+            comboStudents.addItem(student.toString().trim());
         }
     }
     

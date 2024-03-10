@@ -3,7 +3,6 @@ package org.manisoft.dialogs;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.manisoft.entities.Course;
-import org.manisoft.entities.Student;
 import org.manisoft.utilities.StrUtil;
 
 /**
