@@ -11,6 +11,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="exitMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Alt+X"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Exit"/>
               </Properties>
               <Events>
@@ -29,6 +32,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="welcomeMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+W"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Welcome Page"/>
               </Properties>
               <Events>
@@ -37,6 +43,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="studentsMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+S"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Students"/>
               </Properties>
               <Events>
@@ -45,6 +54,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="coursesMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+C"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Courses"/>
               </Properties>
               <Events>
@@ -53,6 +65,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="studentsEnrollMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+E"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Students Enrollments"/>
               </Properties>
               <Events>
@@ -61,6 +76,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="gradesMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+G"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Grades"/>
               </Properties>
               <Events>

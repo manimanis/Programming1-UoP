@@ -74,8 +74,8 @@ public class PanelCourses extends JPanel
     public Course removeItem(int index) {
         Course course = (Course) courseList.get(index);
         int res = JOptionPane.showConfirmDialog(
-                null, "Do you want to delete this student?",
-                "Delete a Student",
+                null, "Do you want to delete this course?",
+                "Delete a Course",
                 JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.NO_OPTION) {
             return null;
