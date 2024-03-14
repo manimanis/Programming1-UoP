@@ -1,8 +1,5 @@
 package org.manisoft.forms;
 
-import org.manisoft.panels.PanelStudents;
-import org.manisoft.panels.PanelEnrolledCourses;
-import org.manisoft.panels.PanelCourses;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.io.File;
@@ -23,7 +20,10 @@ import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.CourseManagement;
 import org.manisoft.entities.Student;
+import org.manisoft.panels.PanelCourses;
+import org.manisoft.panels.PanelEnrolledCourses;
 import org.manisoft.panels.PanelGrades;
+import org.manisoft.panels.PanelStudents;
 import org.manisoft.panels.PanelWelcome;
 
 /**
