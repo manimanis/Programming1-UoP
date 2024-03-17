@@ -22,6 +22,9 @@ public class DialogCourse extends DialogBase<Course> {
         initComponents();
     }
 
+    /**
+     * Update the dialog component from the data variable.
+     */
     @Override
     public void updateInterface() {
         txtCode.setText(data.getCode());
@@ -30,6 +33,9 @@ public class DialogCourse extends DialogBase<Course> {
         txtGradesCount.setText(data.getGradesCount() + "");
     }
 
+    /**
+     * Update the data variable from the dialog content.
+     */
     @Override
     public void updateData() {
         data.setCode(txtCode.getText());
@@ -38,6 +44,10 @@ public class DialogCourse extends DialogBase<Course> {
         data.setGradesCount(Integer.parseInt(txtGradesCount.getText()));
     }
 
+    /**
+     * Verifies if the dialog's components are valid.
+     * @return true if the dialog content is valid
+     */
     @Override
     public boolean isValidData() {
         boolean error = false;
