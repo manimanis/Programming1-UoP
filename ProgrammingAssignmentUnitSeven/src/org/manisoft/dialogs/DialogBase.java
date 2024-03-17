@@ -28,31 +28,56 @@ public class DialogBase<T extends Object> extends JDialog {
         setLocationRelativeTo(parent);
     }
 
+    /**
+     * Get the object displayed by this dialog.
+     * @return the object
+     */
     public T getData() {
         return data;
     }
 
+    /**
+     * Set the object displayed by this dialog.
+     * @param data The data
+     */
     public void setData(T data) {
         this.data = data;
         updateInterface();
     }
 
+    /**
+     * Get the dialog result.
+     * @return JOptionPane.CANCEL_OPTION or JOptionPane.OK_OPTION
+     */
     public int getDialogResult() {
         return dialogResult;
     }
     
+    /**
+     * Update the dialog component from the data variable.
+     */
     public void updateInterface() {
         
     }
     
+    /**
+     * Update the data variable from the dialog content.
+     */
     public void updateData() {
         
     }
     
+    /**
+     * Verifies if the dialog's components are valid.
+     * @return true if the dialog content is valid
+     */
     public boolean isValidData() {
         return true;
     }
     
+    /**
+     * Invoked when clicking Ok button.
+     */
     public void acceptChanges() {
         dialogResult = JOptionPane.CANCEL_OPTION;
         if (isValidData()) {
@@ -62,6 +87,9 @@ public class DialogBase<T extends Object> extends JDialog {
         }
     }
     
+    /**
+     * Invoked when clicking Cancel button.
+     */
     public void cancelChanges() {
         dialogResult = JOptionPane.CANCEL_OPTION;
         setVisible(false);

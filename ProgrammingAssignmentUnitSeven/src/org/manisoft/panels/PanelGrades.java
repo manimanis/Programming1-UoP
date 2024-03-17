@@ -12,7 +12,6 @@ import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
 import org.manisoft.entities.EnrolledCourse;
 import org.manisoft.dialogs.DataManagementInterface;
-import org.manisoft.dialogs.DialogEnrolledCourse;
 import org.manisoft.dialogs.DialogGrades;
 import org.manisoft.forms.FrameMain;
 import org.manisoft.dialogs.OperationType;
@@ -79,8 +78,6 @@ public class PanelGrades extends JPanel
     @Override
     public EnrolledCourse addNew() {
         EnrolledCourse course = new EnrolledCourse(selectedCourse);
-        StudentList availStudentsList = StudentList.findNotEnrolledStudents(
-                studentList, enrollmentList);
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         DialogGrades dlg = new DialogGrades(topFrame, OperationType.ADD);
         dlg.setLocationRelativeTo(topFrame);
@@ -97,9 +94,6 @@ public class PanelGrades extends JPanel
     public EnrolledCourse editItem(int index) {
         EnrolledCourse course = (EnrolledCourse) enrollmentList.get(index).clone();
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        StudentList availStudentsList = StudentList.findNotEnrolledStudents(
-                studentList, enrollmentList);
-        availStudentsList.add(course.getStudent());
         DialogGrades dlg = new DialogGrades(topFrame, OperationType.EDIT);
         dlg.setLocationRelativeTo(topFrame);
         dlg.setData(course);

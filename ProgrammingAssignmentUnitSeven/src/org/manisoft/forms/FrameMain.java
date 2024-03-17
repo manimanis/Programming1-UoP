@@ -1,7 +1,6 @@
 package org.manisoft.forms;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -168,6 +167,9 @@ public final class FrameMain extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Load students, courses and enrollments data from a file.
+     */
     public void loadData() {
         ObjectInputStream ois = null;
         File fichier = new File(filePath);
@@ -196,7 +198,7 @@ public final class FrameMain extends javax.swing.JFrame {
     }
 
     /**
-     * Saves data to a file.
+     * Saves students, courses and enrollments data to a file.
      */
     public void saveData() {
         ObjectOutputStream oos = null;
@@ -222,6 +224,10 @@ public final class FrameMain extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Display the panel and make it the current panel.
+     * @param panel 
+     */
     private void displayPanel(JPanel panel) {
         if (panel == currPanel) {
             return;
@@ -234,6 +240,9 @@ public final class FrameMain extends javax.swing.JFrame {
         currPanel = panel;
     }
 
+    /**
+     * Display welcome panel.
+     */
     public void startWelcomePage() {
         if (winPanels[PANEL_WELCOME] == null) {
             winPanels[PANEL_WELCOME] = new PanelWelcome();
@@ -241,6 +250,9 @@ public final class FrameMain extends javax.swing.JFrame {
         displayPanel(winPanels[PANEL_WELCOME]);
     }
 
+    /**
+     * Display students management panel.
+     */
     public void startStudentsManagement() {
         if (winPanels[PANEL_STUDENTS] == null) {
             winPanels[PANEL_STUDENTS] = new PanelStudents();
@@ -250,6 +262,9 @@ public final class FrameMain extends javax.swing.JFrame {
                 .setStudentList(students);
     }
 
+    /**
+     * Display courses management panel.
+     */
     public void startCoursesManagement() {
         if (winPanels[PANEL_COURSES] == null) {
             winPanels[PANEL_COURSES] = new PanelCourses();
@@ -259,6 +274,9 @@ public final class FrameMain extends javax.swing.JFrame {
                 .setCourseList(courses);
     }
 
+    /**
+     * Display enrollments management panel.
+     */
     public void startEnrollmentsManagement() {
         if (winPanels[PANEL_ENROLLMENTS] == null) {
             winPanels[PANEL_ENROLLMENTS] = new PanelEnrolledCourses();
@@ -272,6 +290,9 @@ public final class FrameMain extends javax.swing.JFrame {
                 .setEnrolledCoursesList(enrollment);
     }
 
+    /**
+     * Display grades management panel.
+     */
     public void startGradesManagement() {
         if (winPanels[PANEL_GRADES] == null) {
             winPanels[PANEL_GRADES] = new PanelGrades();
@@ -316,6 +337,7 @@ public final class FrameMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_managementMenuStateChanged
 
+    
     public static FrameMain frameMain;
 
     /**

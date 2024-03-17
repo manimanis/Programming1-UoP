@@ -10,10 +10,21 @@ import org.manisoft.entities.Student;
  */
 public class EnrollmentList extends ArrayList<EnrolledCourse> {
 
+    /**
+     * Find the student object.
+     * @param student
+     * @return the object index in the list, -1 otherwise.
+     */
     public int findStudent(Student student) {
         return findStudent(student, 0);
     }
 
+    /**
+     * Find the student object.
+     * @param student
+     * @param startIndex the index
+     * @return the object index in the list, -1 otherwise.
+     */
     public int findStudent(Student student, int startIndex) {
         for (int i = startIndex; i < size(); i++) {
             EnrolledCourse ec = get(i);

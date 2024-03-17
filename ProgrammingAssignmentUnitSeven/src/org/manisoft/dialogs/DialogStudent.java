@@ -23,23 +23,33 @@ public class DialogStudent extends DialogBase<Student> {
         init();
     }
     
-    protected void init() {
+    protected final void init() {
         txtID.setEnabled(false);
         txtName.setEnabled(opType != OperationType.REMOVE);
     }
 
+    /**
+     * Update the dialog component from the data variable.
+     */
     @Override
     public void updateInterface() {
         txtID.setText(data.getID());
         txtName.setText(data.getName());
     }
 
+    /**
+     * Update the data variable from the dialog content.
+     */
     @Override
     public void updateData() {
         data.setID(txtID.getText());
         data.setName(txtName.getText());
     }
 
+    /**
+     * Verifies if the dialog's components are valid.
+     * @return true if the dialog content is valid
+     */
     @Override
     public boolean isValidData() {
         if (opType != OperationType.ADD) {

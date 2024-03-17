@@ -26,6 +26,10 @@ public class DialogEnrolledCourse extends DialogBase<EnrolledCourse> {
         getRootPane().setDefaultButton(okBtn);
     }
 
+    /**
+     * Provides the list of student the user can choose from.
+     * @param studentList 
+     */
     public void setStudentList(StudentList studentList) {
         this.studentList = studentList;
         comboStudents.removeAllItems();
@@ -34,6 +38,9 @@ public class DialogEnrolledCourse extends DialogBase<EnrolledCourse> {
         }
     }
     
+    /**
+     * Update the dialog component from the data variable.
+     */
     @Override
     public void updateInterface() {
         txtCode.setText(data.getCourse().getCode());
@@ -43,11 +50,18 @@ public class DialogEnrolledCourse extends DialogBase<EnrolledCourse> {
         }
     }
 
+    /**
+     * Update the data variable from the dialog content.
+     */
     @Override
     public void updateData() {
         data.setStudent(studentList.get(comboStudents.getSelectedIndex()));
     }
 
+    /**
+     * Verifies if the dialog's components are valid.
+     * @return true if the dialog content is valid
+     */
     @Override
     public boolean isValidData() {     
         if (comboStudents.getSelectedIndex() == -1) {

@@ -5,7 +5,7 @@ import org.manisoft.containers.EnrollmentList;
 import org.manisoft.entities.EnrolledCourse;
 
 /**
- *
+ * JTable Model to display the enrolled courses data.
  * @author manianis
  */
 public class EnrolledCourseModel extends AbstractTableModel {
@@ -24,6 +24,10 @@ public class EnrolledCourseModel extends AbstractTableModel {
         fireTableDataChanged();
     }
     
+    /**
+     * Get the number of enrollments.
+     * @return 
+     */
     @Override
     public int getRowCount() {
         if (courseList == null) {
@@ -32,16 +36,31 @@ public class EnrolledCourseModel extends AbstractTableModel {
         return courseList.size();
     }
 
+    /**
+     * Get the number of columns in the table.
+     * @return 
+     */
     @Override
     public int getColumnCount() {
         return columns.length;
     }
 
+    /**
+     * Get columns labels.
+     * @param column column index.
+     * @return Column label.
+     */
     @Override
     public String getColumnName(int column) {
         return columns[column];
     }
     
+    /**
+     * Get table's cell content.
+     * @param rowIndex row index
+     * @param columnIndex column index
+     * @return 
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         EnrolledCourse course = courseList.get(rowIndex);

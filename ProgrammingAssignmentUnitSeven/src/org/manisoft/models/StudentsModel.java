@@ -5,7 +5,7 @@ import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Student;
 
 /**
- *
+ * JTable Model to display students data.
  * @author manianis
  */
 public class StudentsModel extends AbstractTableModel {
@@ -24,6 +24,10 @@ public class StudentsModel extends AbstractTableModel {
         fireTableDataChanged();
     }
     
+    /**
+     * Get the number of students.
+     * @return 
+     */
     @Override
     public int getRowCount() {
         if (studentList == null) {
@@ -32,16 +36,31 @@ public class StudentsModel extends AbstractTableModel {
         return studentList.size();
     }
 
+    /**
+     * Get the number of columns in the table.
+     * @return 
+     */
     @Override
     public int getColumnCount() {
         return columns.length;
     }
 
+    /**
+     * Get columns labels.
+     * @param column column index.
+     * @return Column label.
+     */
     @Override
     public String getColumnName(int column) {
         return columns[column];
     }
     
+    /**
+     * Get table's cell content.
+     * @param rowIndex row index
+     * @param columnIndex column index
+     * @return 
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Student student = studentList.get(rowIndex);

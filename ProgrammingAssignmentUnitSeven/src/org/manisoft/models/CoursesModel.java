@@ -2,12 +2,10 @@ package org.manisoft.models;
 
 import javax.swing.table.AbstractTableModel;
 import org.manisoft.containers.CourseList;
-import org.manisoft.containers.StudentList;
 import org.manisoft.entities.Course;
-import org.manisoft.entities.Student;
 
 /**
- *
+ * JTable Model to display courses data.
  * @author manianis
  */
 public class CoursesModel extends AbstractTableModel {
@@ -26,6 +24,10 @@ public class CoursesModel extends AbstractTableModel {
         fireTableDataChanged();
     }
     
+    /**
+     * Get the number of courses.
+     * @return 
+     */
     @Override
     public int getRowCount() {
         if (courseList == null) {
@@ -34,29 +36,46 @@ public class CoursesModel extends AbstractTableModel {
         return courseList.size();
     }
 
+    /**
+     * Get the number of columns in the table.
+     * @return 
+     */
     @Override
     public int getColumnCount() {
         return columns.length;
     }
 
+    /**
+     * Get columns labels.
+     * @param column column index.
+     * @return Column label.
+     */
     @Override
     public String getColumnName(int column) {
         return columns[column];
     }
     
+    /**
+     * Get table's cell content.
+     * @param rowIndex row index
+     * @param columnIndex column index
+     * @return 
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Course course = courseList.get(rowIndex);
-        if (columnIndex == 0) {
-            return course.getCode();
-        } else if (columnIndex == 1) {
-            return course.getName();
-        } else if (columnIndex == 2) {
-            return course.getCapacity();
-        } else if (columnIndex == 3) {
-            return course.getGradesCount();
-        } 
-        return "";
+        return switch (columnIndex) {
+            case 0 -> 
+                course.getCode();
+            case 1 -> 
+                course.getName();
+            case 2 -> 
+                course.getCapacity();
+            case 3 -> 
+                course.getGradesCount();
+            default -> 
+                "";
+        };
     }
 
 }

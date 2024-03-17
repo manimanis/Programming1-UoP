@@ -5,7 +5,7 @@ import org.manisoft.containers.EnrollmentList;
 import org.manisoft.entities.EnrolledCourse;
 
 /**
- *
+ * JTable Model to display students grades data.
  * @author manianis
  */
 public class GradesModel extends AbstractTableModel {
@@ -22,6 +22,10 @@ public class GradesModel extends AbstractTableModel {
         fireTableDataChanged();
     }
     
+    /**
+     * Get the number of grades.
+     * @return 
+     */
     @Override
     public int getRowCount() {
         if (courseList == null) {
@@ -30,6 +34,10 @@ public class GradesModel extends AbstractTableModel {
         return courseList.size();
     }
     
+    /**
+     * Get the number of columns in the table.
+     * @return 
+     */
     @Override
     public int getColumnCount() {
         if (courseList == null || courseList.isEmpty()) {
@@ -38,6 +46,11 @@ public class GradesModel extends AbstractTableModel {
         return courseList.get(0).getGradesCount() + 3;
     }
     
+    /**
+     * Get columns labels.
+     * @param column column index.
+     * @return Column label.
+     */
     @Override
     public String getColumnName(int column) {
         if (courseList == null || courseList.isEmpty()) {
@@ -54,6 +67,12 @@ public class GradesModel extends AbstractTableModel {
         return "Average";
     }
     
+    /**
+     * Get table's cell content.
+     * @param rowIndex row index
+     * @param columnIndex column index
+     * @return 
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         EnrolledCourse course = courseList.get(rowIndex);

@@ -30,6 +30,10 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         getRootPane().setDefaultButton(okBtn);
     }
     
+    /**
+     * Set the object displayed by this dialog.
+     * @param data The data
+     */
     @Override
     public void setData(EnrolledCourse data) {
         super.setData(data);
@@ -67,6 +71,9 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         updateInterface();
     }
     
+    /**
+     * Update the dialog component from the data variable.
+     */
     @Override
     public void updateInterface() {
         txtCourse.setText(data.getCourse().toString().trim());
@@ -78,6 +85,9 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         }
     }
     
+    /**
+     * Update the data variable from the dialog content.
+     */
     @Override
     public void updateData() {
         for (int i = 0; i < txtGrades.size(); i++) {
@@ -87,6 +97,10 @@ public class DialogGrades extends DialogBase<EnrolledCourse> {
         }
     }
     
+    /**
+     * Verifies if the dialog's components are valid.
+     * @return true if the dialog content is valid
+     */
     @Override
     public boolean isValidData() {
         for (int i = 0; i < txtGrades.size(); i++) {
