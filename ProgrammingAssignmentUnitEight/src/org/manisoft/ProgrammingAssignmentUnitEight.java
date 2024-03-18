@@ -1,5 +1,8 @@
 package org.manisoft;
 
+import java.util.HashMap;
+import org.manisoft.entities.Employee;
+
 /**
  *
  * @author Cyberbox
@@ -14,6 +17,9 @@ public class ProgrammingAssignmentUnitEight {
                 ProgrammingAssignmentUnitEight.class
                         .getResourceAsStream(
                                 "./EmployeeSampleData1.csv"));
+        for (HashMap<String, String> data : csv) {
+            System.out.println(new Employee(data));
+        }
         
     }
 

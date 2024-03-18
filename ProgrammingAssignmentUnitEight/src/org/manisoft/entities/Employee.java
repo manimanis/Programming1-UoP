@@ -3,6 +3,7 @@ package org.manisoft.entities;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,44 +31,39 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String[] line) {
+    public Employee(HashMap<String, String> data) {
         SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
-        for (int i = 0; i < line.length; i++) {
-            String item = line[i];
-            System.out.print(i + ":" + item + ",");
-        }
-        System.out.println();
-        ID = line[0]; // Employee ID
-        fullName = line[1]; // Full Name
-        jobTitle = line[2]; // Job Title
-        department = line[3]; // Department
-        businessUnit = line[4]; // Business Unit
-        gender = line[5]; // Gender
-        ethnicity = line[6]; // Ethnicity
-        age = Integer.parseInt(line[7]); // Age
+        ID = data.get("Employee ID"); // Employee ID
+        fullName = data.get("Full Name"); // 
+        jobTitle = data.get("Job Title"); // 
+        department = data.get("Department"); // Department
+        businessUnit = data.get("Business Unit"); // Business Unit
+        gender = data.get("Gender"); // Gender
+        ethnicity = data.get("Ethnicity"); // Ethnicity
+        age = Integer.parseInt("0"+data.get("Age")); // Age
         try {
             // Hire Date
-            hireDate = !line[8].isEmpty() ? sdf.parse(line[8]) : new Date();
+            String temp = data.getOrDefault("Hire Date", "");
+            hireDate = !temp.isEmpty() ? sdf.parse(temp) : new Date();
         } catch (ParseException ex) {
-            Logger.getLogger(Employee.class.getName())
-                    .log(Level.SEVERE, null, ex);
+            hireDate = new Date(9999, 11, 31);
         }
-        annualSalary = 0.0; // Annual Salary
-        bonus = 0.0; // Bonus %
-        country = line[11]; // Country
-        city = line[12]; // City
+        annualSalary = Double.parseDouble(data.get("Annual Salary")); // Annual Salary
+        bonus = Double.parseDouble(data.get("Bonus %")); // Bonus %
+        country = data.get("Country"); // Country
+        city = data.get("City"); // City
         try {
             // Exit Date
-            exitDate = !line[13].isEmpty() ? sdf.parse(line[13]) : new Date();
+            String temp = data.getOrDefault("Exit Date", "");
+            exitDate = !temp.isEmpty() ? sdf.parse(temp) : new Date();
         } catch (ParseException ex) {
-            Logger.getLogger(Employee.class.getName())
-                    .log(Level.SEVERE, null, ex);
+            exitDate = new Date(9999, 11, 31);
         }
     }
 
     @Override
     public String toString() {
-        return String.format("%s %-32s %-16s",
-                ID, fullName, department);
+        return String.format("%s %-32s %-16s %10.2f",
+                ID, fullName, department, annualSalary);
     }
 }
