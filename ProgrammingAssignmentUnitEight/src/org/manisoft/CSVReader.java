@@ -28,7 +28,8 @@ public class CSVReader implements Iterable<HashMap<String, String>> {
     private ArrayList<String[]> fileData = new ArrayList<>();
     
     public CSVReader(InputStream is) {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(is))) {
             columnNames = readLine(br);
             String[] line;
             while ((line = readLine(br)) != null) {
