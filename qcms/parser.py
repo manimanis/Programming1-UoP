@@ -1,9 +1,24 @@
+import json
 import os
 import pprint
 from bs4 import BeautifulSoup
 
+
 def getText(txt: str):
     return " ".join(txt.strip().split())
+
+
+def extract_paragraphs(elem):
+    pars = elem.find_all("p")
+    partext = ""
+    for par in pars:
+        if partext:
+            partext += "\n"
+        partext += getText(par.text)
+    if partext == "":
+        partext = getText(elem.text)
+    return partext
+
 
 folder = "cs1102"
 curfolder = os.path.dirname(__file__)
@@ -18,10 +33,9 @@ for file in os.listdir(folder_path):
             filepath = os.path.join(path, afile)
             if afile.endswith(".html"):
                 html_files[file].append(filepath)
-print(html_files)
 
+all_questions = []
 for unit in html_files.keys():
-    print(unit)
     unit_questions = []
     for file in html_files[unit]:
         with open(file, "r") as f:
@@ -29,29 +43,27 @@ for unit in html_files.keys():
         bs = BeautifulSoup(text, "lxml")
         qlist = []
         questions = bs.find_all(class_="formulation clearfix")
-        for question in questions:
-            qdict = {
-                "question": "",
-                "answers": []
-            }
-            text = question.find(class_="qtext")
-            pars = text.find_all("p")
-            qtext = ""
-            for par in pars:
-                if qtext != "":
-                    qtext += "\n"
-                qtext += getText(par.text)
+        for idx, question in enumerate(questions):
+            qdict = {"question": "", "answers": []}
+            text = extract_paragraphs(question.find(class_="qtext"))
+            qdict["question"] = text
+            if text == "":
+                print(
+                    f"No question {unit} q:{idx+1} file:{os.path.basename(file)}"
+                )
+
             answers = question.select(".answer > div")
-            qdict["question"] = qtext
             for answer in answers:
                 an = getText(answer.find(class_="answernumber").text)
                 an_text = getText(answer.find(class_="flex-fill").text)
                 qdict["answers"].append([an, an_text])
             qlist.append(qdict)
-        corrects = bs.find_all(class_="rightanswer")
         
+        corrects = bs.find_all(class_="rightanswer")
+        if len(corrects) != len(qlist):
+            print(f"unsufficient answers {unit} f.{os.path.basename(file)}")
         for idx, correct in enumerate(corrects):
-            rightanswer = getText(correct.text)[len("The correct answer is:"):].strip()
+            rightanswer = getText(correct.text)[len("The correct answer is:") :].strip()
             valid = False
             for idx2, options in enumerate(qlist[idx]["answers"]):
                 corrans = options[1] == rightanswer
@@ -59,11 +71,22 @@ for unit in html_files.keys():
                     valid = True
                 options.append(corrans)
             if not valid:
-                print(f"No valid answer question {unit} question {idx+1} file {os.path.basename(file)}")
-    
+                print(
+                    f"No valid answer {unit} q.{idx+1} f.{os.path.basename(file)}"
+                )
+                print(rightanswer)
+                pprint.pprint(qlist[idx])
+
         for question in qlist:
             if question not in unit_questions:
                 unit_questions.append(question)
+    print(unit)
     print(len(unit_questions))
-    # pprint.pprint(unit_questions)
-    
+    for question in unit_questions:
+        if question not in all_questions:
+            all_questions.append(question)
+print("Total questions:", len(all_questions))
+
+jsonfile = os.path.join(folder_path, folder + ".json")
+with open(jsonfile, "w") as outfile:
+    outfile.write(json.dumps(all_questions))
