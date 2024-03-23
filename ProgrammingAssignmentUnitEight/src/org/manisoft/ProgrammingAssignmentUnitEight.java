@@ -1,5 +1,6 @@
 package org.manisoft;
 
+import org.manisoft.csv.CSVReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -7,7 +8,9 @@ import java.util.List;
 import java.util.function.Function;
 import org.manisoft.entities.DescriptiveStatistics;
 import org.manisoft.entities.DistributionByCountry;
+import org.manisoft.entities.DistributionByCountryAndGender;
 import org.manisoft.entities.Employee;
+import org.manisoft.entities.Pair;
 
 /**
  *
@@ -49,7 +52,7 @@ public class ProgrammingAssignmentUnitEight {
         // Display employees names and their departments
         displayEmployeesNamesAndDept(employees);
 
-        // Display the average salary and the number of employees
+        // Display the average salary and
         // and the number of employees who earn less than average
         displayAverageSalary(employees);
 
@@ -67,8 +70,11 @@ public class ProgrammingAssignmentUnitEight {
         // Display all employees salaries in all departments
         displayAllDepartmentsEmployeesSalaries(emplByDept);
 
-        // Display employees distribution by country
+        // Display employees earnings distribution by country
         displayEmployeeDistributionByCountry(employees);
+
+        // Display employees earnings distribution by country and gender
+        displayEmployeeDistributionByGenderAndCountry(employees);
     }
 
     private static void displayEmployeesNamesAndDept(
@@ -82,8 +88,15 @@ public class ProgrammingAssignmentUnitEight {
         // Display the list of employees and their respective Departements
         // The employees are sorted according to their departments.
         employees.stream()
-                .sorted((e1, e2) -> e1.getDepartment()
-                .compareToIgnoreCase(e2.getDepartment()))
+                .sorted((e1, e2) -> {
+                    int cmp = e1.getDepartment()
+                            .compareToIgnoreCase(e2.getDepartment());
+                    if (cmp != 0) {
+                        return cmp;
+                    }
+                    return e1.getFullName()
+                            .compareToIgnoreCase(e2.getFullName());
+                })
                 .map(employeeDepartment)
                 .forEach((text) -> System.out.println(text));
         System.out.println();
@@ -233,7 +246,8 @@ public class ProgrammingAssignmentUnitEight {
 
     /**
      * Display the employees distrubtion by country.
-     * @param employees 
+     *
+     * @param employees
      */
     private static void displayEmployeeDistributionByCountry(
             List<Employee> employees) {
@@ -249,14 +263,37 @@ public class ProgrammingAssignmentUnitEight {
                 .map((country) -> new DistributionByCountry(employees, country))
                 .forEach((distribution)
                         -> System.out.printf(
-                                "%-15s %6d %10.2f$  %10.2f$  %10.2f$\n",
-                                distribution.country,
-                                distribution.stats.count(),
-                                distribution.stats.getMin(),
-                                distribution.stats.getMax(),
-                                distribution.stats.getAvg()
-                        ));
+                        "%-15s %6d %10.2f$  %10.2f$  %10.2f$\n",
+                        distribution.country,
+                        distribution.stats.count(),
+                        distribution.stats.getMin(),
+                        distribution.stats.getMax(),
+                        distribution.stats.getAvg()
+                ));
         System.out.println();
+    }
+
+    private static void displayEmployeeDistributionByGenderAndCountry(
+            ArrayList<Employee> employees) {
+        System.out.println("Salaries By Country And Gender\n");
+        System.out.println("Countries       Gender  Empl.        Min.         Max.      Average");
+        System.out.println(repStr("-", 60));
+        employees.stream()
+                .map((emp) -> new Pair<String, String>(emp.getCountry(), emp.getGender()))
+                .distinct()
+                .sorted()
+                .map((pair) -> new DistributionByCountryAndGender(employees,
+                pair.first, pair.second))
+                .forEach((distribution) -> System.out.printf(
+                "%-15s %-6s %6d %10.2f$  %10.2f$  %10.2f$\n",
+                distribution.country,
+                distribution.gender,
+                distribution.stats.count(),
+                distribution.stats.getMin(),
+                distribution.stats.getMax(),
+                distribution.stats.getAvg()
+        ));
+
     }
 
     /**
@@ -283,4 +320,5 @@ public class ProgrammingAssignmentUnitEight {
         }
         return sb.toString();
     }
+
 }

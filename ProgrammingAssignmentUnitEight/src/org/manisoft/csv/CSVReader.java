@@ -1,4 +1,4 @@
-package org.manisoft;
+package org.manisoft.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;

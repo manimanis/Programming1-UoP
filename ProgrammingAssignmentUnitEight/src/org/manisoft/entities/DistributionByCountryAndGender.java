@@ -6,16 +6,22 @@ import java.util.List;
  *
  * @author Cyberbox
  */
-public class DistributionByCountry {
+public class DistributionByCountryAndGender {
 
     public String country;
+    public String gender;
     public DescriptiveStatistics stats;
 
-    public DistributionByCountry(List<Employee> employees, String country) {
+    public DistributionByCountryAndGender(List<Employee> employees,
+            String country, String gender) {
         this.country = country;
+        this.gender = gender;
         this.stats = new DescriptiveStatistics(
                 employees.stream()
-                        .filter((emp) -> emp.getCountry().equals(country))
+                        .filter((emp)
+                                -> emp.getCountry().equals(country)
+                        && emp.getGender().equals(gender)
+                        )
                         .toList(),
                 (emp) -> emp.getAnnualSalary()
         );
