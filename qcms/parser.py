@@ -14,13 +14,13 @@ def extract_paragraphs(elem):
     for par in pars:
         if partext:
             partext += "\n"
-        partext += getText(par.text)
+        partext += getText(str(par))
     if partext == "":
-        partext = getText(elem.text)
+        partext = getText(str(elem))
     return partext
 
 
-folder = "cs1102"
+folder = "math1201"
 curfolder = os.path.dirname(__file__)
 
 html_files = {}
@@ -38,7 +38,7 @@ all_questions = []
 for unit in html_files.keys():
     unit_questions = []
     for file in html_files[unit]:
-        with open(file, "r") as f:
+        with open(file, "r", encoding="utf8") as f:
             text = f.read()
         bs = BeautifulSoup(text, "lxml")
         qlist = []
