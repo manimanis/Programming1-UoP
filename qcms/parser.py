@@ -14,9 +14,9 @@ def extract_paragraphs(elem):
     for par in pars:
         if partext:
             partext += "\n"
-        partext += getText(str(par))
+        partext += getText(str(par.prettify()))
     if partext == "":
-        partext = getText(str(elem))
+        partext = getText(str(elem.prettify()))
     return partext
 
 
