@@ -99,9 +99,14 @@ for unit in html_files.keys():
             answers = fieldset.select(".answer > div")
             for answer in answers:
                 of.write("<div class=\"answer\">")
-                of.write(answer.select_one(".answernumber").text + "&nbsp;")
+                an = answer.select_one(".answernumber")
+                if an:
+                    of.write(answer.select_one(".answernumber").text + "&nbsp;")
                 answer_content = answer.select_one(".flex-fill.ml-1")
-                of.write(answer_content.prettify())
+                if answer_content:
+                    of.write(answer_content.prettify())
+                else:
+                    of.write(answer.prettify())
                 of.write("</div>")  # class=\"answer\"
             of.write("</div>")  # class=\"answers\"
             of.write("</div>")  # class=\"question\"
